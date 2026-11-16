@@ -1,5 +1,5 @@
 :root {
-  color-scheme: light;
+  color-scheme: dark;
   /* Coolors metro palette */
   --strawberry: #f94144;
   --tangerine: #f3722c;
@@ -11,12 +11,12 @@
   --cyan: #4d908e;
   --blue-slate: #577590;
   --cerulean: #277da1;
-  --black: #111827;
+  --black: #e8eaf0;
   --white: #ffffff;
 
-  --bg-soft: #f3f4f6;
+  --bg-soft: #0c0f14;
   --bg: var(--bg-soft);
-  --surface: var(--white);
+  --surface: #161b24;
   --text: var(--black);
   --muted: color-mix(in srgb, var(--black) 60%, transparent);
   --border: color-mix(in srgb, var(--black) 14%, transparent);
