@@ -1,28 +1,21 @@
 :root {
-  color-scheme: dark;
-  /* Coffee-house palette */
-  --c-rose: #cb857b;
-  --c-chocolate: #813639;
-  --c-walnut: #6e260e;
-  --c-walnut-2: #5a301a;
-  --c-coffee: #2b1402;
-  --c-khaki: #444927;
-  --c-teal: #5b7761;
-  --c-slate: #62838a;
-  --c-steel: #719dad;
-  --c-dark-teal: #255957;
+  color-scheme: light;
+  /* Oxford scheme */
+  --black: #000000;
+  --prussian: #14213d;
+  --orange: #fca311;
+  --alabaster: #e5e5e5;
+  --white: #ffffff;
 
-  --cream: #f4e8de;
-  --bg: var(--c-coffee);
-  --surface: var(--c-walnut-2);
-  --text: var(--cream);
-  --muted: color-mix(in srgb, var(--cream) 65%, transparent);
-  --border: color-mix(in srgb, var(--cream) 14%, transparent);
-  --primary: var(--c-chocolate);
-  --primary-contrast: var(--cream);
-  --tile-fg: var(--cream);
-  --heart: var(--c-rose);
-  --error: var(--c-rose);
+  --bg: var(--alabaster);
+  --surface: var(--white);
+  --text: var(--black);
+  --muted: color-mix(in srgb, var(--black) 60%, transparent);
+  --border: color-mix(in srgb, var(--black) 14%, transparent);
+  --primary: var(--orange);
+  --primary-contrast: var(--black);
+  --heart: var(--orange);
+  --error-bg: var(--orange);
 }
 
 body {
@@ -48,8 +41,8 @@ body {
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
-  background: var(--primary);
-  color: var(--primary-contrast);
+  background: var(--prussian);
+  color: var(--white);
 }
 
 .appbar h1 {
@@ -61,7 +54,7 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: var(--primary-contrast);
+  color: var(--orange);
 }
 
 .content {
@@ -99,16 +92,10 @@ body {
   padding: 4px 6px 4px 0;
 }
 
-.list-item:nth-child(10n + 1) { --tile: var(--c-rose); }
-.list-item:nth-child(10n + 2) { --tile: var(--c-chocolate); }
-.list-item:nth-child(10n + 3) { --tile: var(--c-walnut); }
-.list-item:nth-child(10n + 4) { --tile: var(--c-walnut-2); }
-.list-item:nth-child(10n + 5) { --tile: var(--c-coffee); }
-.list-item:nth-child(10n + 6) { --tile: var(--c-khaki); }
-.list-item:nth-child(10n + 7) { --tile: var(--c-teal); }
-.list-item:nth-child(10n + 8) { --tile: var(--c-slate); }
-.list-item:nth-child(10n + 9) { --tile: var(--c-steel); }
-.list-item:nth-child(10n + 10) { --tile: var(--c-dark-teal); }
+.list-item:nth-child(4n + 1) { --tile: var(--prussian); --tile-fg: var(--white); }
+.list-item:nth-child(4n + 2) { --tile: var(--orange); --tile-fg: var(--black); }
+.list-item:nth-child(4n + 3) { --tile: var(--black); --tile-fg: var(--white); }
+.list-item:nth-child(4n + 4) { --tile: var(--white); --tile-fg: var(--black); border: 1px solid var(--border); }
 
 .list-main {
   flex: 1;
@@ -156,7 +143,7 @@ body {
   flex-shrink: 0;
 }
 
-/* --- Buttons: flat, square, solid accent --- */
+/* --- Buttons: flat, square, solid orange --- */
 
 .btn {
   display: inline-flex;
@@ -165,21 +152,21 @@ body {
   gap: 6px;
   padding: 10px 18px;
   border: none;
-  background: var(--primary);
-  color: var(--primary-contrast);
+  background: var(--orange);
+  color: var(--black);
   font: inherit;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   text-decoration: none;
   transition: background 0.15s ease, opacity 0.15s ease;
 }
 
 .btn:hover {
-  background: color-mix(in srgb, var(--primary) 78%, #000);
+  background: color-mix(in srgb, var(--orange) 82%, var(--black));
 }
 
 .btn:disabled {
-  opacity: 0.45;
+  opacity: 0.4;
   cursor: default;
 }
 
@@ -190,7 +177,7 @@ body {
 }
 
 .btn-outline:hover {
-  background: color-mix(in srgb, var(--text) 10%, transparent);
+  background: color-mix(in srgb, var(--text) 8%, transparent);
   color: var(--text);
 }
 
@@ -222,13 +209,13 @@ body {
 }
 
 .icon-btn.heart:hover {
-  color: var(--heart);
+  color: var(--orange);
 }
 
 .icon-btn.heart.saved {
-  background: var(--heart);
-  border-color: var(--heart);
-  color: var(--c-coffee);
+  background: var(--orange);
+  border-color: var(--orange);
+  color: var(--black);
 }
 
 /* Icon buttons inside colored tiles pick up the tile text color. */
@@ -241,32 +228,32 @@ body {
   background: color-mix(in srgb, var(--tile-fg) 15%, transparent);
 }
 
-/* Icons in the solid-color appbar are light. */
+/* Icons in the prussian appbar are light. */
 .appbar .icon-btn {
-  color: color-mix(in srgb, var(--primary-contrast) 85%, transparent);
+  color: color-mix(in srgb, var(--white) 85%, transparent);
 }
 
 .appbar .icon-btn:hover {
-  color: var(--primary-contrast);
-  background: color-mix(in srgb, var(--primary-contrast) 15%, transparent);
+  color: var(--white);
+  background: color-mix(in srgb, var(--white) 15%, transparent);
 }
 
 .appbar .icon-btn.heart {
   background: transparent;
-  border: 1px solid color-mix(in srgb, var(--primary-contrast) 55%, transparent);
-  color: var(--primary-contrast);
+  border: 1px solid color-mix(in srgb, var(--white) 55%, transparent);
+  color: var(--white);
   font-size: 1.1rem;
 }
 
 .appbar .icon-btn.heart:hover {
-  color: var(--primary-contrast);
-  background: color-mix(in srgb, var(--primary-contrast) 15%, transparent);
+  color: var(--white);
+  background: color-mix(in srgb, var(--white) 15%, transparent);
 }
 
 .appbar .icon-btn.heart.saved {
-  background: var(--heart);
-  border-color: var(--heart);
-  color: var(--c-coffee);
+  background: var(--orange);
+  border-color: var(--orange);
+  color: var(--black);
 }
 
 /* --- Floating add button --- */
@@ -278,14 +265,14 @@ body {
   z-index: 15;
   width: 56px;
   height: 56px;
-  background: var(--primary);
-  color: var(--primary-contrast);
+  background: var(--orange);
+  color: var(--black);
   font-size: 1.7rem;
 }
 
 .icon-btn.fab:hover {
-  background: color-mix(in srgb, var(--primary) 78%, #000);
-  color: var(--primary-contrast);
+  background: color-mix(in srgb, var(--orange) 82%, var(--black));
+  color: var(--black);
 }
 
 /* --- Bottom tab bar: each tab has its own color --- */
@@ -298,8 +285,7 @@ body {
   width: 100%;
   max-width: 720px;
   padding: 4px;
-  background: var(--surface);
-  border-top: 1px solid var(--border);
+  background: var(--prussian);
   z-index: 15;
   display: flex;
   gap: 4px;
@@ -311,26 +297,26 @@ body {
   border: none;
   border-bottom: 4px solid transparent;
   background: transparent;
-  color: var(--muted);
+  color: color-mix(in srgb, var(--white) 75%, transparent);
   font: inherit;
   font-weight: 500;
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease;
 }
 
-.tab:nth-child(1) { --tab-accent: var(--c-teal); }
-.tab:nth-child(2) { --tab-accent: var(--c-chocolate); }
-.tab:nth-child(3) { --tab-accent: var(--c-slate); }
+.tab:nth-child(1) { --tab-accent: var(--orange); --tab-fg: var(--black); }
+.tab:nth-child(2) { --tab-accent: var(--white); --tab-fg: var(--black); }
+.tab:nth-child(3) { --tab-accent: var(--orange); --tab-fg: var(--black); }
 
 .tab:hover {
-  color: var(--text);
-  background: color-mix(in srgb, var(--tab-accent) 15%, transparent);
+  color: var(--white);
+  background: color-mix(in srgb, var(--white) 12%, transparent);
 }
 
 .tab.active {
   background: var(--tab-accent);
-  border-bottom-color: color-mix(in srgb, var(--tab-accent) 68%, #000);
-  color: var(--cream);
+  border-bottom-color: var(--black);
+  color: var(--tab-fg);
   font-weight: 600;
 }
 
@@ -346,14 +332,14 @@ body {
 }
 
 .card:hover {
-  background: color-mix(in srgb, var(--cream) 6%, var(--surface));
+  background: color-mix(in srgb, var(--orange) 10%, var(--surface));
 }
 
 .card-image {
   width: 100%;
   height: 200px;
   object-fit: cover;
-  background: color-mix(in srgb, var(--cream) 8%, transparent);
+  background: color-mix(in srgb, var(--black) 8%, transparent);
   display: block;
 }
 
@@ -409,10 +395,10 @@ body {
   bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--c-rose);
+  background: var(--prussian);
   border: none;
-  border-left: 4px solid color-mix(in srgb, var(--c-rose) 68%, #000);
-  color: var(--c-coffee);
+  border-left: 4px solid var(--orange);
+  color: var(--white);
   padding: 12px 16px;
   cursor: pointer;
   max-width: 90vw;
@@ -435,7 +421,7 @@ body {
 }
 
 .autocomplete-option:hover {
-  background: color-mix(in srgb, var(--c-steel) 25%, transparent);
+  background: color-mix(in srgb, var(--orange) 18%, transparent);
 }
 
 .option-title {
@@ -458,7 +444,11 @@ body {
 .error {
   margin: 0;
   font-size: 0.85rem;
-  color: var(--error);
+  font-weight: 600;
+  background: var(--error-bg);
+  color: var(--black);
+  padding: 8px 12px;
+  justify-self: start;
 }
 
 .modal-overlay {
@@ -475,7 +465,7 @@ body {
   width: min(480px, 100%);
   background: var(--surface);
   border: none;
-  border-top: 4px solid var(--primary);
+  border-top: 4px solid var(--orange);
   padding: 8px 20px 20px;
 }
 
@@ -520,14 +510,14 @@ body {
 .suggest-wrap input {
   padding: 10px 12px;
   border: 1px solid var(--border);
-  background: var(--bg);
+  background: var(--alabaster);
   color: var(--text);
   font: inherit;
 }
 
 .field input:focus,
 .suggest-wrap input:focus {
-  outline: 2px solid var(--c-steel);
+  outline: 2px solid var(--orange);
   outline-offset: -2px;
   border-color: transparent;
 }
