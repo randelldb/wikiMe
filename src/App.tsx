@@ -102,6 +102,11 @@ export default function App() {
 
   return (
     <div className="app" style={{ visibility: restoring ? "hidden" : undefined }}>
+      {restoring && (
+        <div className="restoring-overlay" role="status" aria-label="Laden">
+          <div className="spinner" />
+        </div>
+      )}
       {view.screen === "themes" && (
         <ThemesScreen
           onOpenTheme={openFeed}
