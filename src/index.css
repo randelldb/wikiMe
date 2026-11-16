@@ -101,18 +101,18 @@ body {
   display: flex;
   align-items: center;
   gap: 4px;
-  background: var(--tile);
-  border-left: 4px solid color-mix(in srgb, var(--tile) 68%, #000);
+  background: color-mix(in srgb, var(--tile) 62%, #000);
+  border-left: 4px solid color-mix(in srgb, var(--tile) 40%, #000);
   color: var(--tile-fg);
   padding: 4px 6px 4px 0;
 }
 
 .list-item:nth-child(10n + 1) { --tile: var(--strawberry); --tile-fg: var(--white); }
 .list-item:nth-child(10n + 2) { --tile: var(--tangerine); --tile-fg: var(--white); }
-.list-item:nth-child(10n + 3) { --tile: var(--carrot); --tile-fg: var(--black); }
-.list-item:nth-child(10n + 4) { --tile: var(--coral); --tile-fg: var(--black); }
-.list-item:nth-child(10n + 5) { --tile: var(--tuscan); --tile-fg: var(--black); }
-.list-item:nth-child(10n + 6) { --tile: var(--willow); --tile-fg: var(--black); }
+.list-item:nth-child(10n + 3) { --tile: var(--carrot); --tile-fg: var(--white); }
+.list-item:nth-child(10n + 4) { --tile: var(--coral); --tile-fg: var(--white); }
+.list-item:nth-child(10n + 5) { --tile: var(--tuscan); --tile-fg: var(--white); }
+.list-item:nth-child(10n + 6) { --tile: var(--willow); --tile-fg: var(--white); }
 .list-item:nth-child(10n + 7) { --tile: var(--seagrass); --tile-fg: var(--white); }
 .list-item:nth-child(10n + 8) { --tile: var(--cyan); --tile-fg: var(--white); }
 .list-item:nth-child(10n + 9) { --tile: var(--blue-slate); --tile-fg: var(--white); }
@@ -183,7 +183,7 @@ body {
 }
 
 .btn:hover {
-  background: color-mix(in srgb, var(--primary) 82%, var(--black));
+  background: color-mix(in srgb, var(--primary) 45%, #000);
 }
 
 .btn:disabled {
@@ -234,8 +234,8 @@ body {
 }
 
 .icon-btn.heart.saved {
-  background: var(--primary);
-  border-color: var(--primary);
+  background: color-mix(in srgb, var(--heart) 62%, #000);
+  border-color: color-mix(in srgb, var(--heart) 62%, #000);
   color: var(--white);
 }
 
@@ -272,8 +272,8 @@ body {
 }
 
 .appbar .icon-btn.heart.saved {
-  background: var(--primary);
-  border-color: var(--primary);
+  background: color-mix(in srgb, var(--heart) 62%, #000);
+  border-color: color-mix(in srgb, var(--heart) 62%, #000);
   color: var(--white);
 }
 
@@ -286,13 +286,13 @@ body {
   z-index: 15;
   width: 56px;
   height: 56px;
-  background: var(--primary);
+  background: color-mix(in srgb, var(--primary) 62%, #000);
   color: var(--white);
   font-size: 1.7rem;
 }
 
 .icon-btn.fab:hover {
-  background: color-mix(in srgb, var(--primary) 82%, var(--black));
+  background: color-mix(in srgb, var(--primary) 45%, #000);
   color: var(--white);
 }
 
@@ -325,9 +325,9 @@ body {
   transition: background 0.15s ease, color 0.15s ease;
 }
 
-.tab:nth-child(1) { --tab-accent: var(--cerulean); --tab-fg: var(--white); }
-.tab:nth-child(2) { --tab-accent: var(--strawberry); --tab-fg: var(--white); }
-.tab:nth-child(3) { --tab-accent: var(--cyan); --tab-fg: var(--white); }
+.tab:nth-child(1) { --tab-accent: var(--cerulean); }
+.tab:nth-child(2) { --tab-accent: var(--strawberry); }
+.tab:nth-child(3) { --tab-accent: var(--cyan); }
 
 .tab:hover {
   color: var(--white);
@@ -335,9 +335,9 @@ body {
 }
 
 .tab.active {
-  background: var(--tab-accent);
-  border-bottom-color: var(--black);
-  color: var(--tab-fg);
+  background: color-mix(in srgb, var(--tab-accent) 62%, #000);
+  border-bottom-color: color-mix(in srgb, var(--tab-accent) 40%, #000);
+  color: var(--white);
   font-weight: 600;
 }
 
@@ -416,9 +416,9 @@ body {
   bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--cerulean);
+  background: color-mix(in srgb, var(--cerulean) 62%, #000);
   border: none;
-  border-left: 4px solid var(--tangerine);
+  border-left: 4px solid color-mix(in srgb, var(--tangerine) 62%, #000);
   color: var(--white);
   padding: 12px 16px;
   cursor: pointer;
@@ -466,7 +466,7 @@ body {
   margin: 0;
   font-size: 0.85rem;
   font-weight: 600;
-  background: var(--error-bg);
+  background: color-mix(in srgb, var(--error-bg) 62%, #000);
   color: var(--white);
   padding: 8px 12px;
   justify-self: start;
@@ -486,7 +486,7 @@ body {
   width: min(480px, 100%);
   background: var(--surface);
   border: none;
-  border-top: 4px solid var(--primary);
+  border-top: 4px solid color-mix(in srgb, var(--primary) 62%, #000);
   padding: 8px 20px 20px;
 }
 
