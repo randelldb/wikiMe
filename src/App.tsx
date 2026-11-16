@@ -33,6 +33,9 @@ function viewKey(v: View): string {
 
 export default function App() {
   const [view, setView] = useState<View>({ screen: "themes" });
+  // The tab bar is always visible; activeTab keeps the tab you navigated
+  // from highlighted while a feed or article view is pushed on top.
+  const [activeTab, setActiveTab] = useState<(typeof TABS)[number]["screen"]>("themes");
   const [saved, setSaved] = useState<Set<string>>(new Set());
   const [restoring, setRestoring] = useState(false);
   const backStack = useRef<View[]>([]);
@@ -94,9 +97,10 @@ export default function App() {
     return () => cancelAnimationFrame(raf);
   }, [view]);
 
-  const switchTab = (screen: "themes" | "saved" | "foryou") => {
+  const switchTab = (screen: (typeof TABS)[number]["screen"]) => {
     rememberScroll();
     backStack.current = [];
+    setActiveTab(screen);
     setView({ screen });
   };
 
@@ -147,23 +151,19 @@ export default function App() {
         />
       )}
 
-      {(view.screen === "themes" ||
-        view.screen === "saved" ||
-        view.screen === "foryou") && (
-        <nav className="tabbar" role="tablist">
-          {TABS.map((tab) => (
-            <button
-              key={tab.screen}
-              role="tab"
-              aria-selected={view.screen === tab.screen}
-              className={view.screen === tab.screen ? "tab active" : "tab"}
-              onClick={() => switchTab(tab.screen)}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </nav>
-      )}
+      <nav className="tabbar" role="tablist">
+        {TABS.map((tab) => (
+          <button
+            key={tab.screen}
+            role="tab"
+            aria-selected={activeTab === tab.screen}
+            className={activeTab === tab.screen ? "tab active" : "tab"}
+            onClick={() => switchTab(tab.screen)}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </nav>
     </div>
   );
 }
