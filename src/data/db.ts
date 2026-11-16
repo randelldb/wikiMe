@@ -27,22 +27,24 @@ let dbPromise: Promise<IDBPDatabase<WikiMeDb>> | null = null;
 /** IndexedDB replacement for Room/sqflite: same stores, same seed data. */
 export function db(): Promise<IDBPDatabase<WikiMeDb>> {
   if (!dbPromise) {
-    dbPromise = openDB<WikiMeDb>("wikime", 5, {
+    dbPromise = openDB<WikiMeDb>("wikime", 6, {
       upgrade: async (database, oldVersion, _newVersion, tx) => {
-        if (oldVersion < 1) {
+        // Create stores idempotently: existing databases may already be at
+        // version 5 without the shown_articles store (an earlier migration
+        // aborted before creating it).
+        if (!database.objectStoreNames.contains("themes")) {
           database.createObjectStore("themes", {
             keyPath: "id",
             autoIncrement: true,
           });
-          database.createObjectStore("saved_articles", {
+        }
+        if (!database.objectStoreNames.contains("saved_articles")) {
+          const store = database.createObjectStore("saved_articles", {
             keyPath: "title",
           });
-          database
-            .createObjectStore("saved_articles")
-            .createIndex("by-savedAt", "savedAt");
+          store.createIndex("by-savedAt", "savedAt");
         }
-        // Migration v5: shown-articles ring buffer for the "Voor jou" feed.
-        if (oldVersion < 5) {
+        if (!database.objectStoreNames.contains("shown_articles")) {
           const store = database.createObjectStore("shown_articles", {
             keyPath: "articleId",
           });
