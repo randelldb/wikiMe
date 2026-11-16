@@ -82,8 +82,6 @@ export default function ArticleView({
         <h1>{title}</h1>
       </header>
 
-      </header>
-
       <button
         className={saved ? "saved-bar saved" : "saved-bar"}
         onClick={toggleSaved}
