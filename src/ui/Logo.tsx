@@ -8,10 +8,10 @@ export default function Logo({ size = 24 }: { size?: number }) {
       aria-hidden="true"
       style={{ flexShrink: 0 }}
     >
-      <rect x="0" y="0" width="16" height="16" fill="#f94144" />
-      <rect x="16" y="0" width="16" height="16" fill="#f9c74f" />
-      <rect x="0" y="16" width="16" height="16" fill="#43aa8b" />
-      <rect x="16" y="16" width="16" height="16" fill="#277da1" />
+      <rect x="0" y="0" width="16" height="16" fill="#f04a4d" />
+      <rect x="16" y="0" width="16" height="16" fill="#f0c357" />
+      <rect x="0" y="16" width="16" height="16" fill="#48a589" />
+      <rect x="16" y="16" width="16" height="16" fill="#2d7a9b" />
       <text
         x="16"
         y="22.5"

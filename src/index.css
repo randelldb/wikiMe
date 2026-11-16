@@ -1,16 +1,16 @@
 :root {
   color-scheme: dark;
   /* Coolors metro palette */
-  --strawberry: #f94144;
-  --tangerine: #f3722c;
-  --carrot: #f8961e;
-  --coral: #f9844a;
-  --tuscan: #f9c74f;
-  --willow: #90be6d;
-  --seagrass: #43aa8b;
-  --cyan: #4d908e;
-  --blue-slate: #577590;
-  --cerulean: #277da1;
+  --strawberry: #f04a4d;
+  --tangerine: #e97536;
+  --carrot: #ed9529;
+  --coral: #f08753;
+  --tuscan: #f0c357;
+  --willow: #91ba71;
+  --seagrass: #48a589;
+  --cyan: #508d8b;
+  --blue-slate: #5a758d;
+  --cerulean: #2d7a9b;
   --black: #e8eaf0;
   --white: #ffffff;
 
@@ -369,7 +369,7 @@ body {
   transition: background 0.15s ease, color 0.15s ease;
 }
 
-.tab:nth-child(1) { --tab-accent: #ee9b00; }
+.tab:nth-child(1) { --tab-accent: #e2970c; }
 .tab:nth-child(2) { --tab-accent: var(--strawberry); }
 .tab:nth-child(3) { --tab-accent: var(--cyan); }
 
