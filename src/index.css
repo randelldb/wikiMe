@@ -622,7 +622,8 @@ body {
 
 .modal.fullscreen {
   width: 100%;
-  max-width: none;
+  max-width: 720px;
+  margin: 0 auto;
   height: 100%;
   border: none;
   border-radius: 0;
