@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Logo from "./Logo";
 import Modal from "./Modal";
 import SwipeToDelete from "./SwipeToDelete";
@@ -7,6 +7,7 @@ import { themeLanguage } from "../data/types";
 import type { Theme } from "../data/types";
 import { ArticleRepository } from "../data/repository";
 import { RateLimitedError } from "../data/types";
+import { buildPresetQuery, suggestedThemeName, themePresets } from "../data/presets";
 import { useLang } from "../i18n";
 
 const repository = new ArticleRepository();
@@ -105,6 +106,9 @@ function AddThemeDialog({
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  // Preset ids tapped in the chip grid; together they build the search query.
+  const [selectedPresetIds, setSelectedPresetIds] = useState<string[]>([]);
+  const presets = useMemo(() => themePresets(lang), [lang]);
   const [suggestions, setSuggestions] = useState<{ title: string; description?: string }[]>([]);
   const [suggestionsOpen, setSuggestionsOpen] = useState(false);
   const [isSuggesting, setIsSuggesting] = useState(false);
@@ -156,7 +160,24 @@ function AddThemeDialog({
   const pick = (title: string) => {
     pickedRef.current = true;
     setSuggestionsOpen(false);
+    setSelectedPresetIds([]);
     setSearchQuery(title);
+  };
+
+  // Tapping a preset (de)selects it and rebuilds the search query from the
+  // combined terms of all selected presets; an empty name/description is
+  // suggested from the presets. Hand-typing a query clears the selection.
+  const togglePreset = (id: string) => {
+    const next = selectedPresetIds.includes(id)
+      ? selectedPresetIds.filter((presetId) => presetId !== id)
+      : [...selectedPresetIds, id];
+    const chosen = presets.filter((preset) => next.includes(preset.id));
+    setSelectedPresetIds(next);
+    setSearchQuery(buildPresetQuery(chosen));
+    if (name.trim() === "") setName(suggestedThemeName(chosen));
+    if (description.trim() === "") {
+      setDescription(chosen.map((preset) => preset.name).join(", "));
+    }
   };
 
   const add = async () => {
@@ -169,6 +190,27 @@ function AddThemeDialog({
   return (
     <Modal title={t("themes.dialog.title")} onClose={onClose} fullscreen>
       <div className="dialog-body">
+        <div className="field">
+          <span className="field-label">{t("themes.dialog.presets")}</span>
+          <div className="chip-grid" role="group" aria-label={t("themes.dialog.presets")}>
+            {presets.map((preset) => {
+              const selected = selectedPresetIds.includes(preset.id);
+              return (
+                <button
+                  key={preset.id}
+                  type="button"
+                  className={selected ? "chip selected" : "chip"}
+                  aria-pressed={selected}
+                  title={preset.description}
+                  onClick={() => togglePreset(preset.id)}
+                >
+                  {preset.name}
+                </button>
+              );
+            })}
+          </div>
+          <p className="hint">{t("themes.dialog.presetsHint")}</p>
+        </div>
         <label className="field">
           <span>{t("themes.dialog.name")}</span>
           <input
@@ -193,7 +235,10 @@ function AddThemeDialog({
               id="theme-search-query"
               placeholder={t("themes.dialog.searchPlaceholder")}
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {
+                setSelectedPresetIds([]);
+                setSearchQuery(e.target.value);
+              }}
               onFocus={() => setSuggestionsOpen(true)}
               onBlur={() => setSuggestionsOpen(false)}
             />

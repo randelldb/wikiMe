@@ -20,6 +20,9 @@ const nl = {
   "themes.add": "Thema toevoegen",
   "themes.confirmDelete": 'Verwijder thema "{name}"?',
   "themes.dialog.title": "Nieuw thema",
+  "themes.dialog.presets": "Presets",
+  "themes.dialog.presetsHint":
+    "Tik op \u00e9\u00e9n of meer presets: er wordt automatisch een bredere zoekterm van gemaakt.",
   "themes.dialog.name": "Naam",
   "themes.dialog.description": "Beschrijving",
   "themes.dialog.descriptionPlaceholder": "Waar gaat dit thema over? (optioneel)",
@@ -101,6 +104,9 @@ const en: Dict = {
   "themes.add": "Add theme",
   "themes.confirmDelete": 'Delete theme "{name}"?',
   "themes.dialog.title": "New theme",
+  "themes.dialog.presets": "Presets",
+  "themes.dialog.presetsHint":
+    "Tap one or more presets: a broader search term is built automatically.",
   "themes.dialog.name": "Name",
   "themes.dialog.description": "Description",
   "themes.dialog.descriptionPlaceholder": "What is this theme about? (optional)",
