@@ -1,29 +1,21 @@
 :root {
   color-scheme: light;
-  /* Soft blue scheme */
-  --bg: #eaf2fb;
-  --surface: #ffffff;
-  --primary: #2f7cf6;
-  --primary-dark: #1d63d8;
-  --primary-soft: #dbeafe;
-  --primary-faint: #f0f6ff;
-  --rose: #f0546c;
-  --rose-soft: #fdeef1;
-  --text: #10243e;
-  --muted: #6b7f99;
-  --border: rgba(16, 36, 62, 0.12);
+  /* Oxford scheme */
+  --black: #000000;
+  --prussian: #14213d;
+  --orange: #fca311;
+  --alabaster: #e5e5e5;
+  --white: #ffffff;
 
-  --navy: #10243e;
-  --c-stripe-1: #3b82f6;
-  --c-stripe-2: #60a5fa;
-  --c-stripe-3: #0ea5e9;
-  --c-stripe-4: #2563eb;
-
-  --radius: 12px;
-  --radius-lg: 16px;
-  --shadow-sm: 0 2px 8px rgba(16, 36, 62, 0.08);
-  --shadow-md: 0 8px 24px rgba(16, 36, 62, 0.12);
-  --shadow-lg: 0 16px 40px rgba(16, 36, 62, 0.18);
+  --bg: var(--alabaster);
+  --surface: var(--white);
+  --text: var(--black);
+  --muted: color-mix(in srgb, var(--black) 60%, transparent);
+  --border: color-mix(in srgb, var(--black) 14%, transparent);
+  --primary: var(--orange);
+  --primary-contrast: var(--black);
+  --heart: var(--orange);
+  --error-bg: var(--orange);
 }
 
 body {
@@ -38,7 +30,7 @@ body {
 .app {
   max-width: 720px;
   margin: 0 auto;
-  padding-bottom: 120px;
+  padding-bottom: 104px;
 }
 
 .appbar {
@@ -49,11 +41,8 @@ body {
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
-  background: color-mix(in srgb, var(--surface) 88%, transparent);
-  backdrop-filter: blur(12px) saturate(180%);
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
-  border-bottom: 1px solid var(--border);
-  color: var(--text);
+  background: var(--prussian);
+  color: var(--white);
 }
 
 .appbar h1 {
@@ -65,11 +54,11 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: var(--text);
+  color: var(--orange);
 }
 
 .content {
-  padding: 16px 0 24px;
+  padding: 0 0 24px;
 }
 
 .empty,
@@ -83,43 +72,30 @@ body {
   margin: 0;
 }
 
-/* --- Lists (themes / saved) --- */
+/* --- Lists (themes / saved): full-color tiles cycling the palette --- */
 
 .list {
   list-style: none;
   margin: 0;
-  padding: 0 16px;
+  padding: 0;
   display: grid;
-  gap: 10px;
+  gap: 0;
 }
 
 .list-item {
   display: flex;
   align-items: center;
   gap: 4px;
-  background: var(--surface);
-  border: none;
-  border-radius: 14px;
-  box-shadow: var(--shadow-sm);
+  background: var(--tile);
+  border-left: 4px solid color-mix(in srgb, var(--tile) 68%, #000);
+  color: var(--tile-fg);
   padding: 4px 6px 4px 0;
-  overflow: hidden;
-  position: relative;
 }
 
-.list-item::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: var(--stripe);
-}
-
-.list-item:nth-child(4n + 1) { --stripe: var(--c-stripe-1); }
-.list-item:nth-child(4n + 2) { --stripe: var(--c-stripe-2); }
-.list-item:nth-child(4n + 3) { --stripe: var(--c-stripe-3); }
-.list-item:nth-child(4n + 4) { --stripe: var(--c-stripe-4); }
+.list-item:nth-child(4n + 1) { --tile: var(--prussian); --tile-fg: var(--white); }
+.list-item:nth-child(4n + 2) { --tile: var(--orange); --tile-fg: var(--black); }
+.list-item:nth-child(4n + 3) { --tile: var(--black); --tile-fg: var(--white); }
+.list-item:nth-child(4n + 4) { --tile: var(--white); --tile-fg: var(--black); border: 1px solid var(--border); }
 
 .list-main {
   flex: 1;
@@ -138,7 +114,7 @@ body {
 }
 
 .list-main:hover {
-  background: var(--primary-faint);
+  background: color-mix(in srgb, var(--tile-fg) 10%, transparent);
 }
 
 .list-text {
@@ -153,7 +129,7 @@ body {
 
 .list-sub {
   font-size: 0.85rem;
-  color: var(--muted);
+  color: color-mix(in srgb, var(--tile-fg) 75%, transparent);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -163,51 +139,45 @@ body {
 .thumb {
   width: 56px;
   height: 56px;
-  border-radius: 12px;
   object-fit: cover;
   flex-shrink: 0;
 }
 
-/* --- Buttons --- */
+/* --- Buttons: flat, square, solid orange --- */
 
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  padding: 11px 20px;
+  padding: 10px 18px;
   border: none;
-  border-radius: var(--radius);
-  background: var(--primary);
-  color: #fff;
+  background: var(--orange);
+  color: var(--black);
   font: inherit;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   text-decoration: none;
-  box-shadow: 0 4px 12px rgba(47, 124, 246, 0.3);
-  transition: background 0.15s ease, opacity 0.15s ease, transform 0.15s ease;
+  transition: background 0.15s ease, opacity 0.15s ease;
 }
 
 .btn:hover {
-  background: var(--primary-dark);
-  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--orange) 82%, var(--black));
 }
 
 .btn:disabled {
   opacity: 0.4;
   cursor: default;
-  transform: none;
 }
 
 .btn-outline {
   background: transparent;
   color: var(--text);
-  border: 1px solid var(--border);
-  box-shadow: none;
+  border: 1px solid color-mix(in srgb, var(--text) 35%, transparent);
 }
 
 .btn-outline:hover {
-  background: var(--primary-faint);
+  background: color-mix(in srgb, var(--text) 8%, transparent);
   color: var(--text);
 }
 
@@ -218,7 +188,6 @@ body {
   width: 40px;
   height: 40px;
   border: none;
-  border-radius: 12px;
   background: transparent;
   color: var(--muted);
   font-size: 1.1rem;
@@ -229,46 +198,62 @@ body {
 }
 
 .icon-btn:hover {
-  background: var(--primary-faint);
-  color: var(--primary-dark);
-}
-
-.list-item .icon-btn:hover {
-  background: var(--rose-soft);
-  color: var(--rose);
-}
-
-.icon-btn.heart {
-  border: none;
-  background: var(--primary-faint);
-  border-radius: 999px;
-  font-size: 1.15rem;
-  color: var(--muted);
-}
-
-.icon-btn.heart:hover {
-  background: var(--rose-soft);
-  color: var(--rose);
-}
-
-.icon-btn.heart.saved {
-  background: var(--rose);
-  color: #fff;
-}
-
-.appbar .icon-btn.heart {
-  background: var(--primary-faint);
+  background: color-mix(in srgb, var(--text) 10%, transparent);
   color: var(--text);
 }
 
+.icon-btn.heart {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-size: 1.15rem;
+}
+
+.icon-btn.heart:hover {
+  color: var(--orange);
+}
+
+.icon-btn.heart.saved {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: var(--black);
+}
+
+/* Icon buttons inside colored tiles pick up the tile text color. */
+.list-item .icon-btn {
+  color: color-mix(in srgb, var(--tile-fg) 85%, transparent);
+}
+
+.list-item .icon-btn:hover {
+  color: var(--tile-fg);
+  background: color-mix(in srgb, var(--tile-fg) 15%, transparent);
+}
+
+/* Icons in the prussian appbar are light. */
+.appbar .icon-btn {
+  color: color-mix(in srgb, var(--white) 85%, transparent);
+}
+
+.appbar .icon-btn:hover {
+  color: var(--white);
+  background: color-mix(in srgb, var(--white) 15%, transparent);
+}
+
+.appbar .icon-btn.heart {
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--white) 55%, transparent);
+  color: var(--white);
+  font-size: 1.1rem;
+}
+
 .appbar .icon-btn.heart:hover {
-  background: var(--rose-soft);
-  color: var(--rose);
+  color: var(--white);
+  background: color-mix(in srgb, var(--white) 15%, transparent);
 }
 
 .appbar .icon-btn.heart.saved {
-  background: var(--rose);
-  color: #fff;
+  background: var(--orange);
+  border-color: var(--orange);
+  color: var(--black);
 }
 
 /* --- Floating add button --- */
@@ -276,89 +261,85 @@ body {
 .icon-btn.fab {
   position: fixed;
   right: max(16px, calc(50vw - 344px));
-  bottom: 108px;
+  bottom: 96px;
   z-index: 15;
   width: 56px;
   height: 56px;
-  border-radius: 999px;
-  background: var(--primary);
-  color: #fff;
+  background: var(--orange);
+  color: var(--black);
   font-size: 1.7rem;
-  box-shadow: var(--shadow-md);
 }
 
 .icon-btn.fab:hover {
-  background: var(--primary-dark);
-  color: #fff;
-  transform: translateY(-2px);
+  background: color-mix(in srgb, var(--orange) 82%, var(--black));
+  color: var(--black);
 }
 
-/* --- Bottom tab bar: floating rounded bar --- */
+/* --- Bottom tab bar: each tab has its own color --- */
 
 .tabbar {
   position: fixed;
-  bottom: 16px;
+  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: calc(100% - 32px);
-  max-width: 688px;
-  padding: 6px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  box-shadow: var(--shadow-md);
+  width: 100%;
+  max-width: 720px;
+  padding: 4px;
+  background: var(--prussian);
   z-index: 15;
   display: flex;
-  gap: 6px;
+  gap: 4px;
 }
 
 .tab {
   flex: 1;
-  padding: 11px 0;
+  padding: 10px 0 12px;
   border: none;
-  border-radius: 14px;
+  border-bottom: 4px solid transparent;
   background: transparent;
-  color: var(--muted);
+  color: color-mix(in srgb, var(--white) 75%, transparent);
   font: inherit;
   font-weight: 500;
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease;
 }
 
+.tab:nth-child(1) { --tab-accent: var(--orange); --tab-fg: var(--black); }
+.tab:nth-child(2) { --tab-accent: var(--white); --tab-fg: var(--black); }
+.tab:nth-child(3) { --tab-accent: var(--orange); --tab-fg: var(--black); }
+
 .tab:hover {
-  color: var(--primary-dark);
-  background: var(--primary-faint);
+  color: var(--white);
+  background: color-mix(in srgb, var(--white) 12%, transparent);
 }
 
 .tab.active {
-  background: var(--primary);
-  color: #fff;
+  background: var(--tab-accent);
+  border-bottom-color: var(--black);
+  color: var(--tab-fg);
   font-weight: 600;
 }
 
-/* --- Feed cards --- */
+/* --- Feed cards: borderless full-width panels --- */
 
 .card {
   background: var(--surface);
   border: none;
-  border-radius: var(--radius-lg);
-  margin: 12px 16px;
+  margin: 12px 0;
   overflow: hidden;
   cursor: pointer;
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: background 0.15s ease;
 }
 
 .card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  background: color-mix(in srgb, var(--orange) 10%, var(--surface));
 }
 
 .card-image {
   width: 100%;
   height: 200px;
   object-fit: cover;
-  background: color-mix(in srgb, var(--primary) 8%, transparent);
+  background: color-mix(in srgb, var(--black) 8%, transparent);
   display: block;
 }
 
@@ -414,11 +395,10 @@ body {
   bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--navy);
+  background: var(--prussian);
   border: none;
-  border-radius: 14px;
-  box-shadow: var(--shadow-lg);
-  color: #fff;
+  border-left: 4px solid var(--orange);
+  color: var(--white);
   padding: 12px 16px;
   cursor: pointer;
   max-width: 90vw;
@@ -438,11 +418,10 @@ body {
   color: inherit;
   font: inherit;
   cursor: pointer;
-  border-radius: 10px;
 }
 
 .autocomplete-option:hover {
-  background: var(--primary-faint);
+  background: color-mix(in srgb, var(--orange) 18%, transparent);
 }
 
 .option-title {
@@ -466,10 +445,9 @@ body {
   margin: 0;
   font-size: 0.85rem;
   font-weight: 600;
-  background: var(--rose-soft);
-  color: #c73c52;
+  background: var(--error-bg);
+  color: var(--black);
   padding: 8px 12px;
-  border-radius: 10px;
   justify-self: start;
 }
 
@@ -480,15 +458,14 @@ body {
   display: grid;
   place-items: center;
   padding: 16px;
-  background: color-mix(in srgb, #10243e 45%, transparent);
+  background: color-mix(in srgb, #000 55%, transparent);
 }
 
 .modal {
   width: min(480px, 100%);
   background: var(--surface);
   border: none;
-  border-radius: 20px;
-  box-shadow: var(--shadow-lg);
+  border-top: 4px solid var(--orange);
   padding: 8px 20px 20px;
 }
 
@@ -502,14 +479,14 @@ body {
 .modal-header h2 {
   flex: 1;
   margin: 0;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 800;
   letter-spacing: -0.01em;
 }
 
 .dialog-body {
   display: grid;
-  gap: 14px;
+  gap: 12px;
 }
 
 .dialog-actions {
@@ -520,7 +497,7 @@ body {
 
 .field {
   display: grid;
-  gap: 6px;
+  gap: 4px;
 }
 
 .field-label {
@@ -531,17 +508,16 @@ body {
 
 .field input,
 .suggest-wrap input {
-  padding: 11px 14px;
+  padding: 10px 12px;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--bg);
+  background: var(--alabaster);
   color: var(--text);
   font: inherit;
 }
 
 .field input:focus,
 .suggest-wrap input:focus {
-  outline: 2px solid var(--primary);
+  outline: 2px solid var(--orange);
   outline-offset: -2px;
   border-color: transparent;
 }
@@ -557,7 +533,7 @@ body {
 
 .suggest-status {
   position: absolute;
-  right: 14px;
+  right: 12px;
   top: 50%;
   transform: translateY(-50%);
   color: var(--muted);
@@ -566,17 +542,15 @@ body {
 
 .suggest-list {
   position: absolute;
-  top: calc(100% + 6px);
+  top: calc(100% + 4px);
   left: 0;
   right: 0;
   max-height: 280px;
   overflow-y: auto;
   margin: 0;
-  padding: 6px;
+  padding: 4px;
   list-style: none;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 14px;
-  box-shadow: var(--shadow-md);
   z-index: 210;
 }
