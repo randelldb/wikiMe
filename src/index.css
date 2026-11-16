@@ -79,7 +79,7 @@ body {
   margin: 0;
   padding: 8px 0;
   display: grid;
-  gap: 8px;
+  gap: 0;
 }
 
 .list-item {
