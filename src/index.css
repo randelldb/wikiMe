@@ -49,8 +49,9 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 0;
-  padding: 40px 16px;
-  min-height: 20px;
+  height: 80px;
+  padding: 0 16px;
+  box-sizing: border-box;
   background: var(--bg);
   color: var(--white);
 }
@@ -58,7 +59,8 @@ body {
 .appbar h1 {
   position: absolute;
   left: 50%;
-  transform: translateX(-50%);
+  top: 50%;
+  transform: translate(-50%, -50%);
   display: inline-flex;
   align-items: center;
   gap: 8px;
