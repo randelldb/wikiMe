@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import ThemesScreen from "./ui/ThemesScreen";
 import FeedScreen from "./ui/FeedScreen";
 import SavedScreen from "./ui/SavedScreen";
@@ -34,6 +34,7 @@ function viewKey(v: View): string {
 export default function App() {
   const [view, setView] = useState<View>({ screen: "themes" });
   const [saved, setSaved] = useState<Set<string>>(new Set());
+  const [restoring, setRestoring] = useState(false);
   const backStack = useRef<View[]>([]);
   const scrollPos = useRef<Record<string, number>>({});
 
@@ -67,19 +68,24 @@ export default function App() {
     goTo({ screen: "feed", themeId: theme.id, themeName: theme.name });
   };
 
-  // Restore the remembered scroll position when the view changes. Wait
-  // until async content (IndexedDB / API) has made the page tall enough,
-  // then scroll once — no visible jump to the top first. Falls back to a
-  // direct scroll after 1.5s if the content never gets that tall.
-  useEffect(() => {
+  // Restore the remembered scroll position when the view changes. The app
+  // stays hidden until async content (IndexedDB / API) has made the page
+  // tall enough, then we scroll once straight to the target — no flash at
+  // the top. Falls back after 1.5s if the content never gets that tall.
+  useLayoutEffect(() => {
     const y = scrollPos.current[viewKey(view)] ?? 0;
-    if (y === 0) return;
+    if (y === 0) {
+      setRestoring(false);
+      return;
+    }
+    setRestoring(true);
     let raf = 0;
     const start = performance.now();
     const tryApply = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight;
       if (max >= y || performance.now() - start > 1500) {
         window.scrollTo(0, y);
+        setRestoring(false);
         return;
       }
       raf = requestAnimationFrame(tryApply);
@@ -95,7 +101,7 @@ export default function App() {
   };
 
   return (
-    <div className="app">
+    <div className="app" style={{ visibility: restoring ? "hidden" : undefined }}>
       {view.screen === "themes" && (
         <ThemesScreen
           onOpenTheme={openFeed}
