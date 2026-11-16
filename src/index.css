@@ -337,18 +337,22 @@ body {
   transform: translateX(-50%);
   width: 100%;
   max-width: 720px;
-  padding: 4px;
+  padding: 0;
   background: var(--cerulean);
   z-index: 15;
   display: flex;
-  gap: 4px;
+  gap: 0;
+  height: 56px;
 }
 
 .tab {
   flex: 1;
-  padding: 10px 0 12px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: none;
-  border-bottom: 4px solid transparent;
+  border-radius: 0;
   background: transparent;
   color: color-mix(in srgb, var(--white) 75%, transparent);
   font: inherit;
@@ -368,7 +372,6 @@ body {
 
 .tab.active {
   background: var(--tab-accent);
-  border-bottom-color: color-mix(in srgb, var(--tab-accent) 40%, #000);
   color: var(--white);
   font-weight: 600;
 }
