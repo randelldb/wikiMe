@@ -148,10 +148,10 @@ body {
 
 .list-item:nth-child(10n + 1) { --tile: var(--strawberry); --tile-fg: var(--white); }
 .list-item:nth-child(10n + 2) { --tile: var(--tangerine); --tile-fg: var(--white); }
-.list-item:nth-child(10n + 3) { --tile: var(--carrot); --tile-fg: #111827; }
-.list-item:nth-child(10n + 4) { --tile: var(--coral); --tile-fg: #111827; }
-.list-item:nth-child(10n + 5) { --tile: var(--tuscan); --tile-fg: #111827; }
-.list-item:nth-child(10n + 6) { --tile: var(--willow); --tile-fg: #111827; }
+.list-item:nth-child(10n + 3) { --tile: var(--carrot); --tile-fg: var(--white); }
+.list-item:nth-child(10n + 4) { --tile: var(--coral); --tile-fg: var(--white); }
+.list-item:nth-child(10n + 5) { --tile: var(--tuscan); --tile-fg: var(--white); }
+.list-item:nth-child(10n + 6) { --tile: var(--willow); --tile-fg: var(--white); }
 .list-item:nth-child(10n + 7) { --tile: var(--seagrass); --tile-fg: var(--white); }
 .list-item:nth-child(10n + 8) { --tile: var(--cyan); --tile-fg: var(--white); }
 .list-item:nth-child(10n + 9) { --tile: var(--blue-slate); --tile-fg: var(--white); }
