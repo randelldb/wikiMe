@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import ThemesScreen from "./ui/ThemesScreen";
 import FeedScreen from "./ui/FeedScreen";
 import SavedScreen from "./ui/SavedScreen";
@@ -9,7 +9,9 @@ import type { Theme } from "./data/types";
 
 /** Navigation mirrors the Android/Flutter app: three top-level tabs plus
  * pushed feed and article views. Kept in App-level state on purpose —
- * the app is small enough to not need a router. */
+ * the app is small enough to not need a router. A small back-stack makes
+ * "back" return to the screen you actually came from, and scroll positions
+ * are remembered per view so lists restore exactly where you left them. */
 type View =
   | { screen: "themes" }
   | { screen: "saved" }
@@ -23,9 +25,17 @@ const TABS = [
   { screen: "foryou", label: "Voor jou" },
 ] as const;
 
+function viewKey(v: View): string {
+  if (v.screen === "feed") return `feed:${v.themeId}`;
+  if (v.screen === "article") return `article:${v.title}`;
+  return v.screen;
+}
+
 export default function App() {
   const [view, setView] = useState<View>({ screen: "themes" });
   const [saved, setSaved] = useState<Set<string>>(new Set());
+  const backStack = useRef<View[]>([]);
+  const scrollPos = useRef<Record<string, number>>({});
 
   const refreshSaved = useCallback(() => {
     savedTitles().then((titles) => setSaved(titles));
@@ -33,9 +43,41 @@ export default function App() {
 
   useEffect(refreshSaved, [refreshSaved]);
 
+  const rememberScroll = () => {
+    scrollPos.current[viewKey(view)] = window.scrollY;
+  };
+
+  // Push the current view on the back-stack before navigating deeper.
+  const goTo = (next: View) => {
+    rememberScroll();
+    backStack.current.push(view);
+    setView(next);
+  };
+
+  // Pop back to the screen we came from (fallback: themes).
+  const goBack = () => {
+    const prev = backStack.current.pop();
+    if (!prev) return;
+    rememberScroll();
+    setView(prev);
+  };
+
   const openFeed = (theme: Theme) => {
     if (theme.id == null) return;
-    setView({ screen: "feed", themeId: theme.id, themeName: theme.name });
+    goTo({ screen: "feed", themeId: theme.id, themeName: theme.name });
+  };
+
+  // Restore the remembered scroll position whenever the view changes.
+  useEffect(() => {
+    const y = scrollPos.current[viewKey(view)] ?? 0;
+    const frame = requestAnimationFrame(() => window.scrollTo(0, y));
+    return () => cancelAnimationFrame(frame);
+  }, [view]);
+
+  const switchTab = (screen: "themes" | "saved" | "foryou") => {
+    rememberScroll();
+    backStack.current = [];
+    setView({ screen });
   };
 
   return (
@@ -49,7 +91,7 @@ export default function App() {
         <SavedScreen
           savedTitles={saved}
           refreshSaved={refreshSaved}
-          onOpenArticle={(title) => setView({ screen: "article", title })}
+          onOpenArticle={(title) => goTo({ screen: "article", title })}
         />
       )}
       {view.screen === "foryou" && (
@@ -57,8 +99,8 @@ export default function App() {
           savedCount={saved.size}
           savedTitles={saved}
           refreshSaved={refreshSaved}
-          onGoToThemes={() => setView({ screen: "themes" })}
-          onOpenArticle={(title) => setView({ screen: "article", title })}
+          onGoToThemes={() => switchTab("themes")}
+          onOpenArticle={(title) => goTo({ screen: "article", title })}
         />
       )}
       {view.screen === "feed" && (
@@ -67,8 +109,8 @@ export default function App() {
           themeName={view.themeName}
           savedTitles={saved}
           refreshSaved={refreshSaved}
-          onBack={() => setView({ screen: "themes" })}
-          onOpenArticle={(title) => setView({ screen: "article", title })}
+          onBack={goBack}
+          onOpenArticle={(title) => goTo({ screen: "article", title })}
         />
       )}
       {view.screen === "article" && (
@@ -76,7 +118,7 @@ export default function App() {
           title={view.title}
           savedTitles={saved}
           refreshSaved={refreshSaved}
-          onClose={() => setView({ screen: "themes" })}
+          onClose={goBack}
         />
       )}
 
@@ -90,7 +132,7 @@ export default function App() {
               role="tab"
               aria-selected={view.screen === tab.screen}
               className={view.screen === tab.screen ? "tab active" : "tab"}
-              onClick={() => setView({ screen: tab.screen })}
+              onClick={() => switchTab(tab.screen)}
             >
               {tab.label}
             </button>
