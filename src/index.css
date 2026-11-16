@@ -57,8 +57,8 @@ body {
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
-  background: var(--surface);
-  border-bottom: 2px solid var(--primary);
+  background: var(--primary);
+  color: var(--primary-contrast);
 }
 
 .appbar h1 {
@@ -70,6 +70,7 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: var(--primary-contrast);
 }
 
 .content {
@@ -101,22 +102,22 @@ body {
   display: flex;
   align-items: center;
   gap: 4px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-left: 8px solid var(--list-accent, var(--primary));
+  background: var(--tile);
+  border-left: 8px solid color-mix(in srgb, var(--tile) 68%, #000);
+  color: var(--tile-fg);
   padding: 4px 6px 4px 0;
 }
 
-.list-item:nth-child(10n + 1) { --list-accent: var(--c-strawberry); }
-.list-item:nth-child(10n + 2) { --list-accent: var(--c-tangerine); }
-.list-item:nth-child(10n + 3) { --list-accent: var(--c-carrot); }
-.list-item:nth-child(10n + 4) { --list-accent: var(--c-coral); }
-.list-item:nth-child(10n + 5) { --list-accent: var(--c-sun); }
-.list-item:nth-child(10n + 6) { --list-accent: var(--c-willow); }
-.list-item:nth-child(10n + 7) { --list-accent: var(--c-seagrass); }
-.list-item:nth-child(10n + 8) { --list-accent: var(--c-cyan); }
-.list-item:nth-child(10n + 9) { --list-accent: var(--c-slate); }
-.list-item:nth-child(10n + 10) { --list-accent: var(--c-cerulean); }
+.list-item:nth-child(10n + 1) { --tile: var(--c-strawberry); --tile-fg: #fff; }
+.list-item:nth-child(10n + 2) { --tile: var(--c-tangerine); --tile-fg: #fff; }
+.list-item:nth-child(10n + 3) { --tile: var(--c-carrot); --tile-fg: #16191f; }
+.list-item:nth-child(10n + 4) { --tile: var(--c-coral); --tile-fg: #16191f; }
+.list-item:nth-child(10n + 5) { --tile: var(--c-sun); --tile-fg: #16191f; }
+.list-item:nth-child(10n + 6) { --tile: var(--c-willow); --tile-fg: #16191f; }
+.list-item:nth-child(10n + 7) { --tile: var(--c-seagrass); --tile-fg: #fff; }
+.list-item:nth-child(10n + 8) { --tile: var(--c-cyan); --tile-fg: #fff; }
+.list-item:nth-child(10n + 9) { --tile: var(--c-slate); --tile-fg: #fff; }
+.list-item:nth-child(10n + 10) { --tile: var(--c-cerulean); --tile-fg: #fff; }
 
 .list-main {
   flex: 1;
@@ -135,7 +136,7 @@ body {
 }
 
 .list-main:hover {
-  background: color-mix(in srgb, var(--list-accent) 10%, transparent);
+  background: color-mix(in srgb, var(--tile-fg) 10%, transparent);
 }
 
 .list-text {
@@ -150,7 +151,7 @@ body {
 
 .list-sub {
   font-size: 0.85rem;
-  color: var(--muted);
+  color: color-mix(in srgb, var(--tile-fg) 75%, transparent);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -239,6 +240,43 @@ body {
   color: #fff;
 }
 
+/* Icon buttons inside colored tiles pick up the tile text color. */
+.list-item .icon-btn {
+  color: color-mix(in srgb, var(--tile-fg) 85%, transparent);
+}
+
+.list-item .icon-btn:hover {
+  color: var(--tile-fg);
+  background: color-mix(in srgb, var(--tile-fg) 15%, transparent);
+}
+
+/* Icons in the solid-color appbar are light. */
+.appbar .icon-btn {
+  color: color-mix(in srgb, var(--primary-contrast) 85%, transparent);
+}
+
+.appbar .icon-btn:hover {
+  color: var(--primary-contrast);
+  background: color-mix(in srgb, var(--primary-contrast) 15%, transparent);
+}
+
+.appbar .icon-btn.heart {
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--primary-contrast) 55%, transparent);
+  color: var(--primary-contrast);
+  font-size: 1.1rem;
+}
+
+.appbar .icon-btn.heart:hover {
+  color: var(--primary-contrast);
+  background: color-mix(in srgb, var(--primary-contrast) 15%, transparent);
+}
+
+.appbar .icon-btn.heart.saved {
+  background: var(--heart);
+  border-color: var(--heart);
+}
+
 /* --- Floating add button --- */
 
 .icon-btn.fab {
@@ -258,7 +296,7 @@ body {
   color: var(--primary-contrast);
 }
 
-/* --- Bottom tab bar --- */
+/* --- Bottom tab bar: each tab has its own metro color --- */
 
 .tabbar {
   position: fixed;
@@ -288,32 +326,48 @@ body {
   transition: background 0.15s ease, color 0.15s ease;
 }
 
+.tab:nth-child(1) { --tab-accent: var(--c-cerulean); }
+.tab:nth-child(2) { --tab-accent: var(--c-strawberry); }
+.tab:nth-child(3) { --tab-accent: var(--c-cyan); }
+
 .tab:hover {
   color: var(--text);
+  background: color-mix(in srgb, var(--tab-accent) 12%, transparent);
 }
 
 .tab.active {
-  background: color-mix(in srgb, var(--primary) 12%, transparent);
-  border-bottom-color: var(--primary);
-  color: var(--text);
+  background: var(--tab-accent);
+  border-bottom-color: color-mix(in srgb, var(--tab-accent) 68%, #000);
+  color: #fff;
   font-weight: 600;
 }
 
-/* --- Feed cards: flat panels --- */
+/* --- Feed cards: tinted panels, each cycling through the palette --- */
 
 .card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-top: 8px solid var(--primary);
+  background: color-mix(in srgb, var(--card-accent) 12%, var(--surface));
+  border: none;
+  border-top: 8px solid var(--card-accent);
   margin: 12px 16px;
   overflow: hidden;
   cursor: pointer;
-  transition: border-color 0.15s ease;
+  transition: background 0.15s ease;
 }
 
 .card:hover {
-  border-top-color: var(--c-tangerine);
+  background: color-mix(in srgb, var(--card-accent) 20%, var(--surface));
 }
+
+.content > .card:nth-child(10n + 1) { --card-accent: var(--c-strawberry); }
+.content > .card:nth-child(10n + 2) { --card-accent: var(--c-tangerine); }
+.content > .card:nth-child(10n + 3) { --card-accent: var(--c-carrot); }
+.content > .card:nth-child(10n + 4) { --card-accent: var(--c-coral); }
+.content > .card:nth-child(10n + 5) { --card-accent: var(--c-sun); }
+.content > .card:nth-child(10n + 6) { --card-accent: var(--c-willow); }
+.content > .card:nth-child(10n + 7) { --card-accent: var(--c-seagrass); }
+.content > .card:nth-child(10n + 8) { --card-accent: var(--c-cyan); }
+.content > .card:nth-child(10n + 9) { --card-accent: var(--c-slate); }
+.content > .card:nth-child(10n + 10) { --card-accent: var(--c-cerulean); }
 
 .card-image {
   width: 100%;
@@ -375,9 +429,10 @@ body {
   bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-left: 8px solid var(--c-sun);
+  background: var(--c-sun);
+  border: none;
+  border-left: 8px solid color-mix(in srgb, var(--c-sun) 68%, #000);
+  color: #16191f;
   padding: 12px 16px;
   cursor: pointer;
   max-width: 90vw;
