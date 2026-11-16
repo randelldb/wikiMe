@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Logo from "./Logo";
 import Modal from "./Modal";
+import SwipeToDelete from "./SwipeToDelete";
 import { allThemes, deleteTheme, insertTheme } from "../data/db";
 import type { Theme } from "../data/types";
 import { ArticleRepository } from "../data/repository";
@@ -32,22 +33,20 @@ export default function ThemesScreen({ onOpenTheme }: { onOpenTheme: (theme: The
           <ul className="list">
             {themes.map((theme) => (
               <li key={theme.id} className="list-item">
-                <button className="list-main" onClick={() => onOpenTheme(theme)}>
-                  <span className="list-text">
-                    <span className="list-title">{theme.name}</span>
-                    <span className="list-sub">{theme.searchQuery}</span>
-                  </span>
-                </button>
-                <button
-                  className="icon-btn"
-                  aria-label={`Verwijder ${theme.name}`}
-                  onClick={async () => {
+                <SwipeToDelete
+                  confirmTitle={`Verwijder thema "${theme.name}"?`}
+                  onConfirm={async () => {
                     if (theme.id != null) await deleteTheme(theme.id);
                     load();
                   }}
                 >
-                  🗑
-                </button>
+                  <button className="list-main" onClick={() => onOpenTheme(theme)}>
+                    <span className="list-text">
+                      <span className="list-title">{theme.name}</span>
+                      <span className="list-sub">{theme.searchQuery}</span>
+                    </span>
+                  </button>
+                </SwipeToDelete>
               </li>
             ))}
           </ul>

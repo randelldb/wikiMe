@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import Logo from "./Logo";
+import SwipeToDelete from "./SwipeToDelete";
 import { deleteSavedArticle, savedArticles } from "../data/db";
 import type { SavedArticle } from "../data/types";
 
@@ -40,24 +41,22 @@ export default function SavedScreen({
           <ul className="list">
             {articles.map((article) => (
               <li key={article.title} className="list-item">
-                <button className="list-main" onClick={() => onOpenArticle(article.title)}>
-                  {article.thumbnailUrl && (
-                    <img className="thumb" src={article.thumbnailUrl} alt="" loading="lazy" />
-                  )}
-                  <span className="list-text">
-                    <span className="list-title">{article.title}</span>
-                    {article.summary.trim() !== "" && (
-                      <span className="list-sub">{article.summary}</span>
-                    )}
-                  </span>
-                </button>
-                <button
-                  className="icon-btn"
-                  aria-label={`Verwijder ${article.title}`}
-                  onClick={() => remove(article.title)}
+                <SwipeToDelete
+                  confirmTitle={`Verwijder "${article.title}"?`}
+                  onConfirm={() => remove(article.title)}
                 >
-                  🗑
-                </button>
+                  <button className="list-main" onClick={() => onOpenArticle(article.title)}>
+                    {article.thumbnailUrl && (
+                      <img className="thumb" src={article.thumbnailUrl} alt="" loading="lazy" />
+                    )}
+                    <span className="list-text">
+                      <span className="list-title">{article.title}</span>
+                      {article.summary.trim() !== "" && (
+                        <span className="list-sub">{article.summary}</span>
+                      )}
+                    </span>
+                  </button>
+                </SwipeToDelete>
               </li>
             ))}
           </ul>

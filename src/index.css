@@ -96,13 +96,40 @@ body {
   display: block;
 }
 
+/* Each item is a swipe row: the content slides left over the red
+ * delete area. The list keeps its 2px divider on the <li>. */
 .list-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.swipe {
+  touch-action: pan-y;
+}
+
+.swipe-bg {
+  position: absolute;
+  inset: 0;
+  background: var(--strawberry);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 24px;
+  font-weight: 700;
+}
+
+.swipe-content {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 4px;
   background: var(--tile);
   color: var(--tile-fg);
   padding: 4px 6px 4px 0;
+  transition: transform 0.2s ease;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .list-item + .list-item {
