@@ -89,6 +89,12 @@ export default function ArticleView({
         </button>
       </header>
 
+      {saved && (
+        <div className="saved-bar" role="status" aria-label="Opgeslagen">
+          ♥
+        </div>
+      )}
+
       <main className="content">
         {thumbnailUrl && <img className="hero" src={thumbnailUrl} alt="" />}
         <div className="article-body">
