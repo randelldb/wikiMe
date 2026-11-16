@@ -65,6 +65,19 @@ export class WikipediaApi {
     return (json.query?.random ?? []).map((entry: any) => entry.title as string);
   }
 
+  /** Full rendered HTML of one article (`action=parse&prop=text`), backing
+   * the in-app article reader behind the full-article feature flag. Edit
+   * section links are stripped; redirects resolve to the target page. */
+  async articleHtml(title: string): Promise<string> {
+    const json = await this.get(parseQuery(title));
+    this.throwOnApiError(json);
+    const text = json.parse?.text;
+    if (typeof text !== "string") {
+      throw new Error("API response has no parse.text");
+    }
+    return text;
+  }
+
   /** Titles of articles related to the seed articles via a combined morelike
    * search: `srsearch=morelike:{seedA}|{seedB}|{seedC}`. */
   async morelikeTitles(seeds: string[], limit = 24): Promise<string[]> {
@@ -120,6 +133,21 @@ export function searchQuery(srsearch: string, limit: number, offset = 0): Record
 /** Combined morelike query: `srsearch=morelike:{seedA}|{seedB}|{seedC}`. */
 export function morelikeQuery(seeds: string[], limit: number): Record<string, string> {
   return searchQuery(`morelike:${seeds.join("|")}`, limit);
+}
+
+/** Pure `action=parse` query builder for the full article HTML, URL-encoded
+ * by URLSearchParams in `get`. Exported so the URL construction can be unit
+ * tested. */
+export function parseQuery(title: string): Record<string, string> {
+  return {
+    action: "parse",
+    format: "json",
+    formatversion: "2",
+    page: title,
+    prop: "text",
+    redirects: "1",
+    disableeditsection: "1",
+  };
 }
 
 /** Pure `list=random` query builder, URL-encoded by URLSearchParams in `get`.

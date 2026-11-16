@@ -55,6 +55,12 @@ export class ArticleRepository {
     return this.api.titleSuggestions(query, limit);
   }
 
+  /** Full rendered HTML of an article, for the in-app reader (feature-flagged
+   * in the settings). */
+  async articleHtml(title: string): Promise<string> {
+    return this.api.articleHtml(title);
+  }
+
   /** morelike candidates for the "Voor jou" feed: one combined call for all
    * seeds, falling back to separate per-seed calls (same fallback style as
    * the deepcat strategy) when the combined call errors or returns nothing. */

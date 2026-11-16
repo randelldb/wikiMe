@@ -11,11 +11,18 @@ const LANGUAGES: { code: AppLanguage; label: string }[] = [
   { code: "en", label: "English" },
 ];
 
-/** Settings screen. For now the only option is the language switch: it
- * changes the UI language and the Wikipedia source (WikiConfig) at once.
- * Themes are tied to the language they were created in, so switching warns
- * when existing themes are not available in the new language. */
-export default function SettingsScreen() {
+/** Settings screen. Options: the language switch (changes the UI language
+ * and the Wikipedia source at once; themes are tied to the language they
+ * were created in, so switching warns when items are hidden) and the
+ * full-article feature flag (render whole Wikipedia pages in-app or only
+ * link out to Wikipedia). */
+export default function SettingsScreen({
+  fullArticle,
+  onToggleFullArticle,
+}: {
+  fullArticle: boolean;
+  onToggleFullArticle: (enabled: boolean) => void;
+}) {
   const { lang, setLang, t } = useLang();
   const [notice, setNotice] = useState(false);
 
@@ -59,6 +66,26 @@ export default function SettingsScreen() {
           ))}
         </ul>
         <p className="hint settings-hint">{t("settings.languageHint")}</p>
+
+        <p className="field-label settings-label">{t("settings.fullArticle")}</p>
+        <ul className="list">
+          <li className="list-item">
+            <button
+              className="list-main"
+              role="switch"
+              aria-checked={fullArticle}
+              onClick={() => onToggleFullArticle(!fullArticle)}
+            >
+              <span className="list-text">
+                <span className="list-title">
+                  {fullArticle ? t("settings.on") : t("settings.off")}
+                </span>
+              </span>
+              {fullArticle && <span aria-hidden="true">✓</span>}
+            </button>
+          </li>
+        </ul>
+        <p className="hint settings-hint">{t("settings.fullArticleHint")}</p>
       </main>
 
       {notice && (

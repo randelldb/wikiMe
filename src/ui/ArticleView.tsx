@@ -1,30 +1,48 @@
 import { useEffect, useState } from "react";
+import type { MouseEvent } from "react";
 import { ArticleRepository } from "../data/repository";
 import { WikiConfig } from "../data/config";
 import { deleteSavedArticle, upsertSavedArticle } from "../data/db";
+import { RateLimitedError } from "../data/types";
+import { classifyArticleLink, normalizeArticleHtml } from "../data/wikihtml";
 import { useLang } from "../i18n";
 
 const repository = new ArticleRepository();
 
 /** Article reading view. Wikipedia blocks embedding its site in an iframe,
- * so the web version shows the intro/thumbnail here and links out to
- * m.wikipedia.org — the web equivalent of the in-app WebView from the
- * Android/Flutter versions. */
+ * so two modes exist: with the full-article setting on, the complete article
+ * HTML (`action=parse&prop=text`) is rendered inside the app in app style
+ * and wiki links navigate in-app; with it off, only the intro/thumbnail is
+ * shown here plus a link out to m.wikipedia.org — the web equivalent of the
+ * in-app WebView from the Android/Flutter versions. */
 export default function ArticleView({
   title,
   savedTitles,
   refreshSaved,
   onClose,
+  onOpenArticle,
+  fullArticle,
 }: {
   title: string;
   savedTitles: Set<string>;
   refreshSaved: () => void;
   onClose: () => void;
+  onOpenArticle: (title: string) => void;
+  /** Feature flag from the settings: render the full page in-app. */
+  fullArticle: boolean;
 }) {
   const { t, lang } = useLang();
   const [extract, setExtract] = useState<string | null>(null);
   const [thumbnailUrl, setThumbnailUrl] = useState<string | undefined>();
   const [message, setMessage] = useState<string | null>(null);
+  // Full article HTML keyed by the title it was loaded for, so a title or
+  // flag change derives to "no content yet" during render instead of
+  // resetting state inside the effect.
+  const [full, setFull] = useState<{
+    title: string;
+    html: string | null;
+    error: string | null;
+  } | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -43,6 +61,50 @@ export default function ArticleView({
       cancelled = true;
     };
   }, [title]);
+
+  // Full article HTML, only fetched when the feature flag is on. The lead
+  // extract is still loaded in the background: it backs the save action.
+  useEffect(() => {
+    if (!fullArticle) return;
+    let cancelled = false;
+    repository
+      .articleHtml(title)
+      .then((raw) => {
+        if (!cancelled) setFull({ title, html: normalizeArticleHtml(raw), error: null });
+      })
+      .catch((e) => {
+        console.error(`WikiMe: fetching full article "${title}" failed:`, e);
+        if (!cancelled) {
+          setFull({
+            title,
+            html: null,
+            error:
+              e instanceof RateLimitedError ? t("errors.rateLimited") : t("errors.loadFailed"),
+          });
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [title, fullArticle, t]);
+
+  const html = fullArticle && full?.title === title ? full.html : null;
+  const htmlError = fullArticle && full?.title === title ? full.error : null;
+
+  // Link clicks inside the rendered article: main-namespace wiki links open
+  // in-app, everything else in a new tab, fragments scroll natively.
+  const onContentClick = (e: MouseEvent<HTMLDivElement>) => {
+    const anchor = (e.target as HTMLElement).closest("a");
+    if (!anchor) return;
+    const link = classifyArticleLink(anchor.getAttribute("href") ?? "", WikiConfig.apiBase(lang));
+    if (link.kind === "article") {
+      e.preventDefault();
+      onOpenArticle(link.title);
+    } else if (link.kind === "external") {
+      e.preventDefault();
+      window.open(link.url, "_blank", "noreferrer");
+    }
+  };
 
   const saved = savedTitles.has(title);
 
@@ -96,25 +158,57 @@ export default function ArticleView({
 
       <main className="content">
         {thumbnailUrl && <img className="hero" src={thumbnailUrl} alt="" />}
-        <div className="article-body">
-          {extract === null ? (
-            <div className="status" role="status" aria-label={t("feed.loading")}>
-              <div className="spinner" />
+        {fullArticle ? (
+          <>
+            {html === null && htmlError === null && (
+              <div className="status" role="status" aria-label={t("feed.loading")}>
+                <div className="spinner" />
+              </div>
+            )}
+            {htmlError !== null && (
+              <div className="article-body">
+                <p className="error">{htmlError}</p>
+              </div>
+            )}
+            {html !== null && (
+              <div
+                className="wiki-content"
+                dangerouslySetInnerHTML={{ __html: html }}
+                onClick={onContentClick}
+              />
+            )}
+            <div className="article-body">
+              <a
+                className="btn"
+                href={WikiConfig.mobileArticleUrl(title)}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {t("article.readMore")}
+              </a>
             </div>
-          ) : extract === "" ? (
-            <p className="empty">{t("feed.noSummary")}</p>
-          ) : (
-            <p className="lead">{extract}</p>
-          )}
-          <a
-            className="btn"
-            href={WikiConfig.mobileArticleUrl(title)}
-            target="_blank"
-            rel="noreferrer"
-          >
-            {t("article.readMore")}
-          </a>
-        </div>
+          </>
+        ) : (
+          <div className="article-body">
+            {extract === null ? (
+              <div className="status" role="status" aria-label={t("feed.loading")}>
+                <div className="spinner" />
+              </div>
+            ) : extract === "" ? (
+              <p className="empty">{t("feed.noSummary")}</p>
+            ) : (
+              <p className="lead">{extract}</p>
+            )}
+            <a
+              className="btn"
+              href={WikiConfig.mobileArticleUrl(title)}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {t("article.readMore")}
+            </a>
+          </div>
+        )}
 
         {message && (
           <div className="snackbar" onClick={() => setMessage(null)}>

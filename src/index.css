@@ -490,6 +490,60 @@ body {
   margin: 0;
 }
 
+/* --- Full Wikipedia article rendered in-app (feature-flagged) --- */
+
+.wiki-content {
+  padding: 0 16px 16px;
+  line-height: 1.65;
+  overflow-wrap: break-word;
+}
+
+.wiki-content a {
+  color: color-mix(in srgb, var(--primary) 45%, var(--white));
+}
+
+.wiki-content img {
+  max-width: 100%;
+  height: auto;
+}
+
+.wiki-content h2 {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 4px;
+}
+
+.wiki-content table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  font-size: 0.85rem;
+}
+
+.wiki-content .infobox,
+.wiki-content .navbox,
+.wiki-content .metadata,
+.wiki-content .hatnote,
+.wiki-content .thumb {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.wiki-content .mw-editsection,
+.wiki-content .editsection {
+  display: none;
+}
+
+.wiki-content blockquote {
+  border-left: 3px solid var(--border);
+  margin-left: 0;
+  padding-left: 12px;
+  color: var(--muted);
+}
+
 .snackbar {
   position: fixed;
   bottom: 72px;
