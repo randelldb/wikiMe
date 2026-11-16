@@ -50,7 +50,7 @@ body {
   justify-content: space-between;
   gap: 12px;
   padding: 20px 16px;
-  background: var(--cerulean);
+  background: transparent;
   color: var(--white);
 }
 
@@ -445,7 +445,7 @@ body {
   bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--cerulean);
+  background: transparent;
   border: none;
   border-left: 4px solid var(--tangerine);
   color: var(--white);
