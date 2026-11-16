@@ -48,8 +48,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 20px 16px;
+  gap: 0;
+  padding: 40px 16px;
   background: var(--bg);
   color: var(--white);
 }
