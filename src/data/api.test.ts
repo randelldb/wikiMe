@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { morelikeQuery, searchQuery } from "./api";
+import { morelikeQuery, randomQuery, searchQuery } from "./api";
 
 /** Mirrors how `WikipediaApi.get` encodes queries into the request URL. */
 function asUrl(query: Record<string, string>): string {
@@ -37,5 +37,23 @@ describe("searchQuery (fulltext, themafeed)", () => {
     expect(url).toContain("srsearch=uitvinders");
     expect(url).toContain("srlimit=20");
     expect(url).toContain("sroffset=40");
+  });
+});
+
+describe("randomQuery (list=random, dobbelsteen-tab)", () => {
+  it("builds a list=random query in the main namespace", () => {
+    const params = new URLSearchParams(randomQuery(3));
+
+    expect(params.get("action")).toBe("query");
+    expect(params.get("list")).toBe("random");
+    expect(params.get("rnnamespace")).toBe("0");
+    expect(params.get("rnlimit")).toBe("3");
+  });
+
+  it("is URL-encoded like the other queries", () => {
+    const url = asUrl(randomQuery(3));
+    expect(url).toContain("list=random");
+    expect(url).toContain("rnlimit=3");
+    expect(url).toContain("origin=*");
   });
 });

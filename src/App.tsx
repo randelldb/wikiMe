@@ -4,6 +4,7 @@ import FeedScreen from "./ui/FeedScreen";
 import SavedScreen from "./ui/SavedScreen";
 import ArticleView from "./ui/ArticleView";
 import ForYouScreen from "./ui/ForYouScreen";
+import RandomScreen from "./ui/RandomScreen";
 import { savedTitles } from "./data/db";
 import type { Theme } from "./data/types";
 
@@ -16,6 +17,7 @@ type View =
   | { screen: "themes" }
   | { screen: "saved" }
   | { screen: "foryou" }
+  | { screen: "random" }
   | { screen: "feed"; themeId: number; themeName: string }
   | { screen: "article"; title: string };
 
@@ -24,6 +26,9 @@ const TABS = [
   { screen: "saved", label: "Opgeslagen" },
   { screen: "foryou", label: "Voor jou" },
 ] as const;
+
+/** The dice button sits left of the text tabs and acts as a fourth tab. */
+type TabId = "random" | (typeof TABS)[number]["screen"];
 
 function viewKey(v: View): string {
   if (v.screen === "feed") return `feed:${v.themeId}`;
@@ -34,8 +39,9 @@ function viewKey(v: View): string {
 export default function App() {
   const [view, setView] = useState<View>({ screen: "themes" });
   // The tab bar is always visible; activeTab keeps the tab you navigated
-  // from highlighted while a feed or article view is pushed on top.
-  const [activeTab, setActiveTab] = useState<(typeof TABS)[number]["screen"]>("themes");
+  // from highlighted while a feed or article view is pushed on top. The dice
+  // button is a tab of its own ("random").
+  const [activeTab, setActiveTab] = useState<TabId>("themes");
   const [saved, setSaved] = useState<Set<string>>(new Set());
   const [restoring, setRestoring] = useState(false);
   const backStack = useRef<View[]>([]);
@@ -104,6 +110,14 @@ export default function App() {
     setView({ screen });
   };
 
+  // The dice tab: three random articles, treated like a top-level tab.
+  const goRandom = () => {
+    rememberScroll();
+    backStack.current = [];
+    setActiveTab("random");
+    setView({ screen: "random" });
+  };
+
   return (
     <div className="app" style={{ visibility: restoring ? "hidden" : undefined }}>
       {restoring && (
@@ -132,6 +146,13 @@ export default function App() {
           onOpenArticle={(title) => goTo({ screen: "article", title })}
         />
       )}
+      {view.screen === "random" && (
+        <RandomScreen
+          savedTitles={saved}
+          refreshSaved={refreshSaved}
+          onOpenArticle={(title) => goTo({ screen: "article", title })}
+        />
+      )}
       {view.screen === "feed" && (
         <FeedScreen
           themeId={view.themeId}
@@ -152,6 +173,16 @@ export default function App() {
       )}
 
       <nav className="tabbar" role="tablist">
+        <button
+          role="tab"
+          aria-selected={activeTab === "random"}
+          className={activeTab === "random" ? "tab dice active" : "tab dice"}
+          onClick={goRandom}
+          aria-label="Willekeurige artikelen"
+          title="Willekeurige artikelen"
+        >
+          ⚄
+        </button>
         {TABS.map((tab) => (
           <button
             key={tab.screen}

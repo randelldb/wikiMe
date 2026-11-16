@@ -57,6 +57,14 @@ export class WikipediaApi {
     return (json.query?.search ?? []).map((result: any) => result.title as string);
   }
 
+  /** Titles of random articles in the main namespace (`list=random`),
+   * backing the dice tab. */
+  async randomTitles(limit = 3): Promise<string[]> {
+    const json = await this.get(randomQuery(limit));
+    this.throwOnApiError(json);
+    return (json.query?.random ?? []).map((entry: any) => entry.title as string);
+  }
+
   /** Titles of articles related to the seed articles via a combined morelike
    * search: `srsearch=morelike:{seedA}|{seedB}|{seedC}`. */
   async morelikeTitles(seeds: string[], limit = 24): Promise<string[]> {
@@ -112,4 +120,17 @@ export function searchQuery(srsearch: string, limit: number, offset = 0): Record
 /** Combined morelike query: `srsearch=morelike:{seedA}|{seedB}|{seedC}`. */
 export function morelikeQuery(seeds: string[], limit: number): Record<string, string> {
   return searchQuery(`morelike:${seeds.join("|")}`, limit);
+}
+
+/** Pure `list=random` query builder, URL-encoded by URLSearchParams in `get`.
+ * Exported so the URL construction can be unit tested. */
+export function randomQuery(limit: number): Record<string, string> {
+  return {
+    action: "query",
+    format: "json",
+    formatversion: "2",
+    list: "random",
+    rnnamespace: "0",
+    rnlimit: String(limit),
+  };
 }

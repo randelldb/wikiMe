@@ -31,6 +31,15 @@ export class ArticleRepository {
     return { articles, progress: { searchOffset: progress.searchOffset + titles.length } };
   }
 
+  /** Random articles with intro and thumbnail: `list=random` titles, then the
+   * same `pages()` prefetch the feeds use. Backs the dice tab. */
+  async randomArticles(count = 3): Promise<Article[]> {
+    const titles = await this.api.randomTitles(count);
+    if (titles.length === 0) return [];
+    const pages = await this.api.pages(titles.join("|"));
+    return distinctByTitle(pages.filter((page) => !page.missing).map(articleFromPage));
+  }
+
   /** Looks up a single article's intro and thumbnail, e.g. for saving a page
    * opened via a link. */
   async article(title: string): Promise<Article | null> {

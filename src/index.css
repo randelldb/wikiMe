@@ -369,9 +369,18 @@ body {
   transition: background 0.15s ease, color 0.15s ease;
 }
 
-.tab:nth-child(1) { --tab-accent: #cb870a; }
-.tab:nth-child(2) { --tab-accent: var(--strawberry); }
-.tab:nth-child(3) { --tab-accent: var(--cyan); }
+/* The dice button is the first child, so the text tabs are children 2-4. */
+.tab:nth-child(2) { --tab-accent: #cb870a; }
+.tab:nth-child(3) { --tab-accent: var(--strawberry); }
+.tab:nth-child(4) { --tab-accent: var(--cyan); }
+
+/* Square dice tab at the left of the bar (bar height is 56px). */
+.tab.dice {
+  flex: 0 0 56px;
+  width: 56px;
+  font-size: 1.5rem;
+  --tab-accent: var(--tuscan);
+}
 
 .tab:hover {
   color: var(--white);
@@ -382,6 +391,13 @@ body {
   background: var(--tab-accent);
   color: var(--white);
   font-weight: 600;
+}
+
+/* Re-roll button under the random article list. */
+.roll-again {
+  display: grid;
+  justify-items: center;
+  padding: 8px 16px 24px;
 }
 
 /* --- Feed cards: borderless full-width panels --- */
