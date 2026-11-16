@@ -93,7 +93,7 @@ body {
 .list {
   list-style: none;
   margin: 0;
-  padding: 8px 16px;
+  padding: 8px 0;
   display: grid;
   gap: 8px;
 }
@@ -342,13 +342,12 @@ body {
   font-weight: 600;
 }
 
-/* --- Feed cards: uniform solid panels with a thin colored top stripe --- */
+/* --- Feed cards: borderless full-width panels --- */
 
 .card {
   background: var(--surface);
   border: none;
-  border-top: 4px solid var(--card-accent, var(--primary));
-  margin: 12px 16px;
+  margin: 12px 0;
   overflow: hidden;
   cursor: pointer;
   transition: background 0.15s ease;
@@ -357,17 +356,6 @@ body {
 .card:hover {
   background: color-mix(in srgb, var(--card-accent, var(--primary)) 8%, var(--surface));
 }
-
-.content > .card:nth-child(10n + 1) { --card-accent: var(--c-strawberry); }
-.content > .card:nth-child(10n + 2) { --card-accent: var(--c-tangerine); }
-.content > .card:nth-child(10n + 3) { --card-accent: var(--c-carrot); }
-.content > .card:nth-child(10n + 4) { --card-accent: var(--c-coral); }
-.content > .card:nth-child(10n + 5) { --card-accent: var(--c-sun); }
-.content > .card:nth-child(10n + 6) { --card-accent: var(--c-willow); }
-.content > .card:nth-child(10n + 7) { --card-accent: var(--c-seagrass); }
-.content > .card:nth-child(10n + 8) { --card-accent: var(--c-cyan); }
-.content > .card:nth-child(10n + 9) { --card-accent: var(--c-slate); }
-.content > .card:nth-child(10n + 10) { --card-accent: var(--c-cerulean); }
 
 .card-image {
   width: 100%;
