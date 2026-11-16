@@ -300,14 +300,14 @@ body {
 
 .tabbar {
   position: fixed;
-  bottom: 12px;
+  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: calc(100% - 32px);
-  max-width: 688px;
+  width: 100%;
+  max-width: 720px;
   padding: 4px;
   background: var(--surface);
-  border: 1px solid var(--border);
+  border-top: 1px solid var(--border);
   z-index: 15;
   display: flex;
   gap: 4px;
