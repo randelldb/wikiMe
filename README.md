@@ -27,7 +27,10 @@ and the Wikipedia source, and themes are shown per language.
 - **Random** — the dice tab in the tab bar shows 3 random Wikipedia articles
   to pick from; roll again for a fresh set.
 - **Article view** — hero image, lead paragraph and a link to the full article
-  on Wikipedia, plus a save toggle.
+  on Wikipedia, plus a save toggle. With the **full article** setting enabled
+  (Settings), the whole Wikipedia page (`action=parse&prop=text`) is rendered
+  inside the app in the app style and wiki links navigate in-app; with it off,
+  only the link out to Wikipedia is shown.
 - The tab bar is always visible, scroll positions are remembered per screen,
   and the app handles rate limiting (HTTP 429) with friendly retry states.
 
@@ -65,8 +68,9 @@ src/
     ├── repository.ts     # article feeds: search, morelike, random
     ├── foryou.ts         # personal-feed batching logic
     ├── presets.ts        # theme presets + pure OR-query builders
+    ├── wikihtml.ts       # normalize/parse HTML + link classification
     ├── db.ts             # IndexedDB layer (idb)
-    └── config.ts         # wiki language / API base URLs
+    └── config.ts         # wiki language / feature flags / API base URLs
 ```
 
 Navigation is plain App-level state with a small back-stack — the app is

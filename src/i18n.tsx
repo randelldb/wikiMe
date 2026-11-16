@@ -81,6 +81,11 @@ const nl = {
   "settings.language": "Taal",
   "settings.languageHint":
     "Bepaalt de taal van de app én van de Wikipedia-bronnen.",
+  "settings.fullArticle": "Volledig artikel in de app",
+  "settings.fullArticleHint":
+    "Aan: de hele Wikipedia-pagina wordt in de app-stijl in de app gerenderd. Uit: alleen een link naar de Wikipedia-pagina.",
+  "settings.on": "Aan",
+  "settings.off": "Uit",
   "settings.itemsUnavailable":
     "Thema's en opgeslagen artikelen uit een andere taal worden verborgen.",
 } as const;
@@ -159,6 +164,11 @@ const en: Dict = {
   "settings.title": "Settings",
   "settings.language": "Language",
   "settings.languageHint": "Sets the language of the app and the Wikipedia sources.",
+  "settings.fullArticle": "Full article in the app",
+  "settings.fullArticleHint":
+    "On: the whole Wikipedia page is rendered inside the app in app style. Off: only a link to the Wikipedia page.",
+  "settings.on": "On",
+  "settings.off": "Off",
   "settings.itemsUnavailable": "Themes and saved articles from another language are hidden.",
 };
 

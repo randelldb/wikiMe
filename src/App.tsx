@@ -8,6 +8,7 @@ import RandomScreen from "./ui/RandomScreen";
 import SettingsScreen from "./ui/SettingsScreen";
 import { useLang } from "./i18n";
 import { savedTitlesInLanguage } from "./data/db";
+import { WikiConfig } from "./data/config";
 import type { Theme } from "./data/types";
 
 /** Navigation mirrors the Android/Flutter app: three top-level tabs plus
@@ -49,6 +50,13 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<TabId>("themes");
   const [saved, setSaved] = useState<Set<string>>(new Set());
   const [restoring, setRestoring] = useState(false);
+  // Feature flag from the settings: render full Wikipedia articles in-app.
+  const [fullArticle, setFullArticleState] = useState(WikiConfig.fullArticle);
+
+  const setFullArticle = (enabled: boolean) => {
+    WikiConfig.setFullArticle(enabled);
+    setFullArticleState(enabled);
+  };
   const backStack = useRef<View[]>([]);
   const scrollPos = useRef<Record<string, number>>({});
 
@@ -168,7 +176,9 @@ export default function App() {
           onOpenArticle={(title) => goTo({ screen: "article", title })}
         />
       )}
-      {view.screen === "settings" && <SettingsScreen />}
+      {view.screen === "settings" && (
+        <SettingsScreen fullArticle={fullArticle} onToggleFullArticle={setFullArticle} />
+      )}
       {view.screen === "feed" && (
         <FeedScreen
           themeId={view.themeId}
@@ -185,6 +195,8 @@ export default function App() {
           savedTitles={saved}
           refreshSaved={refreshSaved}
           onClose={goBack}
+          onOpenArticle={(title) => goTo({ screen: "article", title })}
+          fullArticle={fullArticle}
         />
       )}
 

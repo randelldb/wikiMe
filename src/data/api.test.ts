@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { morelikeQuery, randomQuery, searchQuery } from "./api";
+import { morelikeQuery, parseQuery, randomQuery, searchQuery } from "./api";
 
 /** Mirrors how `WikipediaApi.get` encodes queries into the request URL. */
 function asUrl(query: Record<string, string>): string {
@@ -37,6 +37,24 @@ describe("searchQuery (fulltext, themafeed)", () => {
     expect(url).toContain("srsearch=uitvinders");
     expect(url).toContain("srlimit=20");
     expect(url).toContain("sroffset=40");
+  });
+});
+
+describe("parseQuery (action=parse, volledig artikel in de app)", () => {
+  it("builds the full-article HTML query with redirects and no edit links", () => {
+    const params = new URLSearchParams(parseQuery("Ruimtevaart"));
+
+    expect(params.get("action")).toBe("parse");
+    expect(params.get("page")).toBe("Ruimtevaart");
+    expect(params.get("prop")).toBe("text");
+    expect(params.get("redirects")).toBe("1");
+    expect(params.get("disableeditsection")).toBe("1");
+  });
+
+  it("URL-encodes the title like the other queries", () => {
+    const url = asUrl(parseQuery("Olympische Spelen"));
+    expect(url).toContain("page=Olympische+Spelen");
+    expect(url).toContain("origin=*");
   });
 });
 
