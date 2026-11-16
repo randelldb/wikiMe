@@ -1,24 +1,29 @@
 :root {
   color-scheme: light;
-  /* Purple 90's scheme (Hookagency) */
-  --slate-violet: #4a4d60;
-  --ice: #a0d2eb;
-  --mid-purple: #d0bdf4;
-  --grape: #8458b3;
-  --freeze: #e5eaf5;
-  --black: #2f3145;
+  /* Coolors metro palette */
+  --strawberry: #f94144;
+  --tangerine: #f3722c;
+  --carrot: #f8961e;
+  --coral: #f9844a;
+  --tuscan: #f9c74f;
+  --willow: #90be6d;
+  --seagrass: #43aa8b;
+  --cyan: #4d908e;
+  --blue-slate: #577590;
+  --cerulean: #277da1;
+  --black: #111827;
   --white: #ffffff;
 
-  --bg-soft: #edf1f7;
+  --bg-soft: #f3f4f6;
   --bg: var(--bg-soft);
   --surface: var(--white);
   --text: var(--black);
   --muted: color-mix(in srgb, var(--black) 60%, transparent);
   --border: color-mix(in srgb, var(--black) 14%, transparent);
-  --primary: var(--grape);
+  --primary: var(--cerulean);
   --primary-contrast: var(--white);
-  --heart: var(--grape);
-  --error-bg: var(--grape);
+  --heart: var(--strawberry);
+  --error-bg: var(--strawberry);
 }
 
 body {
@@ -44,7 +49,7 @@ body {
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
-  background: var(--slate-violet);
+  background: var(--cerulean);
   color: var(--white);
 }
 
@@ -57,7 +62,7 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: var(--grape);
+  color: var(--primary-contrast);
 }
 
 .content {
@@ -95,11 +100,16 @@ body {
   padding: 4px 6px 4px 0;
 }
 
-.list-item:nth-child(5n + 1) { --tile: var(--slate-violet); --tile-fg: var(--white); }
-.list-item:nth-child(5n + 2) { --tile: var(--ice); --tile-fg: var(--black); }
-.list-item:nth-child(5n + 3) { --tile: var(--grape); --tile-fg: var(--white); }
-.list-item:nth-child(5n + 4) { --tile: var(--mid-purple); --tile-fg: var(--black); }
-.list-item:nth-child(5n + 5) { --tile: var(--freeze); --tile-fg: var(--black); }
+.list-item:nth-child(10n + 1) { --tile: var(--strawberry); --tile-fg: var(--white); }
+.list-item:nth-child(10n + 2) { --tile: var(--tangerine); --tile-fg: var(--white); }
+.list-item:nth-child(10n + 3) { --tile: var(--carrot); --tile-fg: var(--black); }
+.list-item:nth-child(10n + 4) { --tile: var(--coral); --tile-fg: var(--black); }
+.list-item:nth-child(10n + 5) { --tile: var(--tuscan); --tile-fg: var(--black); }
+.list-item:nth-child(10n + 6) { --tile: var(--willow); --tile-fg: var(--black); }
+.list-item:nth-child(10n + 7) { --tile: var(--seagrass); --tile-fg: var(--white); }
+.list-item:nth-child(10n + 8) { --tile: var(--cyan); --tile-fg: var(--white); }
+.list-item:nth-child(10n + 9) { --tile: var(--blue-slate); --tile-fg: var(--white); }
+.list-item:nth-child(10n + 10) { --tile: var(--cerulean); --tile-fg: var(--white); }
 
 .list-main {
   flex: 1;
@@ -147,7 +157,7 @@ body {
   flex-shrink: 0;
 }
 
-/* --- Buttons: flat, square, solid grape --- */
+/* --- Buttons: flat, square, solid cerulean --- */
 
 .btn {
   display: inline-flex;
@@ -156,7 +166,7 @@ body {
   gap: 6px;
   padding: 10px 18px;
   border: none;
-  background: var(--grape);
+  background: var(--primary);
   color: var(--black);
   font: inherit;
   font-weight: 700;
@@ -166,7 +176,7 @@ body {
 }
 
 .btn:hover {
-  background: color-mix(in srgb, var(--grape) 82%, var(--black));
+  background: color-mix(in srgb, var(--primary) 82%, var(--black));
 }
 
 .btn:disabled {
@@ -213,12 +223,12 @@ body {
 }
 
 .icon-btn.heart:hover {
-  color: var(--grape);
+  color: var(--primary);
 }
 
 .icon-btn.heart.saved {
-  background: var(--grape);
-  border-color: var(--grape);
+  background: var(--primary);
+  border-color: var(--primary);
   color: var(--white);
 }
 
@@ -255,8 +265,8 @@ body {
 }
 
 .appbar .icon-btn.heart.saved {
-  background: var(--grape);
-  border-color: var(--grape);
+  background: var(--primary);
+  border-color: var(--primary);
   color: var(--white);
 }
 
@@ -269,13 +279,13 @@ body {
   z-index: 15;
   width: 56px;
   height: 56px;
-  background: var(--grape);
+  background: var(--primary);
   color: var(--white);
   font-size: 1.7rem;
 }
 
 .icon-btn.fab:hover {
-  background: color-mix(in srgb, var(--grape) 82%, var(--black));
+  background: color-mix(in srgb, var(--primary) 82%, var(--black));
   color: var(--white);
 }
 
@@ -289,7 +299,7 @@ body {
   width: 100%;
   max-width: 720px;
   padding: 4px;
-  background: var(--slate-violet);
+  background: var(--cerulean);
   z-index: 15;
   display: flex;
   gap: 4px;
@@ -308,9 +318,9 @@ body {
   transition: background 0.15s ease, color 0.15s ease;
 }
 
-.tab:nth-child(1) { --tab-accent: var(--grape); --tab-fg: var(--white); }
-.tab:nth-child(2) { --tab-accent: var(--ice); --tab-fg: var(--black); }
-.tab:nth-child(3) { --tab-accent: var(--mid-purple); --tab-fg: var(--black); }
+.tab:nth-child(1) { --tab-accent: var(--cerulean); --tab-fg: var(--white); }
+.tab:nth-child(2) { --tab-accent: var(--strawberry); --tab-fg: var(--white); }
+.tab:nth-child(3) { --tab-accent: var(--cyan); --tab-fg: var(--white); }
 
 .tab:hover {
   color: var(--white);
@@ -336,7 +346,7 @@ body {
 }
 
 .card:hover {
-  background: color-mix(in srgb, var(--grape) 10%, var(--surface));
+  background: color-mix(in srgb, var(--primary) 10%, var(--surface));
 }
 
 .card-image {
@@ -399,9 +409,9 @@ body {
   bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--slate-violet);
+  background: var(--cerulean);
   border: none;
-  border-left: 4px solid var(--grape);
+  border-left: 4px solid var(--tangerine);
   color: var(--white);
   padding: 12px 16px;
   cursor: pointer;
@@ -425,7 +435,7 @@ body {
 }
 
 .autocomplete-option:hover {
-  background: color-mix(in srgb, var(--grape) 18%, transparent);
+  background: color-mix(in srgb, var(--primary) 18%, transparent);
 }
 
 .option-title {
@@ -469,7 +479,7 @@ body {
   width: min(480px, 100%);
   background: var(--surface);
   border: none;
-  border-top: 4px solid var(--grape);
+  border-top: 4px solid var(--primary);
   padding: 8px 20px 20px;
 }
 
@@ -521,7 +531,7 @@ body {
 
 .field input:focus,
 .suggest-wrap input:focus {
-  outline: 2px solid var(--grape);
+  outline: 2px solid var(--primary);
   outline-offset: -2px;
   border-color: transparent;
 }
