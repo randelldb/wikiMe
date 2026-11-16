@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import Logo from "./Logo";
 import Modal from "./Modal";
 import { allThemes, deleteTheme, insertTheme } from "../data/db";
 import type { Theme } from "../data/types";
@@ -19,7 +20,9 @@ export default function ThemesScreen({ onOpenTheme }: { onOpenTheme: (theme: The
   return (
     <div className="screen">
       <header className="appbar">
-        <h1>Thema's</h1>
+        <h1>
+          <Logo /> WikiMe
+        </h1>
       </header>
 
       <main className="content">

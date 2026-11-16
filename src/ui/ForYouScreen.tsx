@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import Logo from "./Logo";
 import { upsertSavedArticle, deleteSavedArticle } from "../data/db";
 import { ForYouFeed } from "../data/foryou";
 import { RateLimitedError } from "../data/types";
@@ -99,7 +100,9 @@ export default function ForYouScreen({
   return (
     <div className="screen">
       <header className="appbar">
-        <h1>Voor jou</h1>
+        <h1>
+          <Logo /> WikiMe
+        </h1>
       </header>
 
       <main className="content">

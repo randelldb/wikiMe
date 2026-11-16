@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import Logo from "./Logo";
 import { deleteSavedArticle, savedArticles } from "../data/db";
 import type { SavedArticle } from "../data/types";
 
@@ -27,7 +28,9 @@ export default function SavedScreen({
   return (
     <div className="screen">
       <header className="appbar">
-        <h1>Opgeslagen</h1>
+        <h1>
+          <Logo /> WikiMe
+        </h1>
       </header>
 
       <main className="content">
