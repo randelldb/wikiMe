@@ -50,7 +50,7 @@ body {
   justify-content: space-between;
   gap: 12px;
   padding: 20px 16px;
-  background: color-mix(in srgb, var(--cerulean) 40%, #000);
+  background: var(--cerulean);
   color: var(--white);
 }
 
@@ -100,7 +100,7 @@ body {
   display: flex;
   align-items: center;
   gap: 4px;
-  background: color-mix(in srgb, var(--tile) 40%, #000);
+  background: var(--tile);
   border: 4px solid color-mix(in srgb, var(--tile) 40%, #000);
   color: var(--tile-fg);
   padding: 4px 6px 4px 0;
@@ -112,10 +112,10 @@ body {
 
 .list-item:nth-child(10n + 1) { --tile: var(--strawberry); --tile-fg: var(--white); }
 .list-item:nth-child(10n + 2) { --tile: var(--tangerine); --tile-fg: var(--white); }
-.list-item:nth-child(10n + 3) { --tile: var(--carrot); --tile-fg: var(--white); }
-.list-item:nth-child(10n + 4) { --tile: var(--coral); --tile-fg: var(--white); }
-.list-item:nth-child(10n + 5) { --tile: var(--tuscan); --tile-fg: var(--white); }
-.list-item:nth-child(10n + 6) { --tile: var(--willow); --tile-fg: var(--white); }
+.list-item:nth-child(10n + 3) { --tile: var(--carrot); --tile-fg: #111827; }
+.list-item:nth-child(10n + 4) { --tile: var(--coral); --tile-fg: #111827; }
+.list-item:nth-child(10n + 5) { --tile: var(--tuscan); --tile-fg: #111827; }
+.list-item:nth-child(10n + 6) { --tile: var(--willow); --tile-fg: #111827; }
 .list-item:nth-child(10n + 7) { --tile: var(--seagrass); --tile-fg: var(--white); }
 .list-item:nth-child(10n + 8) { --tile: var(--cyan); --tile-fg: var(--white); }
 .list-item:nth-child(10n + 9) { --tile: var(--blue-slate); --tile-fg: var(--white); }
@@ -186,7 +186,7 @@ body {
 }
 
 .btn:hover {
-  background: color-mix(in srgb, var(--primary) 25%, #000);
+  background: color-mix(in srgb, var(--primary) 82%, #000);
 }
 
 .btn:disabled {
@@ -237,8 +237,8 @@ body {
 }
 
 .icon-btn.heart.saved {
-  background: color-mix(in srgb, var(--heart) 40%, #000);
-  border-color: color-mix(in srgb, var(--heart) 40%, #000);
+  background: var(--heart);
+  border-color: var(--heart);
   color: var(--white);
 }
 
@@ -275,8 +275,8 @@ body {
 }
 
 .appbar .icon-btn.heart.saved {
-  background: color-mix(in srgb, var(--heart) 40%, #000);
-  border-color: color-mix(in srgb, var(--heart) 40%, #000);
+  background: var(--heart);
+  border-color: var(--heart);
   color: var(--white);
 }
 
@@ -289,13 +289,13 @@ body {
   z-index: 15;
   width: 56px;
   height: 56px;
-  background: color-mix(in srgb, var(--primary) 40%, #000);
+  background: var(--primary);
   color: var(--white);
   font-size: 1.7rem;
 }
 
 .icon-btn.fab:hover {
-  background: color-mix(in srgb, var(--primary) 25%, #000);
+  background: color-mix(in srgb, var(--primary) 82%, #000);
   color: var(--white);
 }
 
@@ -338,7 +338,7 @@ body {
 }
 
 .tab.active {
-  background: color-mix(in srgb, var(--tab-accent) 40%, #000);
+  background: var(--tab-accent);
   border-bottom-color: color-mix(in srgb, var(--tab-accent) 40%, #000);
   color: var(--white);
   font-weight: 600;
@@ -419,9 +419,9 @@ body {
   bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
-  background: color-mix(in srgb, var(--cerulean) 40%, #000);
+  background: var(--cerulean);
   border: none;
-  border-left: 4px solid color-mix(in srgb, var(--tangerine) 40%, #000);
+  border-left: 4px solid var(--tangerine);
   color: var(--white);
   padding: 12px 16px;
   cursor: pointer;
@@ -469,7 +469,7 @@ body {
   margin: 0;
   font-size: 0.85rem;
   font-weight: 600;
-  background: color-mix(in srgb, var(--error-bg) 40%, #000);
+  background: var(--error-bg);
   color: var(--white);
   padding: 8px 12px;
   justify-self: start;
@@ -489,7 +489,7 @@ body {
   width: min(480px, 100%);
   background: var(--surface);
   border: none;
-  border-top: 4px solid color-mix(in srgb, var(--primary) 40%, #000);
+  border-top: 4px solid var(--primary);
   padding: 8px 20px 20px;
 }
 
