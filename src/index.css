@@ -1,24 +1,24 @@
 :root {
   color-scheme: light;
-  /* Coastal palette */
-  --baltic: #33658a;
-  --sky: #86bbd8;
-  --palm: #758e4f;
-  --honey: #f6ae2d;
-  --blaze: #f26419;
-  --black: #10233a;
+  /* Purple 90's scheme (Hookagency) */
+  --slate-violet: #4a4d60;
+  --ice: #a0d2eb;
+  --mid-purple: #d0bdf4;
+  --grape: #8458b3;
+  --freeze: #e5eaf5;
+  --black: #2f3145;
   --white: #ffffff;
 
-  --bg-soft: #e9f0f6;
+  --bg-soft: #edf1f7;
   --bg: var(--bg-soft);
   --surface: var(--white);
   --text: var(--black);
   --muted: color-mix(in srgb, var(--black) 60%, transparent);
   --border: color-mix(in srgb, var(--black) 14%, transparent);
-  --primary: var(--blaze);
-  --primary-contrast: var(--black);
-  --heart: var(--blaze);
-  --error-bg: var(--blaze);
+  --primary: var(--grape);
+  --primary-contrast: var(--white);
+  --heart: var(--grape);
+  --error-bg: var(--grape);
 }
 
 body {
@@ -44,7 +44,7 @@ body {
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
-  background: var(--baltic);
+  background: var(--slate-violet);
   color: var(--white);
 }
 
@@ -57,7 +57,7 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: var(--blaze);
+  color: var(--grape);
 }
 
 .content {
@@ -95,11 +95,11 @@ body {
   padding: 4px 6px 4px 0;
 }
 
-.list-item:nth-child(5n + 1) { --tile: var(--baltic); --tile-fg: var(--white); }
-.list-item:nth-child(5n + 2) { --tile: var(--honey); --tile-fg: var(--black); }
-.list-item:nth-child(5n + 3) { --tile: var(--blaze); --tile-fg: var(--black); }
-.list-item:nth-child(5n + 4) { --tile: var(--palm); --tile-fg: var(--white); }
-.list-item:nth-child(5n + 5) { --tile: var(--sky); --tile-fg: var(--black); }
+.list-item:nth-child(5n + 1) { --tile: var(--slate-violet); --tile-fg: var(--white); }
+.list-item:nth-child(5n + 2) { --tile: var(--ice); --tile-fg: var(--black); }
+.list-item:nth-child(5n + 3) { --tile: var(--grape); --tile-fg: var(--white); }
+.list-item:nth-child(5n + 4) { --tile: var(--mid-purple); --tile-fg: var(--black); }
+.list-item:nth-child(5n + 5) { --tile: var(--freeze); --tile-fg: var(--black); }
 
 .list-main {
   flex: 1;
@@ -147,7 +147,7 @@ body {
   flex-shrink: 0;
 }
 
-/* --- Buttons: flat, square, solid orange --- */
+/* --- Buttons: flat, square, solid grape --- */
 
 .btn {
   display: inline-flex;
@@ -156,7 +156,7 @@ body {
   gap: 6px;
   padding: 10px 18px;
   border: none;
-  background: var(--blaze);
+  background: var(--grape);
   color: var(--black);
   font: inherit;
   font-weight: 700;
@@ -166,7 +166,7 @@ body {
 }
 
 .btn:hover {
-  background: color-mix(in srgb, var(--blaze) 82%, var(--black));
+  background: color-mix(in srgb, var(--grape) 82%, var(--black));
 }
 
 .btn:disabled {
@@ -213,13 +213,13 @@ body {
 }
 
 .icon-btn.heart:hover {
-  color: var(--blaze);
+  color: var(--grape);
 }
 
 .icon-btn.heart.saved {
-  background: var(--blaze);
-  border-color: var(--blaze);
-  color: var(--black);
+  background: var(--grape);
+  border-color: var(--grape);
+  color: var(--white);
 }
 
 /* Icon buttons inside colored tiles pick up the tile text color. */
@@ -255,9 +255,9 @@ body {
 }
 
 .appbar .icon-btn.heart.saved {
-  background: var(--blaze);
-  border-color: var(--blaze);
-  color: var(--black);
+  background: var(--grape);
+  border-color: var(--grape);
+  color: var(--white);
 }
 
 /* --- Floating add button --- */
@@ -269,14 +269,14 @@ body {
   z-index: 15;
   width: 56px;
   height: 56px;
-  background: var(--blaze);
-  color: var(--black);
+  background: var(--grape);
+  color: var(--white);
   font-size: 1.7rem;
 }
 
 .icon-btn.fab:hover {
-  background: color-mix(in srgb, var(--blaze) 82%, var(--black));
-  color: var(--black);
+  background: color-mix(in srgb, var(--grape) 82%, var(--black));
+  color: var(--white);
 }
 
 /* --- Bottom tab bar: each tab has its own color --- */
@@ -289,7 +289,7 @@ body {
   width: 100%;
   max-width: 720px;
   padding: 4px;
-  background: var(--baltic);
+  background: var(--slate-violet);
   z-index: 15;
   display: flex;
   gap: 4px;
@@ -308,9 +308,9 @@ body {
   transition: background 0.15s ease, color 0.15s ease;
 }
 
-.tab:nth-child(1) { --tab-accent: var(--honey); --tab-fg: var(--black); }
-.tab:nth-child(2) { --tab-accent: var(--sky); --tab-fg: var(--black); }
-.tab:nth-child(3) { --tab-accent: var(--blaze); --tab-fg: var(--black); }
+.tab:nth-child(1) { --tab-accent: var(--grape); --tab-fg: var(--white); }
+.tab:nth-child(2) { --tab-accent: var(--ice); --tab-fg: var(--black); }
+.tab:nth-child(3) { --tab-accent: var(--mid-purple); --tab-fg: var(--black); }
 
 .tab:hover {
   color: var(--white);
@@ -336,7 +336,7 @@ body {
 }
 
 .card:hover {
-  background: color-mix(in srgb, var(--blaze) 10%, var(--surface));
+  background: color-mix(in srgb, var(--grape) 10%, var(--surface));
 }
 
 .card-image {
@@ -399,9 +399,9 @@ body {
   bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--baltic);
+  background: var(--slate-violet);
   border: none;
-  border-left: 4px solid var(--blaze);
+  border-left: 4px solid var(--grape);
   color: var(--white);
   padding: 12px 16px;
   cursor: pointer;
@@ -425,7 +425,7 @@ body {
 }
 
 .autocomplete-option:hover {
-  background: color-mix(in srgb, var(--blaze) 18%, transparent);
+  background: color-mix(in srgb, var(--grape) 18%, transparent);
 }
 
 .option-title {
@@ -450,7 +450,7 @@ body {
   font-size: 0.85rem;
   font-weight: 600;
   background: var(--error-bg);
-  color: var(--black);
+  color: var(--white);
   padding: 8px 12px;
   justify-self: start;
 }
@@ -469,7 +469,7 @@ body {
   width: min(480px, 100%);
   background: var(--surface);
   border: none;
-  border-top: 4px solid var(--blaze);
+  border-top: 4px solid var(--grape);
   padding: 8px 20px 20px;
 }
 
@@ -521,7 +521,7 @@ body {
 
 .field input:focus,
 .suggest-wrap input:focus {
-  outline: 2px solid var(--blaze);
+  outline: 2px solid var(--grape);
   outline-offset: -2px;
   border-color: transparent;
 }
