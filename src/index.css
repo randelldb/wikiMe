@@ -73,7 +73,7 @@ body {
 }
 
 .content {
-  padding: 0 0 24px;
+  padding: 16px 0 24px;
 }
 
 .empty,
@@ -93,8 +93,7 @@ body {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: grid;
-  gap: 0;
+  display: block;
 }
 
 .list-item {
@@ -102,9 +101,13 @@ body {
   align-items: center;
   gap: 4px;
   background: color-mix(in srgb, var(--tile) 62%, #000);
-  border-left: 4px solid color-mix(in srgb, var(--tile) 40%, #000);
+  border: 4px solid color-mix(in srgb, var(--tile) 40%, #000);
   color: var(--tile-fg);
   padding: 4px 6px 4px 0;
+}
+
+.list-item + .list-item {
+  margin-top: -8px;
 }
 
 .list-item:nth-child(10n + 1) { --tile: var(--strawberry); --tile-fg: var(--white); }
