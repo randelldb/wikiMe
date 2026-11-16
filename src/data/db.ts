@@ -93,8 +93,12 @@ export async function theme(id: number): Promise<Theme | undefined> {
   return (await db()).get("themes", id);
 }
 
-export async function insertTheme(name: string, searchQuery: string): Promise<void> {
-  await (await db()).add("themes", { name, searchQuery });
+export async function insertTheme(
+  name: string,
+  searchQuery: string,
+  description = "",
+): Promise<void> {
+  await (await db()).add("themes", { name, searchQuery, description });
 }
 
 export async function deleteTheme(id: number): Promise<void> {

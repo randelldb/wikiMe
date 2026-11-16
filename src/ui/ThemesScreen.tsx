@@ -43,7 +43,9 @@ export default function ThemesScreen({ onOpenTheme }: { onOpenTheme: (theme: The
                   <button className="list-main" onClick={() => onOpenTheme(theme)}>
                     <span className="list-text">
                       <span className="list-title">{theme.name}</span>
-                      <span className="list-sub">{theme.searchQuery}</span>
+                      <span className="list-sub">
+                        {theme.description?.trim() ? theme.description : theme.searchQuery}
+                      </span>
                     </span>
                   </button>
                 </SwipeToDelete>
@@ -85,6 +87,7 @@ function AddThemeDialog({
   onSaved: () => void;
 }) {
   const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState<{ title: string; description?: string }[]>([]);
   const [suggestionsOpen, setSuggestionsOpen] = useState(false);
@@ -142,7 +145,7 @@ function AddThemeDialog({
 
   const add = async () => {
     if (!valid) return;
-    await insertTheme(name.trim(), searchQuery.trim());
+    await insertTheme(name.trim(), searchQuery.trim(), description.trim());
     onSaved();
   };
 
@@ -154,6 +157,14 @@ function AddThemeDialog({
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
+          />
+        </label>
+        <label className="field">
+          <span>Beschrijving</span>
+          <input
+            placeholder="Waar gaat dit thema over? (optioneel)"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
           />
         </label>
         <div className="field">

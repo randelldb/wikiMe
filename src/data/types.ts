@@ -30,6 +30,8 @@ export interface Theme {
   name: string;
   /** Full-text search term, like Speciaal:Zoeken with fulltext=1, e.g. "uitvinders". */
   searchQuery: string;
+  /** Optional free-text description shown under the name in the list. */
+  description?: string;
 }
 
 /** A saved article row. */
