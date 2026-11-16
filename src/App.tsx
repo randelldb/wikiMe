@@ -68,10 +68,17 @@ export default function App() {
   };
 
   // Restore the remembered scroll position whenever the view changes.
+  // Content loads async (IndexedDB / API), so re-apply a few times until
+  // the page is tall enough for the target position to stick.
   useEffect(() => {
     const y = scrollPos.current[viewKey(view)] ?? 0;
-    const frame = requestAnimationFrame(() => window.scrollTo(0, y));
-    return () => cancelAnimationFrame(frame);
+    const apply = () => window.scrollTo(0, y);
+    const raf = requestAnimationFrame(apply);
+    const timers = [150, 400, 900].map((ms) => window.setTimeout(apply, ms));
+    return () => {
+      cancelAnimationFrame(raf);
+      timers.forEach(clearTimeout);
+    };
   }, [view]);
 
   const switchTab = (screen: "themes" | "saved" | "foryou") => {
