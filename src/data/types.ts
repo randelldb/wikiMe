@@ -32,6 +32,15 @@ export interface Theme {
   searchQuery: string;
   /** Optional free-text description shown under the name in the list. */
   description?: string;
+  /** Wiki language ("nl", "en", …) the theme was created in. A theme only
+   * makes sense on the wiki of its own language, so themes are shown per
+   * active language. Rows from before this field existed count as Dutch. */
+  language?: string;
+}
+
+/** Effective language of a theme row; legacy rows without a language are Dutch. */
+export function themeLanguage(theme: Theme): string {
+  return theme.language ?? "nl";
 }
 
 /** A saved article row. */
@@ -40,6 +49,15 @@ export interface SavedArticle {
   summary: string;
   thumbnailUrl?: string;
   savedAt: number;
+  /** Wiki language ("nl", "en", …) the article was saved in. Saved items are
+   * shown per active language, like themes. Rows from before this field
+   * existed count as Dutch. */
+  language?: string;
+}
+
+/** Effective language of a saved article; legacy rows without a language are Dutch. */
+export function savedArticleLanguage(article: SavedArticle): string {
+  return article.language ?? "nl";
 }
 
 /** An article that was shown in the "Voor jou" feed; kept for a bounded
@@ -50,10 +68,12 @@ export interface ShownArticle {
   timestampAtShown: number;
 }
 
-/** Thrown when Wikimedia answers with HTTP 429. Callers should not retry automatically. */
+/** Thrown when Wikimedia answers with HTTP 429. Callers should not retry
+ * automatically. The default message is a fallback; the UI shows a
+ * translated string via the i18n dictionaries. */
 export class RateLimitedError extends Error {
-  constructor() {
-    super("Te veel verzoeken naar Wikipedia. Wacht even en probeer het opnieuw.");
+  constructor(message = "Rate limited by Wikipedia (HTTP 429).") {
+    super(message);
     this.name = "RateLimitedError";
   }
 }

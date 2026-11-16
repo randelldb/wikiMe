@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import Logo from "./Logo";
 import SwipeToDelete from "./SwipeToDelete";
-import { deleteSavedArticle, savedArticles } from "../data/db";
+import { deleteSavedArticle, savedArticles, savedArticlesInLanguage } from "../data/db";
+import { savedArticleLanguage } from "../data/types";
 import type { SavedArticle } from "../data/types";
+import { useLang } from "../i18n";
 
 export default function SavedScreen({
   savedTitles,
@@ -13,9 +15,18 @@ export default function SavedScreen({
   refreshSaved: () => void;
   onOpenArticle: (title: string) => void;
 }) {
+  const { t, lang } = useLang();
   const [articles, setArticles] = useState<SavedArticle[]>([]);
+  // True when saved articles exist that were saved in another language.
+  const [hiddenOtherLang, setHiddenOtherLang] = useState(false);
 
-  const load = useCallback(() => savedArticles().then(setArticles), []);
+  // Only saved articles of the active language are listed.
+  const load = useCallback(() => {
+    Promise.all([savedArticlesInLanguage(lang), savedArticles()]).then(([mine, all]) => {
+      setArticles(mine);
+      setHiddenOtherLang(all.some((a) => savedArticleLanguage(a) !== lang));
+    });
+  }, [lang]);
   useEffect(() => {
     load();
   }, [load, savedTitles]);
@@ -36,13 +47,16 @@ export default function SavedScreen({
 
       <main className="content">
         {articles.length === 0 ? (
-          <p className="empty">Nog niets opgeslagen.</p>
+          <div className="empty">
+            <p>{t("saved.empty")}</p>
+            {hiddenOtherLang && <p className="hint">{t("saved.hiddenOtherLanguage")}</p>}
+          </div>
         ) : (
           <ul className="list">
             {articles.map((article) => (
               <li key={article.title} className="list-item">
                 <SwipeToDelete
-                  confirmTitle={`Verwijder "${article.title}"?`}
+                  confirmTitle={t("saved.confirmDelete", { name: article.title })}
                   onConfirm={() => remove(article.title)}
                 >
                   <button className="list-main" onClick={() => onOpenArticle(article.title)}>

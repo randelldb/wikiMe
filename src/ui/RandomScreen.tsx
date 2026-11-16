@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import Logo from "./Logo";
 import { upsertSavedArticle, deleteSavedArticle } from "../data/db";
 import { ArticleRepository } from "../data/repository";
 import { RateLimitedError } from "../data/types";
 import type { Article } from "../data/types";
 import { ArticleCard, EMPTY_FEED, FeedStatus, type FeedUiState } from "./FeedParts";
+import { useLang } from "../i18n";
 
 const repository = new ArticleRepository();
 
@@ -22,6 +22,7 @@ export default function RandomScreen({
   refreshSaved: () => void;
   onOpenArticle: (title: string) => void;
 }) {
+  const { t, lang } = useLang();
   const [state, setState] = useState<FeedUiState>(EMPTY_FEED);
   const loadingRef = useRef(false);
 
@@ -41,13 +42,13 @@ export default function RandomScreen({
       console.error("WikiMe: rolling random articles failed:", e);
       const message =
         e instanceof RateLimitedError
-          ? e.message
-          : `Laden mislukt: ${e instanceof Error ? e.message : String(e)}`;
+          ? t("errors.rateLimited")
+          : `${t("errors.loadFailed")}: ${e instanceof Error ? e.message : String(e)}`;
       setState((s) => ({ ...s, isLoading: false, error: message }));
     } finally {
       loadingRef.current = false;
     }
-  }, []);
+  }, [t]);
 
   // Roll once when the screen opens.
   useEffect(() => {
@@ -63,6 +64,7 @@ export default function RandomScreen({
         summary: article.extract,
         thumbnailUrl: article.thumbnailUrl,
         savedAt: Date.now(),
+        language: lang,
       });
     }
     refreshSaved();
@@ -71,14 +73,12 @@ export default function RandomScreen({
   return (
     <div className="screen">
       <header className="appbar">
-        <h1>
-          <Logo /> Willekeurig
-        </h1>
+        <h1>{t("random.title")}</h1>
         <button
-          className="icon-btn"
+          className="icon-btn reroll"
           onClick={roll}
-          title="Nieuwe worp"
-          aria-label="Nieuwe worp"
+          title={t("random.reroll")}
+          aria-label={t("random.reroll")}
         >
           ⚄
         </button>
@@ -89,7 +89,7 @@ export default function RandomScreen({
           <FeedStatus
             state={state}
             onRetry={roll}
-            emptyMessage="Geen artikelen gevonden. Probeer het opnieuw."
+            emptyMessage={t("feed.emptyGeneric")}
           />
         ) : (
           <>
@@ -106,12 +106,12 @@ export default function RandomScreen({
               <FeedStatus
                 state={state}
                 onRetry={roll}
-                emptyMessage="Geen artikelen gevonden. Probeer het opnieuw."
+                emptyMessage={t("feed.emptyGeneric")}
               />
             )}
             <div className="roll-again">
               <button className="btn" onClick={roll} disabled={state.isLoading}>
-                Nog eens rollen
+                {t("random.rollAgain")}
               </button>
             </div>
           </>

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ArticleRepository } from "../data/repository";
 import { WikiConfig } from "../data/config";
 import { deleteSavedArticle, upsertSavedArticle } from "../data/db";
+import { useLang } from "../i18n";
 
 const repository = new ArticleRepository();
 
@@ -20,6 +21,7 @@ export default function ArticleView({
   refreshSaved: () => void;
   onClose: () => void;
 }) {
+  const { t, lang } = useLang();
   const [extract, setExtract] = useState<string | null>(null);
   const [thumbnailUrl, setThumbnailUrl] = useState<string | undefined>();
   const [message, setMessage] = useState<string | null>(null);
@@ -61,13 +63,14 @@ export default function ArticleView({
           `WikiMe: fetching article "${title}" before saving failed, saving title only:`,
           e,
         );
-        setMessage("Samenvatting ophalen mislukt; alleen de titel is opgeslagen.");
+        setMessage(t("article.summaryFailed"));
       }
       await upsertSavedArticle({
         title,
         summary: savedSummary,
         thumbnailUrl: savedThumb,
         savedAt: Date.now(),
+        language: lang,
       });
     }
     refreshSaved();
@@ -76,7 +79,7 @@ export default function ArticleView({
   return (
     <div className="screen article">
       <header className="appbar">
-        <button className="icon-btn" aria-label="Sluiten" onClick={onClose}>
+        <button className="icon-btn" aria-label={t("article.close")} onClick={onClose}>
           ←
         </button>
         <h1>{title}</h1>
@@ -85,7 +88,7 @@ export default function ArticleView({
       <button
         className={saved ? "saved-bar saved" : "saved-bar"}
         onClick={toggleSaved}
-        aria-label={saved ? "Verwijder uit opgeslagen" : "Opslaan"}
+        aria-label={saved ? t("feed.unsave") : t("feed.save")}
         aria-pressed={saved}
       >
         {saved ? "♥" : "♡"}
@@ -95,9 +98,9 @@ export default function ArticleView({
         {thumbnailUrl && <img className="hero" src={thumbnailUrl} alt="" />}
         <div className="article-body">
           {extract === null ? (
-            <p className="status">Laden…</p>
+            <p className="status">{t("feed.loading")}</p>
           ) : extract === "" ? (
-            <p className="empty">Geen samenvatting beschikbaar.</p>
+            <p className="empty">{t("feed.noSummary")}</p>
           ) : (
             <p className="lead">{extract}</p>
           )}
@@ -107,7 +110,7 @@ export default function ArticleView({
             target="_blank"
             rel="noreferrer"
           >
-            Lees verder op Wikipedia →
+            {t("article.readMore")}
           </a>
         </div>
 

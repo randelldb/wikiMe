@@ -4,6 +4,7 @@ import { ArticleRepository } from "../data/repository";
 import { RateLimitedError } from "../data/types";
 import type { Article } from "../data/types";
 import { ArticleCard, EMPTY_FEED, FeedStatus, type FeedUiState } from "./FeedParts";
+import { useLang } from "../i18n";
 
 const repository = new ArticleRepository();
 
@@ -24,6 +25,7 @@ export default function FeedScreen({
   onBack: () => void;
   onOpenArticle: (title: string) => void;
 }) {
+  const { t, lang } = useLang();
   const [state, setState] = useState<FeedUiState>(EMPTY_FEED);
   const queryRef = useRef<string | null>(null);
   const progressRef = useRef<{ searchOffset: number }>({ searchOffset: 0 });
@@ -40,7 +42,7 @@ export default function FeedScreen({
         query = loaded.searchQuery.trim();
         queryRef.current = query;
       }
-      if (query === "") throw new Error("Dit thema heeft geen zoekterm.");
+      if (query === "") throw new Error(t("errors.noSearchQuery"));
       const { articles: batch, progress } = await repository.feedArticles(
         query,
         progressRef.current,
@@ -60,13 +62,13 @@ export default function FeedScreen({
       console.error("WikiMe: loading feed batch failed:", e);
       const message =
         e instanceof RateLimitedError
-          ? e.message
-          : `Laden mislukt: ${e instanceof Error ? e.message : String(e)}`;
+          ? t("errors.rateLimited")
+          : `${t("errors.loadFailed")}: ${e instanceof Error ? e.message : String(e)}`;
       setState((s) => ({ ...s, isLoading: false, error: message }));
     } finally {
       loadingRef.current = false;
     }
-  }, [themeId]);
+  }, [themeId, t]);
 
   const retry = useCallback(() => {
     setState((s) => ({ ...s, error: null, exhausted: false }));
@@ -103,6 +105,7 @@ export default function FeedScreen({
         summary: article.extract,
         thumbnailUrl: article.thumbnailUrl,
         savedAt: Date.now(),
+        language: lang,
       });
     }
     refreshSaved();
@@ -111,7 +114,7 @@ export default function FeedScreen({
   return (
     <div className="screen">
       <header className="appbar">
-        <button className="icon-btn" onClick={onBack} title="Terug">
+        <button className="icon-btn" onClick={onBack} title={t("feed.back")}>
           ←
         </button>
         <h1>{themeName}</h1>
@@ -119,7 +122,7 @@ export default function FeedScreen({
 
       <main className="content">
         {state.articles.length === 0 ? (
-          <FeedStatus state={state} onRetry={retry} emptyMessage="Geen artikelen gevonden. Controleer de zoekterm van dit thema." />
+          <FeedStatus state={state} onRetry={retry} emptyMessage={t("feed.emptyTheme")} />
         ) : (
           <>
             {state.articles.map((article) => (
@@ -132,7 +135,7 @@ export default function FeedScreen({
               />
             ))}
             {(state.isLoading || state.error !== null || state.exhausted) && (
-              <FeedStatus state={state} onRetry={retry} emptyMessage="Geen artikelen gevonden. Controleer de zoekterm van dit thema." />
+              <FeedStatus state={state} onRetry={retry} emptyMessage={t("feed.emptyTheme")} />
             )}
           </>
         )}

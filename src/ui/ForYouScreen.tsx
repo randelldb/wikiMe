@@ -5,6 +5,7 @@ import { ForYouFeed } from "../data/foryou";
 import { RateLimitedError } from "../data/types";
 import type { Article } from "../data/types";
 import { ArticleCard, EMPTY_FEED, FeedStatus, type FeedUiState } from "./FeedParts";
+import { useLang } from "../i18n";
 
 const forYouFeed = new ForYouFeed();
 
@@ -24,6 +25,7 @@ export default function ForYouScreen({
   onGoToThemes: () => void;
   onOpenArticle: (title: string) => void;
 }) {
+  const { t, lang } = useLang();
   const [state, setState] = useState<FeedUiState>(EMPTY_FEED);
   const loadingRef = useRef(false);
   const welcome = savedCount < 2;
@@ -49,13 +51,13 @@ export default function ForYouScreen({
       console.error("WikiMe: loading Voor jou batch failed:", e);
       const message =
         e instanceof RateLimitedError
-          ? e.message
-          : `Laden mislukt: ${e instanceof Error ? e.message : String(e)}`;
+          ? t("errors.rateLimited")
+          : `${t("errors.loadFailed")}: ${e instanceof Error ? e.message : String(e)}`;
       setState((s) => ({ ...s, isLoading: false, error: message }));
     } finally {
       loadingRef.current = false;
     }
-  }, [welcome]);
+  }, [welcome, t]);
 
   const retry = useCallback(() => {
     setState((s) => ({ ...s, error: null, exhausted: false }));
@@ -92,6 +94,7 @@ export default function ForYouScreen({
         summary: article.extract,
         thumbnailUrl: article.thumbnailUrl,
         savedAt: Date.now(),
+        language: lang,
       });
     }
     refreshSaved();
@@ -108,18 +111,15 @@ export default function ForYouScreen({
       <main className="content">
         {welcome ? (
           <div className="status">
-            <p>Sla artikelen op als favoriet en deze feed vormt zich vanzelf.</p>
-            <p className="hint">
-              Open een thema, bekijk artikelen en tik op het hartje. Vanaf twee
-              opgeslagen artikelen stelt WikiMe hier een persoonlijke feed samen.
-            </p>
-            <button className="btn" onClick={onGoToThemes}>Naar thema's</button>
+            <p>{t("foryou.welcomeTitle")}</p>
+            <p className="hint">{t("foryou.welcomeHint")}</p>
+            <button className="btn" onClick={onGoToThemes}>{t("foryou.goThemes")}</button>
           </div>
         ) : state.articles.length === 0 ? (
           <FeedStatus
             state={state}
             onRetry={retry}
-            emptyMessage="Geen artikelen gevonden. Probeer het opnieuw."
+            emptyMessage={t("feed.emptyGeneric")}
           />
         ) : (
           <>
@@ -136,7 +136,7 @@ export default function ForYouScreen({
               <FeedStatus
                 state={state}
                 onRetry={retry}
-                emptyMessage="Geen artikelen gevonden. Probeer het opnieuw."
+                emptyMessage={t("feed.emptyGeneric")}
               />
             )}
           </>

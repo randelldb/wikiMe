@@ -1,4 +1,5 @@
 import { openDB, type DBSchema, type IDBPDatabase } from "idb";
+import { savedArticleLanguage, themeLanguage } from "./types";
 import type { SavedArticle, ShownArticle, Theme } from "./types";
 
 /** Keeps at most this many shown-article rows; the oldest are deleted. */
@@ -72,8 +73,8 @@ async function seedIfEmpty(database: IDBPDatabase<WikiMeDb>): Promise<IDBPDataba
   const count = await database.count("themes");
   if (count > 0) return database;
   const seeds: Theme[] = [
-    { name: "Ruimtevaart", searchQuery: "ruimtevaart" },
-    { name: "Kastelen", searchQuery: "kasteel" },
+    { name: "Ruimtevaart", searchQuery: "ruimtevaart", language: "nl" },
+    { name: "Kastelen", searchQuery: "kasteel", language: "nl" },
   ];
   for (const theme of seeds) {
     await database.add("themes", theme);
@@ -89,6 +90,14 @@ export async function allThemes(): Promise<Theme[]> {
   return themes.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: "base" }));
 }
 
+/** Themes created for a wiki language, ordered by name. A theme's search
+ * term only yields results on the wiki of its own language, so the theme
+ * list is filtered by the active language. */
+export async function themesInLanguage(language: string): Promise<Theme[]> {
+  const themes = await allThemes();
+  return themes.filter((theme) => themeLanguage(theme) === language);
+}
+
 export async function theme(id: number): Promise<Theme | undefined> {
   return (await db()).get("themes", id);
 }
@@ -97,8 +106,9 @@ export async function insertTheme(
   name: string,
   searchQuery: string,
   description = "",
+  language = "nl",
 ): Promise<void> {
-  await (await db()).add("themes", { name, searchQuery, description });
+  await (await db()).add("themes", { name, searchQuery, description, language });
 }
 
 export async function deleteTheme(id: number): Promise<void> {
@@ -113,9 +123,23 @@ export async function savedArticles(): Promise<SavedArticle[]> {
   return rows.sort((a, b) => b.savedAt - a.savedAt);
 }
 
+/** Saved articles of a wiki language, newest first. A saved title only
+ * exists on the wiki of the language it was saved in, so the saved list is
+ * filtered by the active language (legacy rows count as Dutch). */
+export async function savedArticlesInLanguage(language: string): Promise<SavedArticle[]> {
+  const rows = await savedArticles();
+  return rows.filter((row) => savedArticleLanguage(row) === language);
+}
+
 /** Titles of all saved articles. */
 export async function savedTitles(): Promise<Set<string>> {
   const rows = await (await db()).getAll("saved_articles");
+  return new Set(rows.map((r) => r.title));
+}
+
+/** Titles of the saved articles of a wiki language. */
+export async function savedTitlesInLanguage(language: string): Promise<Set<string>> {
+  const rows = await savedArticlesInLanguage(language);
   return new Set(rows.map((r) => r.title));
 }
 

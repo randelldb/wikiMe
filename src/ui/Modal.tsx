@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import type { ReactNode } from "react";
+import { useLang } from "../i18n";
 
 /** Minimal dialog: click on the backdrop or press Escape to close.
  * Renders nothing while closed, so children unmount and reset cleanly.
@@ -17,6 +18,7 @@ export default function Modal({
   fullscreen?: boolean;
   children: ReactNode;
 }) {
+  const { t } = useLang();
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -39,7 +41,7 @@ export default function Modal({
       >
         <header className="modal-header">
           <h2>{title}</h2>
-          <button className="icon-btn" aria-label="Sluiten" onClick={onClose}>
+          <button className="icon-btn" aria-label={t("modal.close")} onClick={onClose}>
             ×
           </button>
         </header>

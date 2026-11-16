@@ -5,7 +5,9 @@ import SavedScreen from "./ui/SavedScreen";
 import ArticleView from "./ui/ArticleView";
 import ForYouScreen from "./ui/ForYouScreen";
 import RandomScreen from "./ui/RandomScreen";
-import { savedTitles } from "./data/db";
+import SettingsScreen from "./ui/SettingsScreen";
+import { useLang } from "./i18n";
+import { savedTitlesInLanguage } from "./data/db";
 import type { Theme } from "./data/types";
 
 /** Navigation mirrors the Android/Flutter app: three top-level tabs plus
@@ -18,17 +20,19 @@ type View =
   | { screen: "saved" }
   | { screen: "foryou" }
   | { screen: "random" }
+  | { screen: "settings" }
   | { screen: "feed"; themeId: number; themeName: string }
   | { screen: "article"; title: string };
 
 const TABS = [
-  { screen: "themes", label: "Thema's" },
-  { screen: "saved", label: "Opgeslagen" },
-  { screen: "foryou", label: "Voor jou" },
+  { screen: "themes", labelKey: "tabs.themes" },
+  { screen: "saved", labelKey: "tabs.saved" },
+  { screen: "foryou", labelKey: "tabs.foryou" },
 ] as const;
 
-/** The dice button sits left of the text tabs and acts as a fourth tab. */
-type TabId = "random" | (typeof TABS)[number]["screen"];
+/** The square dice and settings buttons sit left and right of the text
+ * tabs and act as tabs of their own. */
+type TabId = "random" | "settings" | (typeof TABS)[number]["screen"];
 
 function viewKey(v: View): string {
   if (v.screen === "feed") return `feed:${v.themeId}`;
@@ -37,6 +41,7 @@ function viewKey(v: View): string {
 }
 
 export default function App() {
+  const { t, lang } = useLang();
   const [view, setView] = useState<View>({ screen: "themes" });
   // The tab bar is always visible; activeTab keeps the tab you navigated
   // from highlighted while a feed or article view is pushed on top. The dice
@@ -47,9 +52,11 @@ export default function App() {
   const backStack = useRef<View[]>([]);
   const scrollPos = useRef<Record<string, number>>({});
 
+  // Saved items are per wiki language (like themes), so the heart states
+  // follow the active language.
   const refreshSaved = useCallback(() => {
-    savedTitles().then((titles) => setSaved(titles));
-  }, []);
+    savedTitlesInLanguage(lang).then((titles) => setSaved(titles));
+  }, [lang]);
 
   useEffect(refreshSaved, [refreshSaved]);
 
@@ -118,10 +125,18 @@ export default function App() {
     setView({ screen: "random" });
   };
 
+  // The settings tab (far right), treated like a top-level tab.
+  const goSettings = () => {
+    rememberScroll();
+    backStack.current = [];
+    setActiveTab("settings");
+    setView({ screen: "settings" });
+  };
+
   return (
     <div className="app" style={{ visibility: restoring ? "hidden" : undefined }}>
       {restoring && (
-        <div className="restoring-overlay" role="status" aria-label="Laden">
+        <div className="restoring-overlay" role="status" aria-label={t("app.loading")}>
           <div className="spinner" />
         </div>
       )}
@@ -153,6 +168,7 @@ export default function App() {
           onOpenArticle={(title) => goTo({ screen: "article", title })}
         />
       )}
+      {view.screen === "settings" && <SettingsScreen />}
       {view.screen === "feed" && (
         <FeedScreen
           themeId={view.themeId}
@@ -178,8 +194,8 @@ export default function App() {
           aria-selected={activeTab === "random"}
           className={activeTab === "random" ? "tab dice active" : "tab dice"}
           onClick={goRandom}
-          aria-label="Willekeurige artikelen"
-          title="Willekeurige artikelen"
+          aria-label={t("tabs.random")}
+          title={t("tabs.random")}
         >
           ⚄
         </button>
@@ -191,9 +207,19 @@ export default function App() {
             className={activeTab === tab.screen ? "tab active" : "tab"}
             onClick={() => switchTab(tab.screen)}
           >
-            {tab.label}
+            {t(tab.labelKey)}
           </button>
         ))}
+        <button
+          role="tab"
+          aria-selected={activeTab === "settings"}
+          className={activeTab === "settings" ? "tab gear active" : "tab gear"}
+          onClick={goSettings}
+          aria-label={t("tabs.settings")}
+          title={t("tabs.settings")}
+        >
+          ⚙
+        </button>
       </nav>
     </div>
   );

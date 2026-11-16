@@ -293,6 +293,11 @@ body {
   color: color-mix(in srgb, var(--white) 85%, transparent);
 }
 
+/* The dice in the random screen's appbar is a bit larger. */
+.appbar .icon-btn.reroll {
+  font-size: 1.6rem;
+}
+
 .appbar .icon-btn:hover {
   color: var(--white);
   background: color-mix(in srgb, var(--white) 15%, transparent);
@@ -369,18 +374,23 @@ body {
   transition: background 0.15s ease, color 0.15s ease;
 }
 
-/* The dice button is the first child, so the text tabs are children 2-4. */
+/* The dice button is the first child and the settings button the last,
+ * so the text tabs are children 2-4. */
 .tab:nth-child(2) { --tab-accent: #cb870a; }
 .tab:nth-child(3) { --tab-accent: var(--strawberry); }
 .tab:nth-child(4) { --tab-accent: var(--cyan); }
 
-/* Square dice tab at the left of the bar (bar height is 56px). */
-.tab.dice {
+/* Square icon tabs at the edges of the bar (bar height is 56px):
+ * dice on the left, settings gear on the right. */
+.tab.dice,
+.tab.gear {
   flex: 0 0 56px;
   width: 56px;
   font-size: 1.5rem;
-  --tab-accent: var(--tuscan);
 }
+
+.tab.dice { --tab-accent: var(--tuscan); }
+.tab.gear { --tab-accent: var(--blue-slate); }
 
 .tab:hover {
   color: var(--white);
@@ -398,6 +408,16 @@ body {
   display: grid;
   justify-items: center;
   padding: 8px 16px 24px;
+}
+
+/* --- Settings screen --- */
+
+.settings-label {
+  padding: 16px 14px 8px;
+}
+
+.settings-hint {
+  padding: 12px 14px;
 }
 
 /* --- Feed cards: borderless full-width panels --- */

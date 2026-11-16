@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { ReactNode, PointerEvent as ReactPointerEvent, SyntheticEvent } from "react";
 import Modal from "./Modal";
+import { useLang } from "../i18n";
 
 const REVEAL_WIDTH = 96;
 const CONFIRM_THRESHOLD = 48;
@@ -19,6 +20,7 @@ export default function SwipeToDelete({
   confirmTitle: string;
   children: ReactNode;
 }) {
+  const { t } = useLang();
   const [dragging, setDragging] = useState<number | null>(null);
   const [offset, setOffset] = useState(0);
   const [ask, setAsk] = useState(false);
@@ -102,7 +104,7 @@ export default function SwipeToDelete({
     <>
       <div className="swipe" onPointerDown={onPointerDown}>
         <div className="swipe-bg" aria-hidden="true">
-          Verwijder
+          {t("swipe.reveal")}
         </div>
         <div
           className="swipe-content"
@@ -116,16 +118,13 @@ export default function SwipeToDelete({
       {ask && (
         <Modal title={confirmTitle} onClose={() => setAsk(false)}>
           <div className="dialog-body">
-            <p className="hint">
-              Weet je zeker dat je dit wilt verwijderen? Dit kan niet ongedaan
-              worden.
-            </p>
+            <p className="hint">{t("swipe.confirmHint")}</p>
             <div className="dialog-actions">
               <button className="btn btn-outline" onClick={() => setAsk(false)}>
-                Annuleren
+                {t("actions.cancel")}
               </button>
               <button className="btn" disabled={busy} onClick={confirm}>
-                Verwijderen
+                {t("actions.delete")}
               </button>
             </div>
           </div>

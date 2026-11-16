@@ -1,4 +1,5 @@
 import type { Article } from "../data/types";
+import { useLang } from "../i18n";
 
 export interface FeedUiState {
   articles: Article[];
@@ -27,14 +28,15 @@ export function FeedStatus({
   onRetry: () => void;
   emptyMessage: string;
 }) {
+  const { t } = useLang();
   if (state.isLoading) {
-    return <p className="status">Laden…</p>;
+    return <p className="status">{t("feed.loading")}</p>;
   }
   if (state.error !== null) {
     return (
       <div className="status">
         <p>{state.error}</p>
-        <button className="btn" onClick={onRetry}>Opnieuw</button>
+        <button className="btn" onClick={onRetry}>{t("feed.retry")}</button>
       </div>
     );
   }
@@ -43,9 +45,9 @@ export function FeedStatus({
       <p>
         {state.articles.length === 0
           ? emptyMessage
-          : "Geen nieuwe artikelen gevonden."}
+          : t("feed.noNewArticles")}
       </p>
-      {state.exhausted && <button className="btn" onClick={onRetry}>Opnieuw</button>}
+      {state.exhausted && <button className="btn" onClick={onRetry}>{t("feed.retry")}</button>}
     </div>
   );
 }
@@ -61,6 +63,7 @@ export function ArticleCard({
   onClick: () => void;
   onToggleSaved: () => void;
 }) {
+  const { t } = useLang();
   return (
     <article className="card" onClick={onClick}>
       {article.thumbnailUrl && (
@@ -71,7 +74,7 @@ export function ArticleCard({
           <h2>{article.title}</h2>
           <button
             className={saved ? "icon-btn heart saved" : "icon-btn heart"}
-            aria-label={saved ? "Verwijder uit opgeslagen" : "Opslaan"}
+            aria-label={saved ? t("feed.unsave") : t("feed.save")}
             onClick={(e) => {
               e.stopPropagation();
               onToggleSaved();
@@ -81,7 +84,7 @@ export function ArticleCard({
           </button>
         </div>
         <p className="card-extract">
-          {article.extract === "" ? "Geen samenvatting beschikbaar." : article.extract}
+          {article.extract === "" ? t("feed.noSummary") : article.extract}
         </p>
       </div>
     </article>

@@ -1,5 +1,6 @@
-import { savedArticles, markShownArticles, shownArticleTitles } from "./db";
+import { savedArticlesInLanguage, markShownArticles, shownArticleTitles } from "./db";
 import { ArticleRepository } from "./repository";
+import { WikiConfig } from "./config";
 import { shuffle, distinctByTitle } from "./collections";
 import type { Article } from "./types";
 
@@ -46,7 +47,8 @@ export class ForYouFeed {
   }
 
   async nextBatch(): Promise<Article[]> {
-    const saved = await savedArticles(); // newest first (existing stream)
+    // Seeds come from the saved articles of the active wiki language.
+    const saved = await savedArticlesInLanguage(WikiConfig.language); // newest first
     const savedTitles = saved.map((article) => article.title);
     if (savedTitles.length < 2) return []; // welcome state territory, no calls
 

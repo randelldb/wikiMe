@@ -1,22 +1,34 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Logo from "./Logo";
 import Modal from "./Modal";
 import SwipeToDelete from "./SwipeToDelete";
-import { allThemes, deleteTheme, insertTheme } from "../data/db";
+import { allThemes, themesInLanguage, deleteTheme, insertTheme } from "../data/db";
+import { themeLanguage } from "../data/types";
 import type { Theme } from "../data/types";
 import { ArticleRepository } from "../data/repository";
 import { RateLimitedError } from "../data/types";
+import { useLang } from "../i18n";
 
 const repository = new ArticleRepository();
 
 export default function ThemesScreen({ onOpenTheme }: { onOpenTheme: (theme: Theme) => void }) {
+  const { t, lang } = useLang();
   const [themes, setThemes] = useState<Theme[]>([]);
+  // True when themes exist that were created in another language (hidden now).
+  const [hiddenOtherLang, setHiddenOtherLang] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
 
-  const load = () => allThemes().then(setThemes);
+  // A theme's search term only works on the wiki of its own language, so
+  // only themes of the active language are listed.
+  const load = useCallback(() => {
+    Promise.all([themesInLanguage(lang), allThemes()]).then(([mine, all]) => {
+      setThemes(mine);
+      setHiddenOtherLang(all.some((theme) => themeLanguage(theme) !== lang));
+    });
+  }, [lang]);
   useEffect(() => {
     load();
-  }, []);
+  }, [load]);
 
   return (
     <div className="screen">
@@ -28,13 +40,16 @@ export default function ThemesScreen({ onOpenTheme }: { onOpenTheme: (theme: The
 
       <main className="content">
         {themes.length === 0 ? (
-          <p className="empty">Nog geen thema's. Voeg er een toe met +.</p>
+          <div className="empty">
+            <p>{t("themes.empty")}</p>
+            {hiddenOtherLang && <p className="hint">{t("themes.hiddenOtherLanguage")}</p>}
+          </div>
         ) : (
           <ul className="list">
             {themes.map((theme) => (
               <li key={theme.id} className="list-item">
                 <SwipeToDelete
-                  confirmTitle={`Verwijder thema "${theme.name}"?`}
+                  confirmTitle={t("themes.confirmDelete", { name: theme.name })}
                   onConfirm={async () => {
                     if (theme.id != null) await deleteTheme(theme.id);
                     load();
@@ -57,7 +72,7 @@ export default function ThemesScreen({ onOpenTheme }: { onOpenTheme: (theme: The
 
       <button
         className="icon-btn fab"
-        aria-label="Thema toevoegen"
+        aria-label={t("themes.add")}
         onClick={() => setShowAdd(true)}
       >
         +
@@ -86,6 +101,7 @@ function AddThemeDialog({
   onClose: () => void;
   onSaved: () => void;
 }) {
+  const { t, lang } = useLang();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -127,15 +143,15 @@ function AddThemeDialog({
         setSuggestions([]);
         setSuggestError(
           e instanceof RateLimitedError
-            ? e.message
-            : "Zoeken mislukt. Probeer het opnieuw.",
+            ? t("errors.rateLimited")
+            : t("errors.searchFailed"),
         );
       } finally {
         setIsSuggesting(false);
       }
     }, 350);
     return () => window.clearTimeout(debounce.current);
-  }, [searchQuery]);
+  }, [searchQuery, t]);
 
   const pick = (title: string) => {
     pickedRef.current = true;
@@ -145,36 +161,37 @@ function AddThemeDialog({
 
   const add = async () => {
     if (!valid) return;
-    await insertTheme(name.trim(), searchQuery.trim(), description.trim());
+    // The theme is tied to the wiki language active at creation time.
+    await insertTheme(name.trim(), searchQuery.trim(), description.trim(), lang);
     onSaved();
   };
 
   return (
-    <Modal title="Nieuw thema" onClose={onClose} fullscreen>
+    <Modal title={t("themes.dialog.title")} onClose={onClose} fullscreen>
       <div className="dialog-body">
         <label className="field">
-          <span>Naam</span>
+          <span>{t("themes.dialog.name")}</span>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
         </label>
         <label className="field">
-          <span>Beschrijving</span>
+          <span>{t("themes.dialog.description")}</span>
           <input
-            placeholder="Waar gaat dit thema over? (optioneel)"
+            placeholder={t("themes.dialog.descriptionPlaceholder")}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
         </label>
         <div className="field">
           <label className="field-label" htmlFor="theme-search-query">
-            Zoekterm
+            {t("themes.dialog.searchQuery")}
           </label>
           <div className="suggest-wrap">
             <input
               id="theme-search-query"
-              placeholder="bijv. uitvinders"
+              placeholder={t("themes.dialog.searchPlaceholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setSuggestionsOpen(true)}
@@ -204,16 +221,14 @@ function AddThemeDialog({
             )}
           </div>
         </div>
-        <p className="hint">
-          Volgt pagina's die de zoekterm bevatten, net als zoeken op Wikipedia.
-        </p>
+        <p className="hint">{t("themes.dialog.hint")}</p>
         {suggestError !== null && <p className="error">{suggestError}</p>}
         <div className="dialog-actions">
           <button className="btn btn-outline" onClick={onClose}>
-            Annuleren
+            {t("actions.cancel")}
           </button>
           <button className="btn" disabled={!valid} onClick={add}>
-            Toevoegen
+            {t("themes.dialog.add")}
           </button>
         </div>
       </div>
