@@ -1,37 +1,28 @@
 :root {
-  color-scheme: light dark;
-  /* Palette: metro accents */
-  --c-strawberry: #f94144;
-  --c-tangerine: #f3722c;
-  --c-carrot: #f8961e;
-  --c-coral: #f9844a;
-  --c-sun: #f9c74f;
-  --c-willow: #90be6d;
-  --c-seagrass: #43aa8b;
-  --c-cyan: #4d908e;
-  --c-slate: #577590;
-  --c-cerulean: #277da1;
+  color-scheme: dark;
+  /* Coffee-house palette */
+  --c-rose: #cb857b;
+  --c-chocolate: #813639;
+  --c-walnut: #6e260e;
+  --c-walnut-2: #5a301a;
+  --c-coffee: #2b1402;
+  --c-khaki: #444927;
+  --c-teal: #5b7761;
+  --c-slate: #62838a;
+  --c-steel: #719dad;
+  --c-dark-teal: #255957;
 
-  --bg: #f3f4f6;
-  --surface: #ffffff;
-  --text: #111827;
-  --muted: #6b7280;
-  --border: rgba(17, 24, 39, 0.12);
-  --primary: var(--c-cerulean);
-  --primary-contrast: #ffffff;
-  --heart: var(--c-strawberry);
-  --error: #e03131;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0b0d12;
-    --surface: #161921;
-    --text: #e5e7eb;
-    --muted: #9ca3af;
-    --border: rgba(255, 255, 255, 0.12);
-    --error: #fa5252;
-  }
+  --cream: #f4e8de;
+  --bg: var(--c-coffee);
+  --surface: var(--c-walnut-2);
+  --text: var(--cream);
+  --muted: color-mix(in srgb, var(--cream) 65%, transparent);
+  --border: color-mix(in srgb, var(--cream) 14%, transparent);
+  --primary: var(--c-chocolate);
+  --primary-contrast: var(--cream);
+  --tile-fg: var(--cream);
+  --heart: var(--c-rose);
+  --error: var(--c-rose);
 }
 
 body {
@@ -88,7 +79,7 @@ body {
   margin: 0;
 }
 
-/* --- Lists (themes / saved): flat tiles with a metro accent stripe --- */
+/* --- Lists (themes / saved): full-color tiles cycling the palette --- */
 
 .list {
   list-style: none;
@@ -108,16 +99,16 @@ body {
   padding: 4px 6px 4px 0;
 }
 
-.list-item:nth-child(10n + 1) { --tile: var(--c-strawberry); --tile-fg: #fff; }
-.list-item:nth-child(10n + 2) { --tile: var(--c-tangerine); --tile-fg: #fff; }
-.list-item:nth-child(10n + 3) { --tile: var(--c-carrot); --tile-fg: #16191f; }
-.list-item:nth-child(10n + 4) { --tile: var(--c-coral); --tile-fg: #16191f; }
-.list-item:nth-child(10n + 5) { --tile: var(--c-sun); --tile-fg: #16191f; }
-.list-item:nth-child(10n + 6) { --tile: var(--c-willow); --tile-fg: #16191f; }
-.list-item:nth-child(10n + 7) { --tile: var(--c-seagrass); --tile-fg: #fff; }
-.list-item:nth-child(10n + 8) { --tile: var(--c-cyan); --tile-fg: #fff; }
-.list-item:nth-child(10n + 9) { --tile: var(--c-slate); --tile-fg: #fff; }
-.list-item:nth-child(10n + 10) { --tile: var(--c-cerulean); --tile-fg: #fff; }
+.list-item:nth-child(10n + 1) { --tile: var(--c-rose); }
+.list-item:nth-child(10n + 2) { --tile: var(--c-chocolate); }
+.list-item:nth-child(10n + 3) { --tile: var(--c-walnut); }
+.list-item:nth-child(10n + 4) { --tile: var(--c-walnut-2); }
+.list-item:nth-child(10n + 5) { --tile: var(--c-coffee); }
+.list-item:nth-child(10n + 6) { --tile: var(--c-khaki); }
+.list-item:nth-child(10n + 7) { --tile: var(--c-teal); }
+.list-item:nth-child(10n + 8) { --tile: var(--c-slate); }
+.list-item:nth-child(10n + 9) { --tile: var(--c-steel); }
+.list-item:nth-child(10n + 10) { --tile: var(--c-dark-teal); }
 
 .list-main {
   flex: 1;
@@ -184,7 +175,7 @@ body {
 }
 
 .btn:hover {
-  background: color-mix(in srgb, var(--primary) 82%, #000);
+  background: color-mix(in srgb, var(--primary) 78%, #000);
 }
 
 .btn:disabled {
@@ -199,7 +190,7 @@ body {
 }
 
 .btn-outline:hover {
-  background: color-mix(in srgb, var(--text) 8%, transparent);
+  background: color-mix(in srgb, var(--text) 10%, transparent);
   color: var(--text);
 }
 
@@ -237,7 +228,7 @@ body {
 .icon-btn.heart.saved {
   background: var(--heart);
   border-color: var(--heart);
-  color: #fff;
+  color: var(--c-coffee);
 }
 
 /* Icon buttons inside colored tiles pick up the tile text color. */
@@ -275,6 +266,7 @@ body {
 .appbar .icon-btn.heart.saved {
   background: var(--heart);
   border-color: var(--heart);
+  color: var(--c-coffee);
 }
 
 /* --- Floating add button --- */
@@ -292,11 +284,11 @@ body {
 }
 
 .icon-btn.fab:hover {
-  background: color-mix(in srgb, var(--primary) 82%, #000);
+  background: color-mix(in srgb, var(--primary) 78%, #000);
   color: var(--primary-contrast);
 }
 
-/* --- Bottom tab bar: each tab has its own metro color --- */
+/* --- Bottom tab bar: each tab has its own color --- */
 
 .tabbar {
   position: fixed;
@@ -326,19 +318,19 @@ body {
   transition: background 0.15s ease, color 0.15s ease;
 }
 
-.tab:nth-child(1) { --tab-accent: var(--c-cerulean); }
-.tab:nth-child(2) { --tab-accent: var(--c-strawberry); }
-.tab:nth-child(3) { --tab-accent: var(--c-cyan); }
+.tab:nth-child(1) { --tab-accent: var(--c-teal); }
+.tab:nth-child(2) { --tab-accent: var(--c-chocolate); }
+.tab:nth-child(3) { --tab-accent: var(--c-slate); }
 
 .tab:hover {
   color: var(--text);
-  background: color-mix(in srgb, var(--tab-accent) 12%, transparent);
+  background: color-mix(in srgb, var(--tab-accent) 15%, transparent);
 }
 
 .tab.active {
   background: var(--tab-accent);
   border-bottom-color: color-mix(in srgb, var(--tab-accent) 68%, #000);
-  color: #fff;
+  color: var(--cream);
   font-weight: 600;
 }
 
@@ -354,14 +346,14 @@ body {
 }
 
 .card:hover {
-  background: color-mix(in srgb, var(--card-accent, var(--primary)) 8%, var(--surface));
+  background: color-mix(in srgb, var(--cream) 6%, var(--surface));
 }
 
 .card-image {
   width: 100%;
   height: 200px;
   object-fit: cover;
-  background: color-mix(in srgb, var(--text) 8%, transparent);
+  background: color-mix(in srgb, var(--cream) 8%, transparent);
   display: block;
 }
 
@@ -417,10 +409,10 @@ body {
   bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--c-sun);
+  background: var(--c-rose);
   border: none;
-  border-left: 4px solid color-mix(in srgb, var(--c-sun) 68%, #000);
-  color: #16191f;
+  border-left: 4px solid color-mix(in srgb, var(--c-rose) 68%, #000);
+  color: var(--c-coffee);
   padding: 12px 16px;
   cursor: pointer;
   max-width: 90vw;
@@ -443,7 +435,7 @@ body {
 }
 
 .autocomplete-option:hover {
-  background: color-mix(in srgb, var(--primary) 10%, transparent);
+  background: color-mix(in srgb, var(--c-steel) 25%, transparent);
 }
 
 .option-title {
@@ -482,7 +474,7 @@ body {
 .modal {
   width: min(480px, 100%);
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: none;
   border-top: 4px solid var(--primary);
   padding: 8px 20px 20px;
 }
@@ -535,7 +527,7 @@ body {
 
 .field input:focus,
 .suggest-wrap input:focus {
-  outline: 2px solid var(--primary);
+  outline: 2px solid var(--c-steel);
   outline-offset: -2px;
   border-color: transparent;
 }
