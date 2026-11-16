@@ -49,8 +49,8 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 14px 16px;
-  background: var(--cerulean);
+  padding: 20px 16px;
+  background: color-mix(in srgb, var(--cerulean) 62%, #000);
   color: var(--white);
 }
 
