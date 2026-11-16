@@ -152,7 +152,6 @@ function AddThemeDialog({
         <label className="field">
           <span>Naam</span>
           <input
-            autoFocus
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
