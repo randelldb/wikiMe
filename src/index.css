@@ -50,7 +50,7 @@ body {
   justify-content: space-between;
   gap: 12px;
   padding: 20px 16px;
-  background: transparent;
+  background: var(--bg);
   color: var(--white);
 }
 
