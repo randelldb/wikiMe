@@ -98,7 +98,9 @@ export default function ArticleView({
         {thumbnailUrl && <img className="hero" src={thumbnailUrl} alt="" />}
         <div className="article-body">
           {extract === null ? (
-            <p className="status">{t("feed.loading")}</p>
+            <div className="status" role="status" aria-label={t("feed.loading")}>
+              <div className="spinner" />
+            </div>
           ) : extract === "" ? (
             <p className="empty">{t("feed.noSummary")}</p>
           ) : (

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Logo from "./Logo";
-import { upsertSavedArticle, deleteSavedArticle } from "../data/db";
+import { upsertSavedArticle, deleteSavedArticle, clearShownArticles } from "../data/db";
 import { ForYouFeed } from "../data/foryou";
 import { RateLimitedError } from "../data/types";
 import type { Article } from "../data/types";
@@ -64,9 +64,12 @@ export default function ForYouScreen({
     loadMore();
   }, [loadMore]);
 
-  // Kick off the first load once the feed has two or more favorites.
+  // Kick off the first load once the feed has two or more favorites. Each
+  // (re)open of the screen clears the shown-buffer first, so a new visit can
+  // show articles again instead of filtering everything as "already shown".
   useEffect(() => {
-    if (!welcome) loadMore();
+    if (welcome) return;
+    clearShownArticles().then(() => loadMore());
   }, [loadMore, welcome]);
 
   // Same "near the end of the page" prefetch as the theme feed.

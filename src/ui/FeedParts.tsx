@@ -30,7 +30,11 @@ export function FeedStatus({
 }) {
   const { t } = useLang();
   if (state.isLoading) {
-    return <p className="status">{t("feed.loading")}</p>;
+    return (
+      <div className="status" role="status" aria-label={t("feed.loading")}>
+        <div className="spinner" />
+      </div>
+    );
   }
   if (state.error !== null) {
     return (

@@ -159,6 +159,13 @@ export async function shownArticleTitles(): Promise<Set<string>> {
   return new Set(rows.map((row) => row.articleId));
 }
 
+/** Clears the shown-articles ring buffer. Called when the Voor jou screen is
+ * (re)opened: each visit starts a fresh feed, while within one visit the
+ * buffer still prevents repeats. */
+export async function clearShownArticles(): Promise<void> {
+  await (await db()).clear("shown_articles");
+}
+
 /** Records articles as shown, trims the ring buffer to SHOWN_BUFFER_SIZE. */
 export async function markShownArticles(titles: string[]): Promise<void> {
   if (titles.length === 0) return;
