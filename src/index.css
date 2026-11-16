@@ -640,18 +640,36 @@ body {
   overflow-y: auto;
 }
 
-/* --- Saved indicator: long thin bar under the appbar on saved articles --- */
+/* --- Save toggle: long thin bar under the appbar on the article page --- */
 
 .saved-bar {
   width: 100%;
   height: 24px;
   border: none;
-  background: var(--heart);
-  color: #fff;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.9rem;
   font-family: inherit;
   cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.saved-bar:hover {
+  background: color-mix(in srgb, var(--heart) 12%, transparent);
+  color: var(--heart);
+}
+
+.saved-bar.saved {
+  background: var(--heart);
+  border-bottom: none;
+  color: #fff;
+}
+
+.saved-bar.saved:hover {
+  background: color-mix(in srgb, var(--heart) 82%, #000);
+  color: #fff;
 }

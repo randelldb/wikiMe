@@ -82,15 +82,16 @@ export default function ArticleView({
         <h1>{title}</h1>
       </header>
 
-      {saved && (
-        <button
-          className="saved-bar"
-          onClick={toggleSaved}
-          aria-label="Verwijder uit opgeslagen"
-        >
-          ♥
-        </button>
-      )}
+      </header>
+
+      <button
+        className={saved ? "saved-bar saved" : "saved-bar"}
+        onClick={toggleSaved}
+        aria-label={saved ? "Verwijder uit opgeslagen" : "Opslaan"}
+        aria-pressed={saved}
+      >
+        {saved ? "♥" : "♡"}
+      </button>
 
       <main className="content">
         {thumbnailUrl && <img className="hero" src={thumbnailUrl} alt="" />}
