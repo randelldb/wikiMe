@@ -103,7 +103,7 @@ body {
   align-items: center;
   gap: 4px;
   background: var(--tile);
-  border-left: 8px solid color-mix(in srgb, var(--tile) 68%, #000);
+  border-left: 4px solid color-mix(in srgb, var(--tile) 68%, #000);
   color: var(--tile-fg);
   padding: 4px 6px 4px 0;
 }
@@ -342,12 +342,12 @@ body {
   font-weight: 600;
 }
 
-/* --- Feed cards: tinted panels, each cycling through the palette --- */
+/* --- Feed cards: uniform solid panels with a thin colored top stripe --- */
 
 .card {
-  background: color-mix(in srgb, var(--card-accent) 12%, var(--surface));
+  background: var(--surface);
   border: none;
-  border-top: 8px solid var(--card-accent);
+  border-top: 4px solid var(--card-accent, var(--primary));
   margin: 12px 16px;
   overflow: hidden;
   cursor: pointer;
@@ -355,7 +355,7 @@ body {
 }
 
 .card:hover {
-  background: color-mix(in srgb, var(--card-accent) 20%, var(--surface));
+  background: color-mix(in srgb, var(--card-accent, var(--primary)) 8%, var(--surface));
 }
 
 .content > .card:nth-child(10n + 1) { --card-accent: var(--c-strawberry); }
@@ -431,7 +431,7 @@ body {
   transform: translateX(-50%);
   background: var(--c-sun);
   border: none;
-  border-left: 8px solid color-mix(in srgb, var(--c-sun) 68%, #000);
+  border-left: 4px solid color-mix(in srgb, var(--c-sun) 68%, #000);
   color: #16191f;
   padding: 12px 16px;
   cursor: pointer;
@@ -495,7 +495,7 @@ body {
   width: min(480px, 100%);
   background: var(--surface);
   border: 1px solid var(--border);
-  border-top: 8px solid var(--primary);
+  border-top: 4px solid var(--primary);
   padding: 8px 20px 20px;
 }
 
