@@ -1,21 +1,24 @@
 :root {
   color-scheme: light;
-  /* Oxford scheme */
-  --black: #000000;
-  --prussian: #14213d;
-  --orange: #fca311;
-  --alabaster: #e5e5e5;
+  /* Coastal palette */
+  --baltic: #33658a;
+  --sky: #86bbd8;
+  --palm: #758e4f;
+  --honey: #f6ae2d;
+  --blaze: #f26419;
+  --black: #10233a;
   --white: #ffffff;
 
-  --bg: var(--alabaster);
+  --bg-soft: #e9f0f6;
+  --bg: var(--bg-soft);
   --surface: var(--white);
   --text: var(--black);
   --muted: color-mix(in srgb, var(--black) 60%, transparent);
   --border: color-mix(in srgb, var(--black) 14%, transparent);
-  --primary: var(--orange);
+  --primary: var(--blaze);
   --primary-contrast: var(--black);
-  --heart: var(--orange);
-  --error-bg: var(--orange);
+  --heart: var(--blaze);
+  --error-bg: var(--blaze);
 }
 
 body {
@@ -41,7 +44,7 @@ body {
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
-  background: var(--prussian);
+  background: var(--baltic);
   color: var(--white);
 }
 
@@ -54,7 +57,7 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: var(--orange);
+  color: var(--blaze);
 }
 
 .content {
@@ -92,10 +95,11 @@ body {
   padding: 4px 6px 4px 0;
 }
 
-.list-item:nth-child(4n + 1) { --tile: var(--prussian); --tile-fg: var(--white); }
-.list-item:nth-child(4n + 2) { --tile: var(--orange); --tile-fg: var(--black); }
-.list-item:nth-child(4n + 3) { --tile: var(--black); --tile-fg: var(--white); }
-.list-item:nth-child(4n + 4) { --tile: var(--white); --tile-fg: var(--black); border: 1px solid var(--border); }
+.list-item:nth-child(5n + 1) { --tile: var(--baltic); --tile-fg: var(--white); }
+.list-item:nth-child(5n + 2) { --tile: var(--honey); --tile-fg: var(--black); }
+.list-item:nth-child(5n + 3) { --tile: var(--blaze); --tile-fg: var(--black); }
+.list-item:nth-child(5n + 4) { --tile: var(--palm); --tile-fg: var(--white); }
+.list-item:nth-child(5n + 5) { --tile: var(--sky); --tile-fg: var(--black); }
 
 .list-main {
   flex: 1;
@@ -152,7 +156,7 @@ body {
   gap: 6px;
   padding: 10px 18px;
   border: none;
-  background: var(--orange);
+  background: var(--blaze);
   color: var(--black);
   font: inherit;
   font-weight: 700;
@@ -162,7 +166,7 @@ body {
 }
 
 .btn:hover {
-  background: color-mix(in srgb, var(--orange) 82%, var(--black));
+  background: color-mix(in srgb, var(--blaze) 82%, var(--black));
 }
 
 .btn:disabled {
@@ -209,12 +213,12 @@ body {
 }
 
 .icon-btn.heart:hover {
-  color: var(--orange);
+  color: var(--blaze);
 }
 
 .icon-btn.heart.saved {
-  background: var(--orange);
-  border-color: var(--orange);
+  background: var(--blaze);
+  border-color: var(--blaze);
   color: var(--black);
 }
 
@@ -251,8 +255,8 @@ body {
 }
 
 .appbar .icon-btn.heart.saved {
-  background: var(--orange);
-  border-color: var(--orange);
+  background: var(--blaze);
+  border-color: var(--blaze);
   color: var(--black);
 }
 
@@ -265,13 +269,13 @@ body {
   z-index: 15;
   width: 56px;
   height: 56px;
-  background: var(--orange);
+  background: var(--blaze);
   color: var(--black);
   font-size: 1.7rem;
 }
 
 .icon-btn.fab:hover {
-  background: color-mix(in srgb, var(--orange) 82%, var(--black));
+  background: color-mix(in srgb, var(--blaze) 82%, var(--black));
   color: var(--black);
 }
 
@@ -285,7 +289,7 @@ body {
   width: 100%;
   max-width: 720px;
   padding: 4px;
-  background: var(--prussian);
+  background: var(--baltic);
   z-index: 15;
   display: flex;
   gap: 4px;
@@ -304,9 +308,9 @@ body {
   transition: background 0.15s ease, color 0.15s ease;
 }
 
-.tab:nth-child(1) { --tab-accent: var(--orange); --tab-fg: var(--black); }
-.tab:nth-child(2) { --tab-accent: var(--white); --tab-fg: var(--black); }
-.tab:nth-child(3) { --tab-accent: var(--orange); --tab-fg: var(--black); }
+.tab:nth-child(1) { --tab-accent: var(--honey); --tab-fg: var(--black); }
+.tab:nth-child(2) { --tab-accent: var(--sky); --tab-fg: var(--black); }
+.tab:nth-child(3) { --tab-accent: var(--blaze); --tab-fg: var(--black); }
 
 .tab:hover {
   color: var(--white);
@@ -332,7 +336,7 @@ body {
 }
 
 .card:hover {
-  background: color-mix(in srgb, var(--orange) 10%, var(--surface));
+  background: color-mix(in srgb, var(--blaze) 10%, var(--surface));
 }
 
 .card-image {
@@ -395,9 +399,9 @@ body {
   bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--prussian);
+  background: var(--baltic);
   border: none;
-  border-left: 4px solid var(--orange);
+  border-left: 4px solid var(--blaze);
   color: var(--white);
   padding: 12px 16px;
   cursor: pointer;
@@ -421,7 +425,7 @@ body {
 }
 
 .autocomplete-option:hover {
-  background: color-mix(in srgb, var(--orange) 18%, transparent);
+  background: color-mix(in srgb, var(--blaze) 18%, transparent);
 }
 
 .option-title {
@@ -465,7 +469,7 @@ body {
   width: min(480px, 100%);
   background: var(--surface);
   border: none;
-  border-top: 4px solid var(--orange);
+  border-top: 4px solid var(--blaze);
   padding: 8px 20px 20px;
 }
 
@@ -510,14 +514,14 @@ body {
 .suggest-wrap input {
   padding: 10px 12px;
   border: 1px solid var(--border);
-  background: var(--alabaster);
+  background: var(--bg-soft);
   color: var(--text);
   font: inherit;
 }
 
 .field input:focus,
 .suggest-wrap input:focus {
-  outline: 2px solid var(--orange);
+  outline: 2px solid var(--blaze);
   outline-offset: -2px;
   border-color: transparent;
 }
