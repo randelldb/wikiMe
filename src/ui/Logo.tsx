@@ -19,7 +19,7 @@ export default function Logo({ size = 24 }: { size?: number }) {
         fontSize="17"
         fontWeight="800"
         fill="#ffffff"
-        fontFamily="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
+        fontFamily="Inter Variable, Inter, system-ui, sans-serif"
       >
         W
       </text>
