@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ReactNode, PointerEvent as ReactPointerEvent, SyntheticEvent } from "react";
 import Modal from "./Modal";
 
@@ -7,7 +7,9 @@ const CONFIRM_THRESHOLD = 48;
 
 /** Swipe-to-delete wrapper: drag the list row to the left to reveal the
  * delete action; releasing past the threshold opens a confirmation dialog.
- * Vertical drags fall through so the list keeps scrolling normally. */
+ * Vertical drags fall through so the list keeps scrolling normally.
+ * Pointer capture is avoided on purpose — it would retarget the click and
+ * quietly break the row's main button. */
 export default function SwipeToDelete({
   onConfirm,
   confirmTitle,
@@ -17,37 +19,64 @@ export default function SwipeToDelete({
   confirmTitle: string;
   children: ReactNode;
 }) {
+  const [dragging, setDragging] = useState<number | null>(null);
   const [offset, setOffset] = useState(0);
   const [ask, setAsk] = useState(false);
   const [busy, setBusy] = useState(false);
   const startX = useRef(0);
-  const dragging = useRef(false);
+  const startY = useRef(0);
+  const horizontal = useRef(false);
+  const offsetRef = useRef(0);
   const didSwipe = useRef(false);
+
+  useEffect(() => {
+    if (dragging == null) return;
+
+    const move = (e: PointerEvent) => {
+      const dx = e.clientX - startX.current;
+      const dy = e.clientY - startY.current;
+      // Decide the drag direction once, then act on it exclusively.
+      if (!horizontal.current) {
+        if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+        if (Math.abs(dy) > Math.abs(dx)) {
+          // Vertical drag: let the page scroll; abandon the swipe.
+          setDragging(null);
+          return;
+        }
+        horizontal.current = true;
+      }
+      const clamped = Math.max(-REVEAL_WIDTH, Math.min(0, dx));
+      offsetRef.current = clamped;
+      setOffset(clamped);
+    };
+
+    const up = () => {
+      if (offsetRef.current <= -CONFIRM_THRESHOLD) {
+        didSwipe.current = true;
+        setAsk(true);
+      }
+      offsetRef.current = 0;
+      setOffset(0);
+      setDragging(null);
+    };
+
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", up);
+    window.addEventListener("pointercancel", up);
+    return () => {
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+      window.removeEventListener("pointercancel", up);
+    };
+  }, [dragging]);
 
   const onPointerDown = (e: ReactPointerEvent<HTMLDivElement>) => {
     startX.current = e.clientX;
-    dragging.current = true;
+    startY.current = e.clientY;
+    horizontal.current = false;
     didSwipe.current = false;
-    e.currentTarget.setPointerCapture(e.pointerId);
-  };
-
-  const onPointerMove = (e: ReactPointerEvent<HTMLDivElement>) => {
-    if (!dragging.current) return;
-    const dx = e.clientX - startX.current;
-    if (dx > -4 && Math.abs(dx) < 4) return;
-    // Only claim horizontal drags; let vertical drags scroll the page.
-    const clamped = Math.max(-REVEAL_WIDTH, Math.min(0, dx));
-    setOffset(clamped);
-  };
-
-  const onPointerUp = () => {
-    if (!dragging.current) return;
-    dragging.current = false;
-    if (offset <= -CONFIRM_THRESHOLD) {
-      didSwipe.current = true;
-      setAsk(true);
-    }
-    setOffset(0);
+    offsetRef.current = 0;
+    setDragging(e.pointerId);
   };
 
   // Suppress the click that follows a completed swipe (pointerup -> click).
@@ -71,13 +100,7 @@ export default function SwipeToDelete({
 
   return (
     <>
-      <div
-        className="swipe"
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}
-        onPointerCancel={onPointerUp}
-      >
+      <div className="swipe" onPointerDown={onPointerDown}>
         <div className="swipe-bg" aria-hidden="true">
           Verwijder
         </div>
