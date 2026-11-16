@@ -1,5 +1,4 @@
 import type { Article } from "../data/types";
-import { ActionIcon, Button } from "@mantine/core";
 
 export interface FeedUiState {
   articles: Article[];
@@ -35,7 +34,7 @@ export function FeedStatus({
     return (
       <div className="status">
         <p>{state.error}</p>
-        <Button onClick={onRetry}>Opnieuw</Button>
+        <button className="btn" onClick={onRetry}>Opnieuw</button>
       </div>
     );
   }
@@ -46,7 +45,7 @@ export function FeedStatus({
           ? emptyMessage
           : "Geen nieuwe artikelen gevonden."}
       </p>
-      {state.exhausted && <Button onClick={onRetry}>Opnieuw</Button>}
+      {state.exhausted && <button className="btn" onClick={onRetry}>Opnieuw</button>}
     </div>
   );
 }
@@ -70,11 +69,8 @@ export function ArticleCard({
       <div className="card-body">
         <div className="card-title-row">
           <h2>{article.title}</h2>
-          <ActionIcon
-            variant={saved ? "filled" : "default"}
-            color={saved ? "pink" : "gray"}
-            size="lg"
-            radius="xl"
+          <button
+            className={saved ? "icon-btn heart saved" : "icon-btn heart"}
             aria-label={saved ? "Verwijder uit opgeslagen" : "Opslaan"}
             onClick={(e) => {
               e.stopPropagation();
@@ -82,7 +78,7 @@ export function ArticleCard({
             }}
           >
             {saved ? "♥" : "♡"}
-          </ActionIcon>
+          </button>
         </div>
         <p className="card-extract">
           {article.extract === "" ? "Geen samenvatting beschikbaar." : article.extract}

@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import { ActionIcon } from "@mantine/core";
 import { deleteSavedArticle, savedArticles } from "../data/db";
 import type { SavedArticle } from "../data/types";
 
@@ -49,14 +48,13 @@ export default function SavedScreen({
                     )}
                   </span>
                 </button>
-                <ActionIcon
-                  variant="subtle"
-                  color="gray"
+                <button
+                  className="icon-btn"
                   aria-label={`Verwijder ${article.title}`}
                   onClick={() => remove(article.title)}
                 >
                   🗑
-                </ActionIcon>
+                </button>
               </li>
             ))}
           </ul>

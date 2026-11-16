@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { ActionIcon, Button } from "@mantine/core";
 import { ArticleRepository } from "../data/repository";
 import { WikiConfig } from "../data/config";
 import { deleteSavedArticle, upsertSavedArticle } from "../data/db";
@@ -77,25 +76,17 @@ export default function ArticleView({
   return (
     <div className="screen article">
       <header className="appbar">
-        <ActionIcon
-          variant="subtle"
-          color="gray"
-          aria-label="Sluiten"
-          onClick={onClose}
-        >
+        <button className="icon-btn" aria-label="Sluiten" onClick={onClose}>
           ←
-        </ActionIcon>
+        </button>
         <h1>{title}</h1>
-        <ActionIcon
-          variant={saved ? "filled" : "default"}
-          color={saved ? "pink" : "gray"}
-          size="lg"
-          radius="xl"
+        <button
+          className={saved ? "icon-btn heart saved" : "icon-btn heart"}
           aria-label={saved ? "Verwijder uit opgeslagen" : "Opslaan"}
           onClick={toggleSaved}
         >
           {saved ? "♥" : "♡"}
-        </ActionIcon>
+        </button>
       </header>
 
       <main className="content">
@@ -108,14 +99,14 @@ export default function ArticleView({
           ) : (
             <p className="lead">{extract}</p>
           )}
-          <Button
-            component="a"
+          <a
+            className="btn"
             href={WikiConfig.mobileArticleUrl(title)}
             target="_blank"
             rel="noreferrer"
           >
             Lees verder op Wikipedia →
-          </Button>
+          </a>
         </div>
 
         {message && (

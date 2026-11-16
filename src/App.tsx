@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import { Tabs } from "@mantine/core";
 import ThemesScreen from "./ui/ThemesScreen";
 import FeedScreen from "./ui/FeedScreen";
 import SavedScreen from "./ui/SavedScreen";
@@ -84,23 +83,18 @@ export default function App() {
       {(view.screen === "themes" ||
         view.screen === "saved" ||
         view.screen === "foryou") && (
-        <nav className="tabbar">
-          <Tabs
-            value={view.screen}
-            onChange={(value) => {
-              if (value === "themes" || value === "saved" || value === "foryou") {
-                setView({ screen: value });
-              }
-            }}
-          >
-            <Tabs.List grow justify="space-between">
-              {TABS.map((tab) => (
-                <Tabs.Tab key={tab.screen} value={tab.screen}>
-                  {tab.label}
-                </Tabs.Tab>
-              ))}
-            </Tabs.List>
-          </Tabs>
+        <nav className="tabbar" role="tablist">
+          {TABS.map((tab) => (
+            <button
+              key={tab.screen}
+              role="tab"
+              aria-selected={view.screen === tab.screen}
+              className={view.screen === tab.screen ? "tab active" : "tab"}
+              onClick={() => setView({ screen: tab.screen })}
+            >
+              {tab.label}
+            </button>
+          ))}
         </nav>
       )}
     </div>

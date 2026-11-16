@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Button, Text } from "@mantine/core";
 import { upsertSavedArticle, deleteSavedArticle } from "../data/db";
 import { ForYouFeed } from "../data/foryou";
 import { RateLimitedError } from "../data/types";
@@ -107,11 +106,11 @@ export default function ForYouScreen({
         {welcome ? (
           <div className="status">
             <p>Sla artikelen op als favoriet en deze feed vormt zich vanzelf.</p>
-            <Text size="sm" c="dimmed">
+            <p className="hint">
               Open een thema, bekijk artikelen en tik op het hartje. Vanaf twee
               opgeslagen artikelen stelt WikiMe hier een persoonlijke feed samen.
-            </Text>
-            <Button onClick={onGoToThemes}>Naar thema's</Button>
+            </p>
+            <button className="btn" onClick={onGoToThemes}>Naar thema's</button>
           </div>
         ) : state.articles.length === 0 ? (
           <FeedStatus

@@ -1,14 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import {
-  ActionIcon,
-  Autocomplete,
-  Button,
-  Group,
-  Modal,
-  Stack,
-  Text,
-  TextInput,
-} from "@mantine/core";
+import Modal from "./Modal";
 import { allThemes, deleteTheme, insertTheme } from "../data/db";
 import type { Theme } from "../data/types";
 import { ArticleRepository } from "../data/repository";
@@ -44,9 +35,8 @@ export default function ThemesScreen({ onOpenTheme }: { onOpenTheme: (theme: The
                     <span className="list-sub">{theme.searchQuery}</span>
                   </span>
                 </button>
-                <ActionIcon
-                  variant="subtle"
-                  color="gray"
+                <button
+                  className="icon-btn"
                   aria-label={`Verwijder ${theme.name}`}
                   onClick={async () => {
                     if (theme.id != null) await deleteTheme(theme.id);
@@ -54,53 +44,48 @@ export default function ThemesScreen({ onOpenTheme }: { onOpenTheme: (theme: The
                   }}
                 >
                   🗑
-                </ActionIcon>
+                </button>
               </li>
             ))}
           </ul>
         )}
       </main>
 
-      <ActionIcon
-        className="fab"
-        variant="filled"
-        size="xl"
-        radius="xl"
+      <button
+        className="icon-btn fab"
         aria-label="Thema toevoegen"
         onClick={() => setShowAdd(true)}
       >
         +
-      </ActionIcon>
+      </button>
 
-      <AddThemeDialog
-        opened={showAdd}
-        onClose={() => setShowAdd(false)}
-        onSaved={() => {
-          setShowAdd(false);
-          load();
-        }}
-      />
+      {showAdd && (
+        <AddThemeDialog
+          onClose={() => setShowAdd(false)}
+          onSaved={() => {
+            setShowAdd(false);
+            load();
+          }}
+        />
+      )}
     </div>
   );
 }
 
-/** Mantine modal with a name field and a search term (Autocomplete with live
- * title suggestions) — a theme feeds on the full-text search results for that
+/** Dialog with a name field and a search term (input with live title
+ * suggestions) — a theme feeds on the full-text search results for that
  * term, like Speciaal:Zoeken. */
 function AddThemeDialog({
-  opened,
   onClose,
   onSaved,
 }: {
-  opened: boolean;
   onClose: () => void;
   onSaved: () => void;
 }) {
   const [name, setName] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [suggestions, setSuggestions] = useState<{ title: string; description?: string }[]>(
-    [],
-  );
+  const [suggestions, setSuggestions] = useState<{ title: string; description?: string }[]>([]);
+  const [suggestionsOpen, setSuggestionsOpen] = useState(false);
   const [isSuggesting, setIsSuggesting] = useState(false);
   const [suggestError, setSuggestError] = useState<string | null>(null);
   const debounce = useRef<number | undefined>(undefined);
@@ -109,21 +94,12 @@ function AddThemeDialog({
 
   const valid = name.trim() !== "" && searchQuery.trim() !== "";
 
-  // Reset the form whenever the modal closes.
-  useEffect(() => {
-    if (opened) return;
-    setName("");
-    setSearchQuery("");
-    setSuggestions([]);
-    setIsSuggesting(false);
-    setSuggestError(null);
-  }, [opened]);
-
   useEffect(() => {
     window.clearTimeout(debounce.current);
     if (pickedRef.current) {
       pickedRef.current = false;
       setSuggestions([]);
+      setSuggestionsOpen(false);
       setIsSuggesting(false);
       setSuggestError(null);
       return;
@@ -156,8 +132,10 @@ function AddThemeDialog({
     return () => window.clearTimeout(debounce.current);
   }, [searchQuery]);
 
-  const onSearchQueryChange = (value: string) => {
-    setSearchQuery(value);
+  const pick = (title: string) => {
+    pickedRef.current = true;
+    setSuggestionsOpen(false);
+    setSearchQuery(title);
   };
 
   const add = async () => {
@@ -167,61 +145,66 @@ function AddThemeDialog({
   };
 
   return (
-    <Modal
-      opened={opened}
-      onClose={onClose}
-      title="Nieuw thema"
-      centered
-      zIndex={200}
-    >
-      <Stack gap="sm">
-        <TextInput
-          label="Naam"
-          data-autofocus
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <Autocomplete
-          label="Zoekterm"
-          placeholder="bijv. uitvinders"
-          value={searchQuery}
-          onChange={onSearchQueryChange}
-          data={suggestions.map((s) => ({ value: s.title, label: s.title }))}
-          renderOption={({ option }) => {
-            const suggestion = suggestions.find((s) => s.title === option.value);
-            return (
-              <div className="autocomplete-option">
-                <span className="option-title">{option.value}</span>
-                {suggestion?.description && (
-                  <span className="option-desc">{suggestion.description}</span>
-                )}
-              </div>
-            );
-          }}
-          rightSection={isSuggesting ? "…" : null}
-          onOptionSubmit={() => {
-            // Suppress the suggestion fetch for the option just picked.
-            pickedRef.current = true;
-          }}
-          maxDropdownHeight={280}
-        />
-        <Text size="sm" c="dimmed">
+    <Modal title="Nieuw thema" onClose={onClose}>
+      <div className="dialog-body">
+        <label className="field">
+          <span>Naam</span>
+          <input
+            autoFocus
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </label>
+        <div className="field">
+          <label className="field-label" htmlFor="theme-search-query">
+            Zoekterm
+          </label>
+          <div className="suggest-wrap">
+            <input
+              id="theme-search-query"
+              placeholder="bijv. uitvinders"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onFocus={() => setSuggestionsOpen(true)}
+              onBlur={() => setSuggestionsOpen(false)}
+            />
+            {isSuggesting && <span className="suggest-status">…</span>}
+            {suggestionsOpen && suggestions.length > 0 && (
+              <ul className="suggest-list" role="listbox">
+                {suggestions.map((s) => (
+                  <li key={s.title} role="option" aria-selected="false">
+                    <button
+                      type="button"
+                      className="autocomplete-option"
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        pick(s.title);
+                      }}
+                    >
+                      <span className="option-title">{s.title}</span>
+                      {s.description && (
+                        <span className="option-desc">{s.description}</span>
+                      )}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+        <p className="hint">
           Volgt pagina's die de zoekterm bevatten, net als zoeken op Wikipedia.
-        </Text>
-        {suggestError !== null && (
-          <Text size="sm" c="red">
-            {suggestError}
-          </Text>
-        )}
-        <Group justify="flex-end" mt="xs">
-          <Button variant="default" onClick={onClose}>
+        </p>
+        {suggestError !== null && <p className="error">{suggestError}</p>}
+        <div className="dialog-actions">
+          <button className="btn btn-outline" onClick={onClose}>
             Annuleren
-          </Button>
-          <Button disabled={!valid} onClick={add}>
+          </button>
+          <button className="btn" disabled={!valid} onClick={add}>
             Toevoegen
-          </Button>
-        </Group>
-      </Stack>
+          </button>
+        </div>
+      </div>
     </Modal>
   );
 }

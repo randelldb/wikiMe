@@ -4,6 +4,10 @@
   --surface: #ffffff;
   --text: #111827;
   --muted: #6b7280;
+  --primary: #4f46e5;
+  --primary-contrast: #ffffff;
+  --heart: #e64980;
+  --error: #e03131;
   --border: rgba(17, 24, 39, 0.08);
   --shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.06);
   --shadow-md: 0 4px 12px rgba(17, 24, 39, 0.08);
@@ -17,6 +21,9 @@
     --surface: #161921;
     --text: #e5e7eb;
     --muted: #9ca3af;
+    --primary: #6366f1;
+    --heart: #f783ac;
+    --error: #fa5252;
     --border: rgba(255, 255, 255, 0.08);
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
     --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
@@ -148,16 +155,107 @@ body {
   flex-shrink: 0;
 }
 
+/* --- Buttons --- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 16px;
+  border: none;
+  border-radius: 10px;
+  background: var(--primary);
+  color: var(--primary-contrast);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: filter 0.15s ease, opacity 0.15s ease;
+}
+
+.btn:hover {
+  filter: brightness(1.08);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn-outline:hover {
+  filter: none;
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 1.1rem;
+  font-family: inherit;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.icon-btn:hover {
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+  color: var(--text);
+}
+
+.icon-btn.heart {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 1.15rem;
+}
+
+.icon-btn.heart:hover {
+  color: var(--heart);
+}
+
+.icon-btn.heart.saved {
+  background: var(--heart);
+  border-color: transparent;
+  color: #fff;
+}
+
 /* --- Floating add button --- */
 
-.fab {
+.icon-btn.fab {
   position: fixed;
   right: max(16px, calc(50vw - 344px));
   bottom: 96px;
   z-index: 15;
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--primary-contrast);
+  font-size: 1.7rem;
+  box-shadow: var(--shadow-md);
 }
 
-/* --- Bottom tab bar (Mantine Tabs container) --- */
+.icon-btn.fab:hover {
+  background: var(--primary);
+  color: var(--primary-contrast);
+  filter: brightness(1.08);
+}
+
+/* --- Bottom tab bar --- */
 
 .tabbar {
   position: fixed;
@@ -166,7 +264,7 @@ body {
   transform: translateX(-50%);
   width: calc(100% - 32px);
   max-width: 688px;
-  padding: 6px 10px;
+  padding: 6px;
   background: color-mix(in srgb, var(--surface) 88%, transparent);
   backdrop-filter: blur(12px) saturate(180%);
   -webkit-backdrop-filter: blur(12px) saturate(180%);
@@ -174,6 +272,31 @@ body {
   border-radius: 18px;
   box-shadow: var(--shadow-xl);
   z-index: 15;
+  display: flex;
+  gap: 4px;
+}
+
+.tab {
+  flex: 1;
+  padding: 10px 0;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.tab:hover {
+  color: var(--text);
+}
+
+.tab.active {
+  background: color-mix(in srgb, var(--primary) 12%, transparent);
+  color: var(--text);
+  font-weight: 600;
 }
 
 /* --- Feed cards --- */
@@ -269,6 +392,18 @@ body {
 .autocomplete-option {
   display: grid;
   gap: 2px;
+  width: 100%;
+  padding: 10px 14px;
+  background: none;
+  border: none;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.autocomplete-option:hover {
+  background: color-mix(in srgb, var(--primary, #4f46e5) 8%, transparent);
 }
 
 .option-title {
@@ -278,4 +413,126 @@ body {
 .option-desc {
   font-size: 0.85rem;
   color: var(--muted);
+}
+
+/* --- Dialog (add theme) --- */
+
+.hint {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.error {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--error);
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: color-mix(in srgb, #000 45%, transparent);
+}
+
+.modal {
+  width: min(480px, 100%);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 8px 20px 20px;
+  box-shadow: var(--shadow-xl);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0 12px;
+}
+
+.modal-header h2 {
+  flex: 1;
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.dialog-body {
+  display: grid;
+  gap: 12px;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.field {
+  display: grid;
+  gap: 4px;
+}
+
+.field-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.field input,
+.suggest-wrap input {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+}
+
+.field input:focus,
+.suggest-wrap input:focus {
+  outline: 2px solid color-mix(in srgb, var(--primary) 60%, transparent);
+  outline-offset: -1px;
+  border-color: transparent;
+}
+
+.suggest-wrap {
+  position: relative;
+}
+
+.suggest-wrap input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.suggest-status {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.suggest-list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: 280px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: var(--shadow-md);
+  z-index: 210;
 }
