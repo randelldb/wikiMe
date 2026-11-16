@@ -50,6 +50,7 @@ body {
   justify-content: space-between;
   gap: 0;
   padding: 40px 16px;
+  min-height: 40px;
   background: var(--bg);
   color: var(--white);
 }
