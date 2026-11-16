@@ -2,14 +2,19 @@ import { useEffect } from "react";
 import type { ReactNode } from "react";
 
 /** Minimal dialog: click on the backdrop or press Escape to close.
- * Renders nothing while closed, so children unmount and reset cleanly. */
+ * Renders nothing while closed, so children unmount and reset cleanly.
+ * With `fullscreen` it covers the whole screen (no backdrop) so the
+ * content starts at the very top — handy when the on-screen keyboard
+ * pops up on mobile. */
 export default function Modal({
   title,
   onClose,
+  fullscreen = false,
   children,
 }: {
   title: string;
   onClose: () => void;
+  fullscreen?: boolean;
   children: ReactNode;
 }) {
   useEffect(() => {
@@ -22,12 +27,16 @@ export default function Modal({
 
   return (
     <div
-      className="modal-overlay"
+      className={fullscreen ? "modal-overlay fullscreen" : "modal-overlay"}
       onMouseDown={(e) => {
-        if (e.target === e.currentTarget) onClose();
+        if (!fullscreen && e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="modal" role="dialog" aria-modal="true">
+      <div
+        className={fullscreen ? "modal fullscreen" : "modal"}
+        role="dialog"
+        aria-modal="true"
+      >
         <header className="modal-header">
           <h2>{title}</h2>
           <button className="icon-btn" aria-label="Sluiten" onClick={onClose}>

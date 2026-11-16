@@ -147,7 +147,7 @@ function AddThemeDialog({
   };
 
   return (
-    <Modal title="Nieuw thema" onClose={onClose}>
+    <Modal title="Nieuw thema" onClose={onClose} fullscreen>
       <div className="dialog-body">
         <label className="field">
           <span>Naam</span>
