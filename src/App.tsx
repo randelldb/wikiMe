@@ -67,18 +67,25 @@ export default function App() {
     goTo({ screen: "feed", themeId: theme.id, themeName: theme.name });
   };
 
-  // Restore the remembered scroll position whenever the view changes.
-  // Content loads async (IndexedDB / API), so re-apply a few times until
-  // the page is tall enough for the target position to stick.
+  // Restore the remembered scroll position when the view changes. Wait
+  // until async content (IndexedDB / API) has made the page tall enough,
+  // then scroll once — no visible jump to the top first. Falls back to a
+  // direct scroll after 1.5s if the content never gets that tall.
   useEffect(() => {
     const y = scrollPos.current[viewKey(view)] ?? 0;
-    const apply = () => window.scrollTo(0, y);
-    const raf = requestAnimationFrame(apply);
-    const timers = [150, 400, 900].map((ms) => window.setTimeout(apply, ms));
-    return () => {
-      cancelAnimationFrame(raf);
-      timers.forEach(clearTimeout);
+    if (y === 0) return;
+    let raf = 0;
+    const start = performance.now();
+    const tryApply = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      if (max >= y || performance.now() - start > 1500) {
+        window.scrollTo(0, y);
+        return;
+      }
+      raf = requestAnimationFrame(tryApply);
     };
+    raf = requestAnimationFrame(tryApply);
+    return () => cancelAnimationFrame(raf);
   }, [view]);
 
   const switchTab = (screen: "themes" | "saved" | "foryou") => {
