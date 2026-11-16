@@ -14,7 +14,9 @@ and the Wikipedia source, and themes are shown per language.
 
 - **Themes** — create your own themes around any Wikipedia search term
   (with title autocomplete), stored locally in IndexedDB. Swipe a theme away
-  to delete it.
+  to delete it. The add-theme dialog also offers ~20 **presets** (space,
+  tech, …): tapping one or more auto-builds a broader `OR` search query
+  from their related terms, so you no longer have to search too specifically.
 - **Theme feed** — each theme streams full-text search results from Wikipedia
   with infinite scroll, article thumbnails and intro extracts.
 - **Saved** — tap the heart on any article to save it; the saved list lives in
@@ -62,6 +64,7 @@ src/
     ├── api.ts            # Wikipedia API client + pure query builders
     ├── repository.ts     # article feeds: search, morelike, random
     ├── foryou.ts         # personal-feed batching logic
+    ├── presets.ts        # theme presets + pure OR-query builders
     ├── db.ts             # IndexedDB layer (idb)
     └── config.ts         # wiki language / API base URLs
 ```
