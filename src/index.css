@@ -361,7 +361,7 @@ body {
   transition: background 0.15s ease, color 0.15s ease;
 }
 
-.tab:nth-child(1) { --tab-accent: var(--cerulean); }
+.tab:nth-child(1) { --tab-accent: #ee9b00; }
 .tab:nth-child(2) { --tab-accent: var(--strawberry); }
 .tab:nth-child(3) { --tab-accent: var(--cyan); }
 
