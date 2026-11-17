@@ -59,6 +59,7 @@ const nl = {
 
   "article.close": "Sluiten",
   "article.readMore": "Lees verder op Wikipedia →",
+  "article.readMoreInApp": "Lees meer",
   "article.summaryFailed":
     "Samenvatting ophalen mislukt; alleen de titel is opgeslagen.",
 
@@ -146,6 +147,7 @@ const en: Dict = {
 
   "article.close": "Close",
   "article.readMore": "Read more on Wikipedia →",
+  "article.readMoreInApp": "Read more",
   "article.summaryFailed": "Fetching the summary failed; only the title was saved.",
 
   "swipe.reveal": "Delete",

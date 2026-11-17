@@ -26,11 +26,11 @@ and the Wikipedia source, and themes are shown per language.
   repeating articles you have already seen.
 - **Random** — the dice tab in the tab bar shows 3 random Wikipedia articles
   to pick from; roll again for a fresh set.
-- **Article view** — hero image, lead paragraph and a link to the full article
-  on Wikipedia, plus a save toggle. With the **full article** setting enabled
-  (Settings), the whole Wikipedia page (`action=parse&prop=text`) is rendered
-  inside the app in the app style and wiki links navigate in-app; with it off,
-  only the link out to Wikipedia is shown.
+- **Article view** — always the summary first (hero image + lead paragraph),
+  plus a save toggle. Below it a button whose meaning depends on the **full
+  article** setting (Settings): on, "Lees meer" expands the whole Wikipedia
+  page (`action=parse&prop=text`) inside the app in app style with in-app link
+  navigation; off, "Lees verder op Wikipedia" links out to the site.
 - The tab bar is always visible, scroll positions are remembered per screen,
   and the app handles rate limiting (HTTP 429) with friendly retry states.
 

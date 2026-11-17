@@ -9,12 +9,12 @@ import { useLang } from "../i18n";
 
 const repository = new ArticleRepository();
 
-/** Article reading view. Wikipedia blocks embedding its site in an iframe,
- * so two modes exist: with the full-article setting on, the complete article
- * HTML (`action=parse&prop=text`) is rendered inside the app in app style
- * and wiki links navigate in-app; with it off, only the intro/thumbnail is
- * shown here plus a link out to m.wikipedia.org — the web equivalent of the
- * in-app WebView from the Android/Flutter versions. */
+/** Article reading view: always the summary first (hero + intro extract),
+ * then a button whose meaning depends on the full-article setting. Setting
+ * on: "Lees meer" expands the complete article HTML (`action=parse&prop=text`)
+ * inside the app in app style, and wiki links navigate in-app. Setting off:
+ * "Lees verder op Wikipedia" links out to m.wikipedia.org — the web equivalent
+ * of the in-app WebView from the Android/Flutter versions. */
 export default function ArticleView({
   title,
   savedTitles,
@@ -43,6 +43,10 @@ export default function ArticleView({
     html: string | null;
     error: string | null;
   } | null>(null);
+  // "Lees meer" pressed for this title; keyed by title so navigating to
+  // another article collapses back to the summary view.
+  const [expandedFor, setExpandedFor] = useState<string | null>(null);
+  const expanded = expandedFor === title;
 
   useEffect(() => {
     let cancelled = false;
@@ -62,10 +66,11 @@ export default function ArticleView({
     };
   }, [title]);
 
-  // Full article HTML, only fetched when the feature flag is on. The lead
-  // extract is still loaded in the background: it backs the save action.
+  // Full article HTML, fetched only when the feature flag is on AND the
+  // user pressed "Lees meer". The lead extract is still loaded in the
+  // background: it backs the save action.
   useEffect(() => {
-    if (!fullArticle) return;
+    if (!fullArticle || !expanded) return;
     let cancelled = false;
     repository
       .articleHtml(title)
@@ -86,10 +91,10 @@ export default function ArticleView({
     return () => {
       cancelled = true;
     };
-  }, [title, fullArticle, t]);
+  }, [title, fullArticle, expanded, t]);
 
-  const html = fullArticle && full?.title === title ? full.html : null;
-  const htmlError = fullArticle && full?.title === title ? full.error : null;
+  const html = fullArticle && expanded && full?.title === title ? full.html : null;
+  const htmlError = fullArticle && expanded && full?.title === title ? full.error : null;
 
   // Link clicks inside the rendered article: main-namespace wiki links open
   // in-app, everything else in a new tab, fragments scroll natively.
@@ -158,47 +163,31 @@ export default function ArticleView({
 
       <main className="content">
         {thumbnailUrl && <img className="hero" src={thumbnailUrl} alt="" />}
-        {fullArticle ? (
-          <>
-            {html === null && htmlError === null && (
-              <div className="status" role="status" aria-label={t("feed.loading")}>
-                <div className="spinner" />
-              </div>
-            )}
-            {htmlError !== null && (
-              <div className="article-body">
-                <p className="error">{htmlError}</p>
-              </div>
-            )}
-            {html !== null && (
-              <div
-                className="wiki-content"
-                dangerouslySetInnerHTML={{ __html: html }}
-                onClick={onContentClick}
-              />
-            )}
-            <div className="article-body">
-              <a
-                className="btn"
-                href={WikiConfig.mobileArticleUrl(title)}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {t("article.readMore")}
-              </a>
+        <div className="article-body">
+          {extract === null ? (
+            <div className="status" role="status" aria-label={t("feed.loading")}>
+              <div className="spinner" />
             </div>
-          </>
-        ) : (
-          <div className="article-body">
-            {extract === null ? (
-              <div className="status" role="status" aria-label={t("feed.loading")}>
-                <div className="spinner" />
-              </div>
-            ) : extract === "" ? (
-              <p className="empty">{t("feed.noSummary")}</p>
-            ) : (
-              <p className="lead">{extract}</p>
-            )}
+          ) : extract === "" ? (
+            <p className="empty">{t("feed.noSummary")}</p>
+          ) : (
+            <p className="lead">{extract}</p>
+          )}
+          {fullArticle ? (
+            <>
+              {(!expanded || htmlError !== null) && (
+                <button className="btn" onClick={() => setExpandedFor(title)}>
+                  {t("article.readMoreInApp")}
+                </button>
+              )}
+              {expanded && html === null && htmlError === null && (
+                <div className="status" role="status" aria-label={t("feed.loading")}>
+                  <div className="spinner" />
+                </div>
+              )}
+              {expanded && htmlError !== null && <p className="error">{htmlError}</p>}
+            </>
+          ) : (
             <a
               className="btn"
               href={WikiConfig.mobileArticleUrl(title)}
@@ -207,7 +196,14 @@ export default function ArticleView({
             >
               {t("article.readMore")}
             </a>
-          </div>
+          )}
+        </div>
+        {fullArticle && expanded && html !== null && (
+          <div
+            className="wiki-content"
+            dangerouslySetInnerHTML={{ __html: html }}
+            onClick={onContentClick}
+          />
         )}
 
         {message && (
