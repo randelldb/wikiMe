@@ -11,10 +11,11 @@ const repository = new ArticleRepository();
 
 /** Article reading view: always the summary first (hero + intro extract),
  * then a button whose meaning depends on the full-article setting. Setting
- * on: "Lees meer" expands the complete article HTML (`action=parse&prop=text`)
- * inside the app in app style, and wiki links navigate in-app. Setting off:
- * "Lees verder op Wikipedia" links out to m.wikipedia.org — the web equivalent
- * of the in-app WebView from the Android/Flutter versions. */
+ * on: "Lees meer" replaces the summary with the complete article HTML
+ * (`action=parse&prop=text`) rendered inside the app in app style, and wiki
+ * links navigate in-app. Setting off: "Lees verder op Wikipedia" links out to
+ * m.wikipedia.org — the web equivalent of the in-app WebView from the
+ * Android/Flutter versions. */
 export default function ArticleView({
   title,
   savedTitles,
@@ -95,6 +96,9 @@ export default function ArticleView({
 
   const html = fullArticle && expanded && full?.title === title ? full.html : null;
   const htmlError = fullArticle && expanded && full?.title === title ? full.error : null;
+  // Once the full article is expanded and loaded, the summary (hero + lead)
+  // is replaced by it: the article HTML already contains the lead and image.
+  const showSummary = !fullArticle || !expanded || html === null;
 
   // Link clicks inside the rendered article: main-namespace wiki links open
   // in-app, everything else in a new tab, fragments scroll natively.
@@ -162,42 +166,46 @@ export default function ArticleView({
       </button>
 
       <main className="content">
-        {thumbnailUrl && <img className="hero" src={thumbnailUrl} alt="" />}
-        <div className="article-body">
-          {extract === null ? (
-            <div className="status" role="status" aria-label={t("feed.loading")}>
-              <div className="spinner" />
-            </div>
-          ) : extract === "" ? (
-            <p className="empty">{t("feed.noSummary")}</p>
-          ) : (
-            <p className="lead">{extract}</p>
-          )}
-          {fullArticle ? (
-            <>
-              {(!expanded || htmlError !== null) && (
-                <button className="btn" onClick={() => setExpandedFor(title)}>
-                  {t("article.readMoreInApp")}
-                </button>
-              )}
-              {expanded && html === null && htmlError === null && (
+        {showSummary && (
+          <>
+            {thumbnailUrl && <img className="hero" src={thumbnailUrl} alt="" />}
+            <div className="article-body">
+              {extract === null ? (
                 <div className="status" role="status" aria-label={t("feed.loading")}>
                   <div className="spinner" />
                 </div>
+              ) : extract === "" ? (
+                <p className="empty">{t("feed.noSummary")}</p>
+              ) : (
+                <p className="lead">{extract}</p>
               )}
-              {expanded && htmlError !== null && <p className="error">{htmlError}</p>}
-            </>
-          ) : (
-            <a
-              className="btn"
-              href={WikiConfig.mobileArticleUrl(title)}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {t("article.readMore")}
-            </a>
-          )}
-        </div>
+              {fullArticle ? (
+                <>
+                  {(!expanded || htmlError !== null) && (
+                    <button className="btn" onClick={() => setExpandedFor(title)}>
+                      {t("article.readMoreInApp")}
+                    </button>
+                  )}
+                  {expanded && html === null && htmlError === null && (
+                    <div className="status" role="status" aria-label={t("feed.loading")}>
+                      <div className="spinner" />
+                    </div>
+                  )}
+                  {expanded && htmlError !== null && <p className="error">{htmlError}</p>}
+                </>
+              ) : (
+                <a
+                  className="btn"
+                  href={WikiConfig.mobileArticleUrl(title)}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {t("article.readMore")}
+                </a>
+              )}
+            </div>
+          </>
+        )}
         {fullArticle && expanded && html !== null && (
           <div
             className="wiki-content"

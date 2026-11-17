@@ -28,9 +28,10 @@ and the Wikipedia source, and themes are shown per language.
   to pick from; roll again for a fresh set.
 - **Article view** — always the summary first (hero image + lead paragraph),
   plus a save toggle. Below it a button whose meaning depends on the **full
-  article** setting (Settings): on, "Lees meer" expands the whole Wikipedia
-  page (`action=parse&prop=text`) inside the app in app style with in-app link
-  navigation; off, "Lees verder op Wikipedia" links out to the site.
+  article** setting (Settings): on, "Lees meer" replaces the summary with the
+  whole Wikipedia page (`action=parse&prop=text`) rendered inside the app in
+  app style with in-app link navigation; off, "Lees verder op Wikipedia" links
+  out to the site.
 - The tab bar is always visible, scroll positions are remembered per screen,
   and the app handles rate limiting (HTTP 429) with friendly retry states.
 
