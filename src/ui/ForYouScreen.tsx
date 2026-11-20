@@ -5,6 +5,7 @@ import { ForYouFeed } from "../data/foryou";
 import { RateLimitedError } from "../data/types";
 import type { Article } from "../data/types";
 import { ArticleCard, EMPTY_FEED, FeedStatus, type FeedUiState } from "./FeedParts";
+import PullToRefresh from "./PullToRefresh";
 import { useLang } from "../i18n";
 
 const forYouFeed = new ForYouFeed();
@@ -64,6 +65,15 @@ export default function ForYouScreen({
     loadMore();
   }, [loadMore]);
 
+  // Pull-to-refresh: clear the shown-buffer so the morelike feed can show
+  // articles again, then reload the first batch from scratch.
+  const refresh = useCallback(async () => {
+    if (welcome) return;
+    setState({ articles: [], isLoading: true, error: null, exhausted: false });
+    await clearShownArticles();
+    await loadMore();
+  }, [loadMore, welcome]);
+
   // Kick off the first load once the feed has two or more favorites. Each
   // (re)open of the screen clears the shown-buffer first, so a new visit can
   // show articles again instead of filtering everything as "already shown".
@@ -104,6 +114,7 @@ export default function ForYouScreen({
   };
 
   return (
+    <PullToRefresh onRefresh={refresh} disabled={welcome || state.isLoading}>
     <div className="screen">
       <header className="appbar">
         <h1>
@@ -146,5 +157,6 @@ export default function ForYouScreen({
         )}
       </main>
     </div>
+    </PullToRefresh>
   );
 }

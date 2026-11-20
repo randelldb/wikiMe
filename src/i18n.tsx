@@ -44,6 +44,8 @@ const nl = {
   "feed.emptyTheme":
     "Geen artikelen gevonden. Controleer de zoekterm van dit thema.",
   "feed.emptyGeneric": "Geen artikelen gevonden. Probeer het opnieuw.",
+  "feed.pullToRefresh": "Trek omlaag om te verversen",
+  "feed.refreshing": "Verversen\u2026",
 
   "foryou.welcomeTitle":
     "Sla artikelen op als favoriet en deze feed vormt zich vanzelf.",
@@ -134,6 +136,8 @@ const en: Dict = {
   "feed.unsave": "Remove from saved",
   "feed.emptyTheme": "No articles found. Check this theme's search term.",
   "feed.emptyGeneric": "No articles found. Please try again.",
+  "feed.pullToRefresh": "Pull down to refresh",
+  "feed.refreshing": "Refreshing\u2026",
 
   "foryou.welcomeTitle": "Save articles as favorites and this feed will form itself.",
   "foryou.welcomeHint":
