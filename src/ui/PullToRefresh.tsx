@@ -25,6 +25,15 @@ export default function PullToRefresh({
   const [refreshing, setRefreshing] = useState(false);
   const pullRef = useRef(0);
 
+  // While a screen with custom pull-to-refresh is mounted, mark <html> so
+  // CSS (html.ptr) disables the browser's native overscroll refresh — only
+  // our custom one runs there. Screens without this component (themes,
+  // saved, settings, article) keep the native pull-to-refresh.
+  useEffect(() => {
+    document.documentElement.classList.add("ptr");
+    return () => document.documentElement.classList.remove("ptr");
+  }, []);
+
   useEffect(() => {
     if (disabled || refreshing) return;
     let active = false;
