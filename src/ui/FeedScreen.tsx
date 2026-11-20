@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { theme, upsertSavedArticle, deleteSavedArticle } from "../data/db";
 import { ArticleRepository } from "../data/repository";
+import { shuffle } from "../data/collections";
 import { RateLimitedError } from "../data/types";
 import type { Article } from "../data/types";
 import { ArticleCard, EMPTY_FEED, FeedStatus, type FeedUiState } from "./FeedParts";
@@ -77,11 +78,14 @@ export default function FeedScreen({
   }, [loadMore]);
 
   // Pull-to-refresh: start the search over from offset 0 and reload the
-  // first batch, replacing whatever is currently shown.
+  // first batch, replacing whatever is currently shown. The full-text
+  // search is deterministic, so the fresh batch is shuffled to show the
+  // results in a different order on every refresh.
   const refresh = useCallback(async () => {
     progressRef.current = { searchOffset: 0 };
     setState({ articles: [], isLoading: true, error: null, exhausted: false });
     await loadMore();
+    setState((s) => ({ ...s, articles: shuffle(s.articles) }));
   }, [loadMore]);
 
   // Kick off the first load like the Android init { loadMore() }.
