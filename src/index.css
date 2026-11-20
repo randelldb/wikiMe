@@ -70,6 +70,8 @@ body {
   box-sizing: border-box;
   background: var(--bg);
   color: var(--white);
+  /* Subtle drop shadow on the bottom edge of the header. */
+  box-shadow: 0 2px 8px color-mix(in srgb, #000 45%, transparent);
 }
 
 .appbar h1 {
@@ -383,6 +385,8 @@ body {
   display: flex;
   gap: 0;
   height: 56px;
+  /* Subtle drop shadow on the top edge of the tab bar. */
+  box-shadow: 0 -2px 8px color-mix(in srgb, #000 45%, transparent);
 }
 
 .tab {
@@ -814,7 +818,8 @@ body {
   height: 24px;
   border: none;
   border-bottom: 1px solid var(--border);
-  background: transparent;
+  /* Unselected state: grayish surface background. */
+  background: var(--surface);
   color: var(--muted);
   display: flex;
   align-items: center;
