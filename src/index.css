@@ -32,10 +32,12 @@
   box-sizing: border-box;
 }
 
-/* The app ships its own pull-to-refresh (PullToRefresh.tsx), so the
- * browser's native overscroll refresh/rubber-band is disabled here. */
-html,
-body {
+/* Screens with the custom pull-to-refresh (PullToRefresh.tsx) mark <html>
+ * with the "ptr" class; only there the browser's native overscroll
+ * refresh/rubber-band is disabled so just the custom one runs. All other
+ * screens (themes, saved, settings, article) keep the native refresh. */
+html.ptr,
+html.ptr body {
   overscroll-behavior-y: none;
 }
 
@@ -317,11 +319,6 @@ body {
 /* Icons in the prussian appbar are light. */
 .appbar .icon-btn {
   color: color-mix(in srgb, var(--white) 85%, transparent);
-}
-
-/* The dice in the random screen's appbar is a bit larger. */
-.appbar .icon-btn.reroll {
-  font-size: 1.6rem;
 }
 
 .appbar .icon-btn:hover {

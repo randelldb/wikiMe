@@ -58,8 +58,7 @@ const nl = {
   "saved.confirmDelete": 'Verwijder "{name}"?',
 
   "random.title": "Willekeurig",
-  "random.reroll": "Nieuwe worp",
-  "random.rollAgain": "Nog eens rollen",
+  "random.pullToRoll": "Trek omlaag om nog eens te rollen",
 
   "article.close": "Sluiten",
   "article.readMore": "Lees verder op Wikipedia →",
@@ -149,8 +148,7 @@ const en: Dict = {
   "saved.confirmDelete": 'Delete "{name}"?',
 
   "random.title": "Random",
-  "random.reroll": "New roll",
-  "random.rollAgain": "Roll again",
+  "random.pullToRoll": "Pull down to roll again",
 
   "article.close": "Close",
   "article.readMore": "Read more on Wikipedia →",

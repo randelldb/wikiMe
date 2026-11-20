@@ -4,6 +4,7 @@ import { ArticleRepository } from "../data/repository";
 import { RateLimitedError } from "../data/types";
 import type { Article } from "../data/types";
 import { ArticleCard, EMPTY_FEED, FeedStatus, type FeedUiState } from "./FeedParts";
+import PullToRefresh from "./PullToRefresh";
 import { useLang } from "../i18n";
 
 const repository = new ArticleRepository();
@@ -12,7 +13,7 @@ const repository = new ArticleRepository();
 const ROLL_SIZE = 3;
 
 /** Dice tab screen: a list of random Wikipedia articles to pick from.
- * The appbar button and the button under the list roll a fresh set. */
+ * Pulling down at the top of the list rolls a fresh set. */
 export default function RandomScreen({
   savedTitles,
   refreshSaved,
@@ -71,17 +72,10 @@ export default function RandomScreen({
   };
 
   return (
+    <PullToRefresh onRefresh={roll} disabled={state.isLoading}>
     <div className="screen">
       <header className="appbar">
         <h1>{t("random.title")}</h1>
-        <button
-          className="icon-btn reroll"
-          onClick={roll}
-          title={t("random.reroll")}
-          aria-label={t("random.reroll")}
-        >
-          ⚄
-        </button>
       </header>
 
       <main className="content">
@@ -110,13 +104,12 @@ export default function RandomScreen({
               />
             )}
             <div className="roll-again">
-              <button className="btn" onClick={roll} disabled={state.isLoading}>
-                {t("random.rollAgain")}
-              </button>
+              <p className="hint">{t("random.pullToRoll")}</p>
             </div>
           </>
         )}
       </main>
     </div>
+    </PullToRefresh>
   );
 }
