@@ -126,14 +126,14 @@ export default function SwipeRow({
   return (
     <>
       <div className="swipe" onPointerDown={onPointerDown}>
+        <div className="swipe-bg" aria-hidden="true">
+          <TrashIcon />
+        </div>
         {onEdit && (
           <div className="swipe-bg swipe-bg-edit" aria-hidden="true">
             <PencilIcon />
           </div>
         )}
-        <div className="swipe-bg" aria-hidden="true">
-          <TrashIcon />
-        </div>
         <div
           className="swipe-content"
           style={{ transform: `translateX(${offset}px)` }}

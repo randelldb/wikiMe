@@ -135,7 +135,9 @@ body {
 
 /* Revealed by swiping right: only a left strip is painted over the red
  * delete background (width matches REVEAL_WIDTH in SwipeRow.tsx), so
- * swiping left still shows the delete area. */
+ * swiping left still shows the delete area. DOM order in SwipeRow.tsx
+ * (delete bg, edit bg, content) keeps the content on top at rest and the
+ * edit strip above the delete background while swiping right. */
 .swipe-bg-edit {
   left: 0;
   right: auto;
