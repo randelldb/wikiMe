@@ -32,6 +32,13 @@
   box-sizing: border-box;
 }
 
+/* The app ships its own pull-to-refresh (PullToRefresh.tsx), so the
+ * browser's native overscroll refresh/rubber-band is disabled here. */
+html,
+body {
+  overscroll-behavior-y: none;
+}
+
 body {
   margin: 0;
   overflow-x: hidden;
@@ -856,4 +863,45 @@ body {
   to {
     transform: rotate(360deg);
   }
+}
+
+/* --- Pull-to-refresh (PullToRefresh.tsx) --- */
+
+/* The screen content slides down with the finger; the indicator is a fixed
+ * overlay in the gap that opens up above it. pointer-events: none so it
+ * never intercepts touches. */
+.ptr-content {
+  will-change: transform;
+}
+
+.ptr-indicator {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  pointer-events: none;
+  color: var(--primary);
+}
+
+.ptr-indicator-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 56px;
+  padding-bottom: 8px;
+}
+
+.ptr-arrow {
+  transition: transform 0.2s ease;
+}
+
+.spinner-sm {
+  width: 24px;
+  height: 24px;
+  border-width: 3px;
 }

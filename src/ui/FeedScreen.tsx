@@ -4,6 +4,7 @@ import { ArticleRepository } from "../data/repository";
 import { RateLimitedError } from "../data/types";
 import type { Article } from "../data/types";
 import { ArticleCard, EMPTY_FEED, FeedStatus, type FeedUiState } from "./FeedParts";
+import PullToRefresh from "./PullToRefresh";
 import { useLang } from "../i18n";
 
 const repository = new ArticleRepository();
@@ -75,6 +76,14 @@ export default function FeedScreen({
     loadMore();
   }, [loadMore]);
 
+  // Pull-to-refresh: start the search over from offset 0 and reload the
+  // first batch, replacing whatever is currently shown.
+  const refresh = useCallback(async () => {
+    progressRef.current = { searchOffset: 0 };
+    setState({ articles: [], isLoading: true, error: null, exhausted: false });
+    await loadMore();
+  }, [loadMore]);
+
   // Kick off the first load like the Android init { loadMore() }.
   useEffect(() => {
     loadMore();
@@ -112,6 +121,7 @@ export default function FeedScreen({
   };
 
   return (
+    <PullToRefresh onRefresh={refresh} disabled={state.isLoading}>
     <div className="screen">
       <header className="appbar">
         <button className="icon-btn" onClick={onBack} title={t("feed.back")}>
@@ -141,6 +151,7 @@ export default function FeedScreen({
         )}
       </main>
     </div>
+    </PullToRefresh>
   );
 }
 
