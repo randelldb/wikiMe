@@ -6,6 +6,7 @@ import ArticleView from "./ui/ArticleView";
 import ForYouScreen from "./ui/ForYouScreen";
 import RandomScreen from "./ui/RandomScreen";
 import SettingsScreen from "./ui/SettingsScreen";
+import { ThemesIcon, SavedIcon, ForYouIcon, DiceIcon, GearIcon } from "./ui/TabIcons";
 import { useLang } from "./i18n";
 import { savedTitlesInLanguage } from "./data/db";
 import { WikiConfig } from "./data/config";
@@ -26,9 +27,9 @@ type View =
   | { screen: "article"; title: string };
 
 const TABS = [
-  { screen: "themes", labelKey: "tabs.themes" },
-  { screen: "saved", labelKey: "tabs.saved" },
-  { screen: "foryou", labelKey: "tabs.foryou" },
+  { screen: "themes", labelKey: "tabs.themes", Icon: ThemesIcon },
+  { screen: "saved", labelKey: "tabs.saved", Icon: SavedIcon },
+  { screen: "foryou", labelKey: "tabs.foryou", Icon: ForYouIcon },
 ] as const;
 
 /** The square dice and settings buttons sit left and right of the text
@@ -209,7 +210,7 @@ export default function App() {
           aria-label={t("tabs.random")}
           title={t("tabs.random")}
         >
-          ⚄
+          <DiceIcon />
         </button>
         {TABS.map((tab) => (
           <button
@@ -219,7 +220,8 @@ export default function App() {
             className={activeTab === tab.screen ? "tab active" : "tab"}
             onClick={() => switchTab(tab.screen)}
           >
-            {t(tab.labelKey)}
+            <tab.Icon />
+            <span className="tab-label">{t(tab.labelKey)}</span>
           </button>
         ))}
         <button
@@ -230,7 +232,7 @@ export default function App() {
           aria-label={t("tabs.settings")}
           title={t("tabs.settings")}
         >
-          ⚙
+          <GearIcon />
         </button>
       </nav>
     </div>

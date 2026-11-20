@@ -369,7 +369,8 @@ body {
   width: 100%;
   max-width: 720px;
   padding: 0;
-  background: var(--cerulean);
+  /* Slightly darker blue than --cerulean. */
+  background: color-mix(in srgb, var(--cerulean) 78%, #000);
   z-index: 15;
   display: flex;
   gap: 0;
@@ -377,20 +378,40 @@ body {
 }
 
 .tab {
+  position: relative;
   flex: 1;
   height: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 3px;
   border: none;
   border-radius: 0;
   background: transparent;
   color: color-mix(in srgb, var(--white) 75%, transparent);
   font: inherit;
-  font-size: 0.9rem;
+  font-size: 0.68rem;
   font-weight: 500;
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease;
+}
+
+.tab svg {
+  display: block;
+}
+
+/* Separator between tabs: a thin vertical line, half the bar height,
+ * vertically centered, in a blue darker than the tab bar background. */
+.tab + .tab::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 28px;
+  background: color-mix(in srgb, var(--cerulean) 55%, #000);
 }
 
 /* The dice button is the first child and the settings button the last,
@@ -399,13 +420,12 @@ body {
 .tab:nth-child(3) { --tab-accent: var(--strawberry); }
 .tab:nth-child(4) { --tab-accent: var(--cyan); }
 
-/* Square icon tabs at the edges of the bar (bar height is 56px):
+/* Square icon-only tabs at the edges of the bar (bar height is 56px):
  * dice on the left, settings gear on the right. */
 .tab.dice,
 .tab.gear {
   flex: 0 0 56px;
   width: 56px;
-  font-size: 1.5rem;
 }
 
 .tab.dice { --tab-accent: var(--tuscan); }
