@@ -127,7 +127,10 @@ body {
   align-items: center;
   justify-content: flex-end;
   padding-right: 24px;
-  font-weight: 700;
+}
+
+.swipe-bg svg {
+  display: block;
 }
 
 /* Revealed by swiping right: only a left strip is painted over the red

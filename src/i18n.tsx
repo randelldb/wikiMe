@@ -65,8 +65,6 @@ const nl = {
   "article.summaryFailed":
     "Samenvatting ophalen mislukt; alleen de titel is opgeslagen.",
 
-  "swipe.reveal": "Verwijder",
-  "swipe.edit": "Bewerken",
   "swipe.confirmHint":
     "Weet je zeker dat je dit wilt verwijderen? Dit kan niet ongedaan worden.",
 
@@ -155,8 +153,6 @@ const en: Dict = {
   "article.readMoreInApp": "Read more",
   "article.summaryFailed": "Fetching the summary failed; only the title was saved.",
 
-  "swipe.reveal": "Delete",
-  "swipe.edit": "Edit",
   "swipe.confirmHint": "Are you sure you want to delete this? This cannot be undone.",
 
   "actions.cancel": "Cancel",
