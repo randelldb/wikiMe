@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import Logo from "./Logo";
-import SwipeToDelete from "./SwipeToDelete";
+import SwipeRow from "./SwipeRow";
 import { deleteSavedArticle, savedArticles, savedArticlesInLanguage } from "../data/db";
 import { savedArticleLanguage } from "../data/types";
 import type { SavedArticle } from "../data/types";
@@ -55,7 +55,7 @@ export default function SavedScreen({
           <ul className="list">
             {articles.map((article) => (
               <li key={article.title} className="list-item">
-                <SwipeToDelete
+                <SwipeRow
                   confirmTitle={t("saved.confirmDelete", { name: article.title })}
                   onConfirm={() => remove(article.title)}
                 >
@@ -70,7 +70,7 @@ export default function SavedScreen({
                       )}
                     </span>
                   </button>
-                </SwipeToDelete>
+                </SwipeRow>
               </li>
             ))}
           </ul>

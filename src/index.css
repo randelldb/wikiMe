@@ -107,7 +107,8 @@ body {
 }
 
 /* Each item is a swipe row: the content slides left over the red
- * delete area. The list keeps its 2px divider on the <li>. */
+ * delete area, or right over the blue edit area. The list keeps its
+ * 2px divider on the <li>. */
 .list-item {
   position: relative;
   overflow: hidden;
@@ -127,6 +128,19 @@ body {
   justify-content: flex-end;
   padding-right: 24px;
   font-weight: 700;
+}
+
+/* Revealed by swiping right: only a left strip is painted over the red
+ * delete background (width matches REVEAL_WIDTH in SwipeRow.tsx), so
+ * swiping left still shows the delete area. */
+.swipe-bg-edit {
+  left: 0;
+  right: auto;
+  width: 96px;
+  background: var(--primary);
+  justify-content: flex-start;
+  padding-left: 24px;
+  padding-right: 0;
 }
 
 .swipe-content {

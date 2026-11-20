@@ -6,18 +6,21 @@ import { useLang } from "../i18n";
 const REVEAL_WIDTH = 96;
 const CONFIRM_THRESHOLD = 48;
 
-/** Swipe-to-delete wrapper: drag the list row to the left to reveal the
- * delete action; releasing past the threshold opens a confirmation dialog.
- * Vertical drags fall through so the list keeps scrolling normally.
- * Pointer capture is avoided on purpose — it would retarget the click and
- * quietly break the row's main button. */
-export default function SwipeToDelete({
+/** Swipe row for list items: drag left to reveal the delete action (release
+ * past the threshold opens a confirmation dialog); when `onEdit` is given,
+ * drag right to reveal the edit action and run it on release. Vertical
+ * drags fall through so the list keeps scrolling normally. Pointer capture
+ * is avoided on purpose — it would retarget the click and quietly break the
+ * row's main button. */
+export default function SwipeRow({
   onConfirm,
   confirmTitle,
+  onEdit,
   children,
 }: {
   onConfirm: () => void | Promise<void>;
   confirmTitle: string;
+  onEdit?: () => void;
   children: ReactNode;
 }) {
   const { t } = useLang();
@@ -47,7 +50,8 @@ export default function SwipeToDelete({
         }
         horizontal.current = true;
       }
-      const clamped = Math.max(-REVEAL_WIDTH, Math.min(0, dx));
+      const maxRight = onEdit ? REVEAL_WIDTH : 0;
+      const clamped = Math.max(-REVEAL_WIDTH, Math.min(maxRight, dx));
       offsetRef.current = clamped;
       setOffset(clamped);
     };
@@ -56,6 +60,9 @@ export default function SwipeToDelete({
       if (offsetRef.current <= -CONFIRM_THRESHOLD) {
         didSwipe.current = true;
         setAsk(true);
+      } else if (onEdit && offsetRef.current >= CONFIRM_THRESHOLD) {
+        didSwipe.current = true;
+        onEdit();
       }
       offsetRef.current = 0;
       setOffset(0);
@@ -70,7 +77,7 @@ export default function SwipeToDelete({
       window.removeEventListener("pointerup", up);
       window.removeEventListener("pointercancel", up);
     };
-  }, [dragging]);
+  }, [dragging, onEdit]);
 
   const onPointerDown = (e: ReactPointerEvent<HTMLDivElement>) => {
     startX.current = e.clientX;
@@ -103,6 +110,11 @@ export default function SwipeToDelete({
   return (
     <>
       <div className="swipe" onPointerDown={onPointerDown}>
+        {onEdit && (
+          <div className="swipe-bg swipe-bg-edit" aria-hidden="true">
+            {t("swipe.edit")}
+          </div>
+        )}
         <div className="swipe-bg" aria-hidden="true">
           {t("swipe.reveal")}
         </div>

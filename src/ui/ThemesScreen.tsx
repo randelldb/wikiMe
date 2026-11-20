@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Logo from "./Logo";
 import Modal from "./Modal";
-import SwipeToDelete from "./SwipeToDelete";
-import { allThemes, themesInLanguage, deleteTheme, insertTheme } from "../data/db";
+import SwipeRow from "./SwipeRow";
+import { allThemes, themesInLanguage, deleteTheme, insertTheme, updateTheme } from "../data/db";
 import { themeLanguage } from "../data/types";
 import type { Theme } from "../data/types";
 import { ArticleRepository } from "../data/repository";
@@ -18,6 +18,8 @@ export default function ThemesScreen({ onOpenTheme }: { onOpenTheme: (theme: The
   // True when themes exist that were created in another language (hidden now).
   const [hiddenOtherLang, setHiddenOtherLang] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
+  // Theme being edited via the swipe-right action, null when no edit dialog.
+  const [editing, setEditing] = useState<Theme | null>(null);
 
   // A theme's search term only works on the wiki of its own language, so
   // only themes of the active language are listed.
@@ -49,12 +51,13 @@ export default function ThemesScreen({ onOpenTheme }: { onOpenTheme: (theme: The
           <ul className="list">
             {themes.map((theme) => (
               <li key={theme.id} className="list-item">
-                <SwipeToDelete
+                <SwipeRow
                   confirmTitle={t("themes.confirmDelete", { name: theme.name })}
                   onConfirm={async () => {
                     if (theme.id != null) await deleteTheme(theme.id);
                     load();
                   }}
+                  onEdit={() => setEditing(theme)}
                 >
                   <button className="list-main" onClick={() => onOpenTheme(theme)}>
                     <span className="list-text">
@@ -64,7 +67,7 @@ export default function ThemesScreen({ onOpenTheme }: { onOpenTheme: (theme: The
                       </span>
                     </span>
                   </button>
-                </SwipeToDelete>
+                </SwipeRow>
               </li>
             ))}
           </ul>
@@ -80,10 +83,21 @@ export default function ThemesScreen({ onOpenTheme }: { onOpenTheme: (theme: The
       </button>
 
       {showAdd && (
-        <AddThemeDialog
+        <ThemeDialog
           onClose={() => setShowAdd(false)}
           onSaved={() => {
             setShowAdd(false);
+            load();
+          }}
+        />
+      )}
+
+      {editing && (
+        <ThemeDialog
+          initial={editing}
+          onClose={() => setEditing(null)}
+          onSaved={() => {
+            setEditing(null);
             load();
           }}
         />
@@ -94,18 +108,21 @@ export default function ThemesScreen({ onOpenTheme }: { onOpenTheme: (theme: The
 
 /** Dialog with a name field and a search term (input with live title
  * suggestions) — a theme feeds on the full-text search results for that
- * term, like Speciaal:Zoeken. */
-function AddThemeDialog({
+ * term, like Speciaal:Zoeken. With `initial` it edits an existing theme
+ * instead of adding a new one. */
+function ThemeDialog({
+  initial,
   onClose,
   onSaved,
 }: {
+  initial?: Theme;
   onClose: () => void;
   onSaved: () => void;
 }) {
   const { t, lang } = useLang();
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [name, setName] = useState(initial?.name ?? "");
+  const [description, setDescription] = useState(initial?.description ?? "");
+  const [searchQuery, setSearchQuery] = useState(initial?.searchQuery ?? "");
   // Preset ids tapped in the chip grid; together they build the search query.
   const [selectedPresetIds, setSelectedPresetIds] = useState<string[]>([]);
   const presets = useMemo(() => themePresets(lang), [lang]);
@@ -180,15 +197,29 @@ function AddThemeDialog({
     }
   };
 
-  const add = async () => {
+  const save = async () => {
     if (!valid) return;
-    // The theme is tied to the wiki language active at creation time.
-    await insertTheme(name.trim(), searchQuery.trim(), description.trim(), lang);
+    if (initial) {
+      // Keep the id and the language the theme was created in.
+      await updateTheme({
+        ...initial,
+        name: name.trim(),
+        searchQuery: searchQuery.trim(),
+        description: description.trim(),
+      });
+    } else {
+      // The theme is tied to the wiki language active at creation time.
+      await insertTheme(name.trim(), searchQuery.trim(), description.trim(), lang);
+    }
     onSaved();
   };
 
   return (
-    <Modal title={t("themes.dialog.title")} onClose={onClose} fullscreen>
+    <Modal
+      title={initial ? t("themes.dialog.editTitle") : t("themes.dialog.title")}
+      onClose={onClose}
+      fullscreen
+    >
       <div className="dialog-body">
         <div className="field">
           <span className="field-label">{t("themes.dialog.presets")}</span>
@@ -272,8 +303,8 @@ function AddThemeDialog({
           <button className="btn btn-outline" onClick={onClose}>
             {t("actions.cancel")}
           </button>
-          <button className="btn" disabled={!valid} onClick={add}>
-            {t("themes.dialog.add")}
+          <button className="btn" disabled={!valid} onClick={save}>
+            {initial ? t("themes.dialog.save") : t("themes.dialog.add")}
           </button>
         </div>
       </div>
