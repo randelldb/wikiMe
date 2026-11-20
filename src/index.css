@@ -89,8 +89,12 @@ body {
   color: var(--primary-contrast);
 }
 
+/* Everything between the appbar and the tab bar: 14px is the standard
+ * body-text size for feed/list content in mobile apps (Material body
+ * medium). Titles and reading text below stay at 16px. */
 .content {
   padding: 0;
+  font-size: 0.875rem;
 }
 
 .empty,
@@ -501,7 +505,7 @@ body {
 
 .card-title-row h2 {
   flex: 1;
-  font-size: 1.15rem;
+  font-size: 1rem;
   margin: 0;
 }
 
@@ -531,7 +535,7 @@ body {
 }
 
 .lead {
-  font-size: 1.05rem;
+  font-size: 1rem;
   line-height: 1.6;
   margin: 0;
 }
@@ -540,6 +544,7 @@ body {
 
 .wiki-content {
   padding: 0 16px 16px;
+  font-size: 1rem;
   line-height: 1.65;
   overflow-wrap: break-word;
 }
