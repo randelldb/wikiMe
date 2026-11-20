@@ -111,6 +111,11 @@ export async function insertTheme(
   await (await db()).add("themes", { name, searchQuery, description, language });
 }
 
+/** Updates an existing theme (matched by id); keeps its id and language. */
+export async function updateTheme(updated: Theme): Promise<void> {
+  await (await db()).put("themes", updated);
+}
+
 export async function deleteTheme(id: number): Promise<void> {
   await (await db()).delete("themes", id);
 }
