@@ -1,5 +1,6 @@
 import type { Article } from "../data/types";
 import { useLang } from "../i18n";
+import { SavedIcon, SavedOutlineIcon } from "./TabIcons";
 
 export interface FeedUiState {
   articles: Article[];
@@ -84,7 +85,7 @@ export function ArticleCard({
               onToggleSaved();
             }}
           >
-            {saved ? "♥" : "♡"}
+            {saved ? <SavedIcon size={20} /> : <SavedOutlineIcon size={20} />}
           </button>
         </div>
         <p className="card-extract">

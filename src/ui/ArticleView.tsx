@@ -5,6 +5,7 @@ import { WikiConfig } from "../data/config";
 import { deleteSavedArticle, upsertSavedArticle } from "../data/db";
 import { RateLimitedError } from "../data/types";
 import { classifyArticleLink, normalizeArticleHtml } from "../data/wikihtml";
+import { SavedIcon, SavedOutlineIcon } from "./TabIcons";
 import { useLang } from "../i18n";
 
 const repository = new ArticleRepository();
@@ -162,7 +163,7 @@ export default function ArticleView({
         aria-label={saved ? t("feed.unsave") : t("feed.save")}
         aria-pressed={saved}
       >
-        {saved ? "♥" : "♡"}
+        {saved ? <SavedIcon size={18} /> : <SavedOutlineIcon size={18} />}
       </button>
 
       <main className="content">
