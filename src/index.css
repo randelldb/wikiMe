@@ -26,8 +26,10 @@
   --error-bg: var(--strawberry);
 
   /* Subtle sheen over colored surfaces: transparent until about 3/4 from
-   * the left, then a slightly lighter tint toward the right edge. */
-  --sheen: linear-gradient(to right, transparent 75%, rgb(255 255 255 / 0.1) 100%);
+   * the left, then a slightly lighter tint toward the right edge. The
+   * gradient axis is rotated ~20deg from horizontal, so the light comes
+   * from the right, slightly from above. */
+  --sheen: linear-gradient(70deg, transparent 75%, rgb(255 255 255 / 0.12) 100%);
 }
 
 *,
